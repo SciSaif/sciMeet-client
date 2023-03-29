@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .darkHeroGradient {
+        background: linear-gradient(327.21deg, rgba(33, 0, 75, 0.24) 3.65%, rgba(60, 0, 136, 0) 40.32%), linear-gradient(245.93deg, rgba(21, 159, 209, 0.16) 0%, rgba(25, 80, 209, 0) 36.63%), linear-gradient(147.6deg, rgba(58, 19, 255, 0) 29.79%, rgba(98, 19, 255, 0.01) 85.72%), #13111C;
+    }
+    .lightHeroGradient {
+        background: linear-gradient(327.21deg, rgba(33, 0, 75, 0.24) 3.65%, rgba(60, 0, 136, 0) 40.32%), linear-gradient(245.93deg, rgba(21, 159, 209, 0.16) 0%, rgba(25, 80, 209, 0) 36.63%), linear-gradient(147.6deg, rgba(58, 19, 255, 0) 29.79%, rgba(98, 19, 255, 0.01) 85.72%), #ffffff;
+    }
+    .blueShadow{
+        box-shadow: rgba(23, 92, 230, 0.15) 0px 4px 24px;
+    }
+
+    
+}
