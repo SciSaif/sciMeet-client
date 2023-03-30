@@ -1,15 +1,16 @@
-import { useId } from "react";
+import { InputHTMLAttributes, useId, forwardRef, Ref } from "react";
 import { FieldError } from "react-hook-form";
 
-interface Props {
-    type: "text" | "email" | "password";
+interface Props
+    extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
     label: string;
-    name: string;
-    register: any;
-    error: FieldError | undefined;
+    error?: FieldError;
 }
 
-const Input = ({ type, label, name, register, error }: Props) => {
+const Input = (
+    { type, label, error, ...rest }: Props,
+    ref: Ref<HTMLInputElement>
+) => {
     const id = useId();
 
     return (
@@ -23,10 +24,11 @@ const Input = ({ type, label, name, register, error }: Props) => {
                 } px-3 pt-3 shadow-sm  focus-within:ring-1   dark:bg-gray-800/25 `}
             >
                 <input
+                    ref={ref}
                     type={type}
                     id={id}
                     placeholder={label}
-                    {...register(name)}
+                    {...rest}
                     className={`peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 dark:text-white sm:text-sm`}
                 />
 
@@ -39,4 +41,5 @@ const Input = ({ type, label, name, register, error }: Props) => {
     );
 };
 
-export default Input;
+// wrap in forwardRef to allow for ref to be passed
+export default forwardRef<HTMLInputElement, Props>(Input);

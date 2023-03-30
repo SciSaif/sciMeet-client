@@ -22,8 +22,6 @@ const LoginPage = () => {
         console.log(data);
     };
 
-    // console.log(errors);
-
     return (
         <div className="flex justify-center  items-center h-screen ">
             <div className="relative overflow-hidden text-black  py-10 px-10 h-[400px] rounded blueShadow border border-[#e8effc] dark:border-[#183367]">
@@ -41,16 +39,14 @@ const LoginPage = () => {
                     <Input
                         type="password"
                         label="Password"
-                        name="password"
                         error={errors.password}
-                        register={register}
+                        {...register("password")}
                     />
                     <Input
                         type="email"
                         label="Email"
-                        name="email"
                         error={errors.email}
-                        register={register}
+                        {...register("email")}
                     />
                     <button type="submit" className="px-5 py-5 text-white">
                         Login
