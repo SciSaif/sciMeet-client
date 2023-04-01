@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -14,8 +14,9 @@ function App() {
     const [count, setCount] = useState(0);
 
     return (
-        <div className="font-sans lightHeroGradient dark:darkHeroGradient">
+        <div className="font-sans lightHeroGradient dark:darkHeroGradient  min-h-screen">
             <Navbar />
+
             <Router>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />

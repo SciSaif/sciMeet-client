@@ -42,4 +42,4 @@ const Input = (
 };
 
 // wrap in forwardRef to allow for ref to be passed
-export default forwardRef<HTMLInputElement, Props>(Input);
+export default forwardRef(Input);
