@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTestQuery } from "../../redux/features/apis/authApi";
+import Sidebar from "./components/Sidebar";
 
 const Dashboard = () => {
     const { data } = useTestQuery();
@@ -11,8 +12,9 @@ const Dashboard = () => {
 
     return (
         <div className="bg-bgColor h-screen flex flex-row relative overflow-hidden">
+            {/* <Sidebar /> */}
             <div
-                className={`bg-red-500 h-screen w-full transition-all  absolute md:top-0 md:left-0 `}
+                className={`bg-red-500 h-screen w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0  `}
             >
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Suscipit quibusdam consequuntur beatae deserunt. Reprehenderit
