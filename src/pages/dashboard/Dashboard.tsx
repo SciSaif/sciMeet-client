@@ -12,7 +12,7 @@ const Dashboard = () => {
     return (
         <div className="bg-bgColor h-screen flex flex-row relative overflow-hidden">
             <div
-                className={`bg-red-500 h-screen w-full transition-all  md:absolute md:top-0 md:left-0 `}
+                className={`bg-red-500 h-screen w-full transition-all  absolute md:top-0 md:left-0 `}
             >
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Suscipit quibusdam consequuntur beatae deserunt. Reprehenderit
