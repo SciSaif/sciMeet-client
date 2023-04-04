@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../assets/Logo";
 import ThemeToggleButton from "./ThemeToggleButton";
+import ProfileDropdown from "./ProfileIcon";
 
 const Navbar = () => {
     return (
@@ -22,18 +23,8 @@ const Navbar = () => {
                 </a>
 
                 <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                    <li className="hidden lg:block">
-                        <a className="rounded-lg px-3 py-2" href="/">
-                            {" "}
-                            Home{" "}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a className="rounded-lg px-3 py-2" href="">
-                            {" "}
-                            Projects{" "}
-                        </a>
+                    <li className="flex items-center mr-2">
+                        <ProfileDropdown />
                     </li>
 
                     <li>

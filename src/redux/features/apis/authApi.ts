@@ -90,7 +90,7 @@ export const authApi = apiSlice.injectEndpoints({
         }),
 
         loginOnbackend: build.mutation<
-            { email: string; token: string; _id: string },
+            { email: string; token: string; _id: string; newUser: boolean },
             { token: string }
         >({
             query: ({ token }) => ({
@@ -99,6 +99,16 @@ export const authApi = apiSlice.injectEndpoints({
                 headers: {
                     "Content-Type": "application/json",
                     authorization: "Bearer " + token,
+                },
+            }),
+        }),
+
+        setUsername: build.mutation<{ message: string }, string>({
+            query: (userName) => ({
+                url: "auth/setUsername",
+                method: "POST",
+                body: {
+                    userName,
                 },
             }),
         }),
@@ -118,4 +128,5 @@ export const {
     useRegisterMutation,
     useLoginOnbackendMutation,
     useTestQuery,
+    useSetUsernameMutation,
 } = authApi;
