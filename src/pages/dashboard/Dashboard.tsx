@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { useTestQuery } from "../../redux/features/apis/authApi";
 import Sidebar from "./components/Sidebar";
-import Hamburger from "../../assets/Hamburger";
+
+import { Bars3Icon } from "@heroicons/react/20/solid";
+import SettingsDropdown from "./components/SettingsDropdown";
 
 const Dashboard = () => {
     const { data } = useTestQuery();
@@ -22,12 +24,15 @@ const Dashboard = () => {
                         : "translate-x-0 md:translate-x-0 md:left-0"
                 } `}
             >
-                <div className="fixed  shadow-md h-14  w-full ">
+                <div className="fixed flex justify-between shadow-md h-14  w-full ">
                     <div
                         onClick={toggle}
-                        className="ml-4 h-full w-fit flex  items-center"
+                        className="ml-4  w-fit flex  items-center text-gray p-2 cursor-pointer"
                     >
-                        <Hamburger />
+                        <Bars3Icon width={20} />
+                    </div>
+                    <div className="">
+                        <SettingsDropdown />
                     </div>
                 </div>
                 <div className=" h-screen w-full pt-14 "></div>
