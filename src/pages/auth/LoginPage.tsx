@@ -9,11 +9,8 @@ import {
     useLoginMutation,
     useLoginOnbackendMutation,
 } from "../../redux/features/apis/authApi";
-import { signOut } from "firebase/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { auth } from "../../../firebase-config";
-import { apiSlice } from "../../redux/features/apiSlice";
-import { logout } from "../../redux/features/slices/authSlice";
+import { useAppSelector } from "../../redux/hooks";
+
 import RectangleShapes from "../../assets/RectangleShapes";
 import ALreadyLoggedIn from "../../components/ALreadyLoggedIn";
 
@@ -40,12 +37,9 @@ const LoginPage = () => {
     } = useForm<FormType>({ resolver: zodResolver(Form) });
 
     const handleLogin = async (data: FormType) => {
-        console.log(data);
         const token = await login(data).unwrap();
         if (token) {
-            console.log("token", token);
             const user = await loginOnBackend({ token }).unwrap();
-            console.log("user", user);
             if (user.newUser) {
                 navigate("/newuser");
             } else {

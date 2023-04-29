@@ -36,7 +36,7 @@ const NewUser = () => {
         if (!user?.newUser) {
             navigate("/dashboard");
         }
-    }, [user, navigate]);
+    }, [user]);
 
     const submit = async (data: FormType) => {
         try {

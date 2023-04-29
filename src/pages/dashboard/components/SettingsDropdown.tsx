@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import {
-    Bars3Icon,
-    ChevronDownIcon,
-    EllipsisVerticalIcon,
-} from "@heroicons/react/20/solid";
+    ArrowRightOnRectangleIcon,
+    HomeIcon,
+} from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const SettingsDropdown = () => {
     return (
@@ -27,58 +28,34 @@ const SettingsDropdown = () => {
                     <div className="px-1 py-1 ">
                         <Menu.Item>
                             {({ active }) => (
-                                <button
+                                <Link
+                                    to="/"
                                     className={`${
                                         active
                                             ? "bg-violet-500 text-white"
                                             : "text-gray-900"
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                    } group gap-x-2 flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                 >
-                                    Duplicate
-                                </button>
+                                    <HomeIcon width={20} />
+                                    Home
+                                </Link>
                             )}
                         </Menu.Item>
                     </div>
-                    <div className="px-1 py-1">
+                    <div className="px-1 py-1 ">
                         <Menu.Item>
                             {({ active }) => (
-                                <button
+                                <Link
+                                    to="/logout"
                                     className={`${
                                         active
                                             ? "bg-violet-500 text-white"
                                             : "text-gray-900"
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                    } group gap-x-2 flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                 >
-                                    Archive
-                                </button>
-                            )}
-                        </Menu.Item>
-                        <Menu.Item>
-                            {({ active }) => (
-                                <button
-                                    className={`${
-                                        active
-                                            ? "bg-violet-500 text-white"
-                                            : "text-gray-900"
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                >
-                                    Move
-                                </button>
-                            )}
-                        </Menu.Item>
-                    </div>
-                    <div className="px-1 py-1">
-                        <Menu.Item>
-                            {({ active }) => (
-                                <button
-                                    className={`${
-                                        active
-                                            ? "bg-violet-500 text-white"
-                                            : "text-gray-900"
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                >
-                                    Delete
-                                </button>
+                                    <ArrowRightOnRectangleIcon width={20} />
+                                    Logout
+                                </Link>
                             )}
                         </Menu.Item>
                     </div>

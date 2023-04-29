@@ -24,6 +24,6 @@ export const apiSlice = createApi({
 
     keepUnusedDataFor: 9999999, //keep cache data forever
 
-    tagTypes: [],
+    tagTypes: ["INVITATIONS"],
     endpoints: () => ({}),
 });

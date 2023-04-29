@@ -18,8 +18,32 @@
         box-shadow: rgba(23, 92, 230, 0.15) 0px 4px 24px;
     }
 
+  
+    
     
 }
+
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 20px;
+    }
+  
+    .scrollbar::-webkit-scrollbar-track {
+      border-radius: 100vh;
+      background: rgba(17,17,17, 0.16) ;
+    }
+  
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 100vh;
+  
+    }
+  
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background: gray;
+    }
+  }
 
 
 /* input bg color change fix */
@@ -29,5 +53,8 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: #fff !important;
+    /* -webkit-text-fill-color: #fff !important; */
 }
+
+
+

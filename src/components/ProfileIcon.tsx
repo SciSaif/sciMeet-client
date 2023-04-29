@@ -1,5 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import ThemeToggleButton from "./ThemeToggleButton";
+import { Link } from "react-router-dom";
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -30,40 +32,28 @@ export default function ProfileDropdown() {
             >
                 <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
+                        <div className=" sm:hidden cursor-pointer px-4 py-2 hover:bg-gray-100 flex flex-row gap-x-2 items-center text-black">
+                            <ThemeToggleButton inMenu />
+                        </div>
                         <Menu.Item>
                             {({ active }) => (
-                                <a
-                                    href="#account-settings"
+                                <Link
+                                    to="/dashboard"
                                     className={classNames(
                                         active
                                             ? "bg-gray-100 text-gray-900"
                                             : "text-gray-700",
-                                        "block px-4 py-2 text-sm"
+                                        "block px-4 py-2 text-sm sm:hidden "
                                     )}
                                 >
-                                    Account settings
-                                </a>
+                                    Dashboard
+                                </Link>
                             )}
                         </Menu.Item>
                         <Menu.Item>
                             {({ active }) => (
-                                <a
-                                    href="#support"
-                                    className={classNames(
-                                        active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                        "block px-4 py-2 text-sm"
-                                    )}
-                                >
-                                    Support
-                                </a>
-                            )}
-                        </Menu.Item>
-                        <Menu.Item>
-                            {({ active }) => (
-                                <a
-                                    href="#logout"
+                                <Link
+                                    to="/logout"
                                     className={classNames(
                                         active
                                             ? "bg-gray-100 text-gray-900"
@@ -72,7 +62,7 @@ export default function ProfileDropdown() {
                                     )}
                                 >
                                     Logout
-                                </a>
+                                </Link>
                             )}
                         </Menu.Item>
                     </div>

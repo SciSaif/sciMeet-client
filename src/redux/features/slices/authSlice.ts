@@ -11,6 +11,7 @@ export interface UserProps {
     _id: string;
     email: string;
     token: string;
+    username?: string;
     newUser: boolean;
 }
 
@@ -44,10 +45,27 @@ export const authSlice = createSlice({
                     email: action.payload.email,
                     token: action.payload.token,
                     newUser: action.payload.newUser,
+                    username: action.payload.username,
                 };
 
                 // add to local storage
                 localStorage.setItem("user", JSON.stringify(newUser));
+                state.user = newUser;
+            }
+        );
+        builder.addMatcher(
+            authApi.endpoints.setUsername.matchFulfilled,
+            (state, action) => {
+                if (!state.user) return;
+                let newUser = {
+                    ...state.user,
+                    username: action.payload.username,
+                    newUser: false,
+                };
+
+                // add to local storage
+                localStorage.setItem("user", JSON.stringify(newUser));
+                // @ts-ignore
                 state.user = newUser;
             }
         );

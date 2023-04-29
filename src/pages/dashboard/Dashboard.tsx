@@ -1,17 +1,27 @@
-import React, { useState, Fragment } from "react";
-import { useTestQuery } from "../../redux/features/apis/authApi";
-import Sidebar from "./components/Sidebar";
+import { useState, useEffect } from "react";
+import Sidebar from "./sidebar/Sidebar";
 
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import SettingsDropdown from "./components/SettingsDropdown";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { connectWithSocketServer } from "../../realtimeCommunication/socketConnection";
+import { setTheme } from "../../redux/features/slices/otherSlice";
+import DashboardHeader from "./components/DashboardHeader";
+import ChatWindow from "./components/ChatWindow";
 
 const Dashboard = () => {
-    const { data } = useTestQuery();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
+    const user = useAppSelector((state) => state.auth.user);
+    const dispatch = useAppDispatch();
 
     const toggle = () => {
         setIsOpen(!isOpen);
     };
+
+    // remove dark mode on load
+    useEffect(() => {
+        dispatch(setTheme("light"));
+    }, []);
 
     return (
         <div className="bg-primaryDark h-screen flex flex-row relative overflow-hidden">
@@ -24,18 +34,10 @@ const Dashboard = () => {
                         : "translate-x-0 md:translate-x-0 md:left-0"
                 } `}
             >
-                <div className="fixed flex justify-between shadow-md h-14  w-full ">
-                    <div
-                        onClick={toggle}
-                        className="ml-4  w-fit flex  items-center text-gray p-2 cursor-pointer"
-                    >
-                        <Bars3Icon width={20} />
-                    </div>
-                    <div className="">
-                        <SettingsDropdown />
-                    </div>
+                <DashboardHeader toggle={toggle} />
+                <div className="pt-14 ">
+                    <ChatWindow />
                 </div>
-                <div className=" h-screen w-full pt-14 "></div>
             </div>
         </div>
     );
