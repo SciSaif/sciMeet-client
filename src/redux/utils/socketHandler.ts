@@ -25,7 +25,7 @@ export function getSocket(getState: () => unknown) {
     if (state.auth.user === null) return;
     const token = state.auth.user.token;
     if (!socket) {
-        socket = io("http://localhost:5002", {
+        socket = io(import.meta.env.VITE_REACT_APP_API_URL, {
             auth: {
                 token,
             },

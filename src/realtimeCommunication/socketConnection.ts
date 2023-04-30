@@ -6,7 +6,7 @@ import { setPendingInvitations } from "../redux/features/slices/otherSlice";
 let socket: any = null;
 
 export const connectWithSocketServer = (user: UserProps) => {
-    socket = io("http://localhost:5002", {
+    socket = io(import.meta.env.VITE_REACT_APP_API_URL, {
         auth: {
             token: user.token,
         },
