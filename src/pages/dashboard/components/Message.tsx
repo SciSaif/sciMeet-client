@@ -1,15 +1,16 @@
 import React from "react";
 import { Message as MessageType } from "../../../redux/features/apis/chatApi";
+import { toReadableDate } from "../../../utils/dateFunctions";
 
 interface Props {
     message: MessageType;
-    sameAuthor: boolean;
+    mergeMessage: boolean;
 }
 
-const Message = ({ message, sameAuthor }: Props) => {
+const Message = ({ message, mergeMessage }: Props) => {
     return (
         <>
-            {!sameAuthor && (
+            {!mergeMessage && (
                 <div className="text-textGray flex flex-row gap-x-3 mt-5">
                     <div className="flex rounded-full h-fit min-w-[35px] ">
                         <img
@@ -20,11 +21,11 @@ const Message = ({ message, sameAuthor }: Props) => {
                     </div>
                     <div className="flex flex-col  ">
                         <div className="items-center flex">
-                            <span className="text-textGray text-sm mr-1 font-bold">
+                            <span className="text-textGray text-sm mr-3 font-bold">
                                 {message.author.username}
                             </span>
                             <span className="text-textGray3/50 font-base text-xs font-bold">
-                                {/* {message.sameDay ? message.date : message.date} */}
+                                {toReadableDate(message.date)}
                             </span>
                         </div>
                         <div className="flex flex-col">{message.content}</div>
@@ -32,7 +33,7 @@ const Message = ({ message, sameAuthor }: Props) => {
                 </div>
             )}
 
-            {sameAuthor && (
+            {mergeMessage && (
                 <div className="flex flex-col text-textGray ml-[47px]">
                     {message.content}
                 </div>
