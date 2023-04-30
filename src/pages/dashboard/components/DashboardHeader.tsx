@@ -13,7 +13,7 @@ const DashboardHeader = ({ toggle }: Props) => {
     );
 
     return (
-        <div className="fixed flex justify-between z-50 shadow-md h-14  w-full ">
+        <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-secondaryDark">
             <div className="w-fit flex items-center">
                 <div
                     onClick={toggle}

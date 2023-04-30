@@ -35,7 +35,7 @@ const Dashboard = () => {
                 } `}
             >
                 <DashboardHeader toggle={toggle} />
-                <div className="pt-14 ">
+                <div className="">
                     <ChatWindow />
                 </div>
             </div>

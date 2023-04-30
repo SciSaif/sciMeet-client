@@ -10,7 +10,7 @@ interface Props {
 const ChatBeginningHeader = ({ friend }: Props) => {
     return (
         <div className="py-5 text-textGray">
-            <div className="flex rounded-full ">
+            <div className="flex rounded-full w-fit">
                 <img
                     className="h-24 w-24 rounded-full"
                     src={`https://ui-avatars.com/api/?name=${friend.username}&&background=16D162`}

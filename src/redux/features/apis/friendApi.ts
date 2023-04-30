@@ -1,6 +1,5 @@
-import { Socket, io } from "socket.io-client";
 import { apiSlice } from "../apiSlice";
-import { RootState } from "../../store";
+import { getSocket } from "../../utils/socketHandler";
 
 export interface Invitation {
     _id: string;
@@ -22,35 +21,6 @@ export interface OnlineUser {
     socketId: string;
 }
 
-interface ServerToClientEvents {
-    // noArg: () => void;
-    // basicEmit: (a: number, b: string, c: Buffer) => void;
-    // withAck: (d: string, callback: (e: number) => void) => void;
-    "friends-invitations": (data: any) => void;
-    "friends-list": (data: any) => void;
-    "online-users": (data: any) => void;
-}
-
-interface ClientToServerEvents {
-    hello: () => void;
-}
-
-let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
-
-function getSocket(getState: () => unknown) {
-    let state = getState() as RootState;
-    if (state.auth.user === null) return;
-    const token = state.auth.user.token;
-    if (!socket) {
-        socket = io("http://localhost:5002", {
-            auth: {
-                token,
-            },
-        });
-    }
-    return socket;
-}
-
 export const friendApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         postInvite: build.mutation<any, { email: string }>({
@@ -69,7 +39,7 @@ export const friendApi = apiSlice.injectEndpoints({
 
         //         return new Promise((resolve) => {
         //             socket.emit(
-        //                 "message",
+        //                 "direct-message",
         //                 chatMessageContent,
         //                 (message: string) => {
         //                     resolve({ data: message });

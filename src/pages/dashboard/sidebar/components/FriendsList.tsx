@@ -10,7 +10,7 @@ import {
 const FriendsList = () => {
     const { data } = useGetFriendsQuery();
     const { data: onlineUsers } = useGetOnlineUsersQuery();
-    console.log("friends: ", data);
+    // console.log("friends: ", data);
 
     const friends = (friends: Friend[], onlineUsers: OnlineUser[]) => {
         return friends.map((friend) => {

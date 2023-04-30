@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import ChatBeginningHeader from "./ChatBeginningHeader";
 import Message from "./Message";
+import {
+    useDirectMessageMutation,
+    useGetMessageHistoryQuery,
+} from "../../../redux/features/apis/chatApi";
 
 const DUMMY_MESSAGESS = [
     {
@@ -106,28 +110,69 @@ const DUMMY_MESSAGESS = [
 ];
 
 const ChatWindow = () => {
+    const [message, setMessage] = useState("");
+    const [sendDirectMessage] = useDirectMessageMutation();
+
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
+    const { data: messages } = useGetMessageHistoryQuery(
+        {
+            receiverUserId: selectedFriend?._id ? selectedFriend._id : "",
+        },
+        { skip: !selectedFriend?._id }
+    );
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!selectedFriend) return;
+        setMessage("");
+        sendDirectMessage({
+            content: message,
+            receiverUserId: selectedFriend._id,
+        });
+    };
+
+    console.log("messages", selectedFriend?.username, messages);
 
     return (
-        <div className="max-h-screen scrollbar pb-20 overflow-auto  w-full  px-5  ">
+        <main className="max-h-screen  pt-14 h-screen flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
             {selectedFriend === undefined && (
                 <div className="flex w-full items-center justify-center h-full text-textGray font-semibold">
                     To start chatting, select a friend from the sidebar
                 </div>
             )}
             {selectedFriend !== undefined && (
-                <div className="">
-                    <ChatBeginningHeader friend={selectedFriend} />
-                    <div className="gap-y-2 flex flex-col ">
-                        {DUMMY_MESSAGESS.map((message) => (
-                            <Message message={message} />
-                        ))}
+                <div className="flex flex-col-reverse   overflow-auto scrollbar px-5 ">
+                    <div className=" flex flex-col pb-5">
+                        {messages?.map((message, index) => {
+                            const sameAuthor =
+                                index > 0 &&
+                                messages[index].author._id ===
+                                    messages[index - 1].author._id;
+                            return (
+                                <Message
+                                    message={message}
+                                    sameAuthor={sameAuthor}
+                                />
+                            );
+                        })}
                     </div>
+                    <ChatBeginningHeader friend={selectedFriend} />
                 </div>
             )}
-        </div>
+            {selectedFriend !== undefined && (
+                <form onSubmit={handleSubmit} className="pb-5  w-full  px-5">
+                    <input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        type="text"
+                        placeholder={`Message ${selectedFriend?.username}`}
+                        className="w-full rounded-xl border-0 bg-[#393A3A] focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
+                    />
+                </form>
+            )}
+        </main>
     );
 };
 
