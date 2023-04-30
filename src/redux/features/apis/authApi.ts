@@ -118,13 +118,6 @@ export const authApi = apiSlice.injectEndpoints({
                 },
             }),
         }),
-
-        test: build.query<any, void>({
-            query: () => ({
-                url: "auth/test",
-                method: "GET",
-            }),
-        }),
     }),
     overrideExisting: false,
 });
@@ -133,6 +126,5 @@ export const {
     useLoginMutation,
     useRegisterMutation,
     useLoginOnbackendMutation,
-    useTestQuery,
     useSetUsernameMutation,
 } = authApi;

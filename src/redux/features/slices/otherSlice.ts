@@ -37,9 +37,15 @@ export const otherSlice = createSlice({
         ) => {
             state.selectedFriend = action.payload;
         },
+
+        resetState: () => initialState,
     },
 });
 
-export const { setTheme, setPendingInvitations, setSelectedFriend } =
-    otherSlice.actions;
+export const {
+    setTheme,
+    setPendingInvitations,
+    setSelectedFriend,
+    resetState,
+} = otherSlice.actions;
 export default otherSlice.reducer;

@@ -24,14 +24,6 @@ export interface MessageHistory {
 
 export const chatApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-        postInvite: build.mutation<any, { email: string }>({
-            query: ({ email }) => ({
-                url: `friend-invitation/invite`,
-                method: "POST",
-                body: { email },
-            }),
-        }),
-
         directMessage: build.mutation<any, MessageContent>({
             queryFn: (chatMessageContent, { getState }) => {
                 const socket = getSocket(getState);
@@ -43,18 +35,6 @@ export const chatApi = apiSlice.injectEndpoints({
                 return { data: "" };
             },
         }),
-
-        // requestMessageHistory: build.mutation<any, { receiverUserId: string }>({
-        //     queryFn: ({ receiverUserId }, { getState }) => {
-        //         const socket = getSocket(getState);
-
-        //         if (!socket) return { data: "" };
-
-        //         socket.emit("direct-chat-message", { receiverUserId });
-
-        //         return { data: "" };
-        //     },
-        // }),
 
         getMessageHistory: build.query<Message[], { receiverUserId: string }>({
             queryFn: ({ receiverUserId }) => ({ data: [] }),
@@ -78,10 +58,8 @@ export const chatApi = apiSlice.injectEndpoints({
                     });
 
                     socket.emit("direct-chat-history", { receiverUserId });
-                    console.log("st");
                     socket.on("direct-chat-history", (data) => {
                         updateCachedData((draft) => {
-                            console.log("participants", data.participants);
                             const participants = data.participants;
                             if (participants.includes(receiverUserId)) {
                                 // replace cached data with new data
@@ -93,7 +71,6 @@ export const chatApi = apiSlice.injectEndpoints({
                     await cacheEntryRemoved;
 
                     socket.off("connect");
-                    console.log("cacheEntryRemoved");
                     socket.off("direct-chat-history");
                 } catch {
                     // if cacheEntryRemoved resolved before cacheDataLoaded,

@@ -3,10 +3,12 @@ import GlobalLoader from "../../components/GlobalLoader";
 import { useAppDispatch } from "../../redux/hooks";
 import { signOut } from "firebase/auth";
 import { apiSlice } from "../../redux/features/apiSlice";
-import { logout } from "../../redux/features/slices/authSlice";
+import { resetState as resetAuthState } from "../../redux/features/slices/authSlice";
 import { auth } from "../../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { resetState as resetOtherState } from "../../redux/features/slices/otherSlice";
+import { closeSocket } from "../../redux/utils/socketHandler";
 
 const Logout = () => {
     const dispatch = useAppDispatch();
@@ -18,7 +20,9 @@ const Logout = () => {
         // remove user from local storage to log user out
         localStorage.removeItem("user");
         dispatch(apiSlice.util.resetApiState());
-        dispatch(logout());
+        dispatch(resetAuthState());
+        dispatch(resetOtherState());
+        closeSocket();
         enqueueSnackbar("You have been logged out", {
             variant: "success",
             preventDuplicate: true,

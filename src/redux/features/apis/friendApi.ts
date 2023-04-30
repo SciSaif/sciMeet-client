@@ -61,7 +61,9 @@ export const friendApi = apiSlice.injectEndpoints({
                 }
             ) {
                 try {
+                    console.log("e1");
                     await cacheDataLoaded;
+                    console.log("e2");
 
                     const socket = getSocket(getState);
                     if (!socket) return;
@@ -96,7 +98,11 @@ export const friendApi = apiSlice.injectEndpoints({
         }),
 
         getFriends: build.query<Friend[], void>({
-            queryFn: () => ({ data: [] }),
+            queryFn: () => {
+                return {
+                    data: [],
+                };
+            },
             async onCacheEntryAdded(
                 _,
                 {
@@ -107,16 +113,21 @@ export const friendApi = apiSlice.injectEndpoints({
                 }
             ) {
                 try {
+                    console.log("e3");
                     await cacheDataLoaded;
+                    console.log("e4");
 
                     const socket = getSocket(getState);
                     if (!socket) return;
                     socket.on("connect", () => {
-                        console.log("Connected to socket server");
+                        console.log("Connected to socket server, getFriends");
                         console.log(socket.id);
                     });
 
+                    console.log("getFriends");
+
                     socket.on("friends-list", (data: { friends: Friend[] }) => {
+                        console.log("friends-list", data.friends);
                         updateCachedData((draft) => {
                             // replace cached data with new data
                             draft.splice(0, draft.length, ...data.friends);
@@ -147,7 +158,9 @@ export const friendApi = apiSlice.injectEndpoints({
                 }
             ) {
                 try {
+                    console.log("e5");
                     await cacheDataLoaded;
+                    console.log("e6");
 
                     const socket = getSocket(getState);
                     if (!socket) return;

@@ -3,7 +3,6 @@ import PendingInvitationListItem from "./PendingInvitationListItem";
 
 const PendingInvitationsList = () => {
     const { data } = useGetFriendsInvitationsQuery();
-    console.log(data);
     return (
         <div className="">
             <h4 className="text-textGray2 text-sm text-center w-full mt-3 font-semibold">

@@ -33,3 +33,10 @@ export function getSocket(getState: () => unknown) {
     }
     return socket;
 }
+
+export function closeSocket() {
+    if (socket) {
+        socket.close();
+        socket = undefined!;
+    }
+}

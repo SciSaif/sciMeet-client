@@ -9,17 +9,17 @@ import { SnackbarProvider } from "notistack";
 const rootElement = document.getElementById("root") as HTMLElement;
 
 ReactDOM.createRoot(rootElement).render(
-    // <React.StrictMode>
-    <Provider store={store}>
-        <SnackbarProvider
-            maxSnack={3}
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-            }}
-        >
-            <App />
-        </SnackbarProvider>
-    </Provider>
-    // </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                }}
+            >
+                <App />
+            </SnackbarProvider>
+        </Provider>
+    </React.StrictMode>
 );
