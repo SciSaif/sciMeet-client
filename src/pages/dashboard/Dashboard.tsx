@@ -20,25 +20,28 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="bg-primaryDark h-screen flex flex-row relative overflow-hidden">
-            <Sidebar />
+        <>
+            <div className="bg-red-300 w-10 h-10 fixed right-20 z-[100] top-0 text-blue-400">
+                sfdasdf
+            </div>
+            <div className="bg-primaryDark h-screen flex flex-row relative overflow-hidden">
+                <Sidebar />
 
-            <div
-                className={`bg-secondaryDark h-screen w-full  rounded-l-lg   transition-all ease-out   md:absolute md:top-0 ${
-                    sidebarOpen
-                        ? "translate-x-[calc(100%-60px)] md:translate-x-0 md:left-[400px] md:w-[calc(100%-400px)]"
-                        : "translate-x-0 md:translate-x-0 md:left-0"
-                } `}
-            >
-                <DashboardHeader />
-                <div className="bg-red-300 w-10 h-10 fixed right-20 z-[100] top-0 text-blue-400">
-                    sfdasdf
-                </div>
-                <div className="">
-                    <ChatWindow />
+                <div
+                    className={`bg-secondaryDark h-screen w-full  rounded-l-lg   transition-all ease-out   md:absolute md:top-0 ${
+                        sidebarOpen
+                            ? "translate-x-[calc(100%-60px)] md:translate-x-0 md:left-[400px] md:w-[calc(100%-400px)]"
+                            : "translate-x-0 md:translate-x-0 md:left-0"
+                    } `}
+                >
+                    <DashboardHeader />
+
+                    <div className="">
+                        <ChatWindow />
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
