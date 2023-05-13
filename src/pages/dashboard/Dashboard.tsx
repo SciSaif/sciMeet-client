@@ -31,6 +31,9 @@ const Dashboard = () => {
                 } `}
             >
                 <DashboardHeader />
+                <div className="bg-red-300 w-10 h-10 fixed right-20 z-[100] top-0 text-blue-400">
+                    sfdasdf
+                </div>
                 <div className="">
                     <ChatWindow />
                 </div>
