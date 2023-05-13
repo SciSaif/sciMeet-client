@@ -14,6 +14,7 @@ const PendingInvitationListItem = ({
     const [rejectInvitation] = useRejectInvitationMutation();
     const [acceptInvitation] = useAcceptInvitationMutation();
 
+    console.log("invitation", invitation);
     return (
         <div className="w-full cursor-pointer items-center  rounded-l-full  flex justify-between h-10">
             <div className="flex flex-row items-center gap-x-2">

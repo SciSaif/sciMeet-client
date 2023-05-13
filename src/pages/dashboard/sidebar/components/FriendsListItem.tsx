@@ -1,7 +1,10 @@
 import React from "react";
 import { Friend } from "../../../../redux/features/apis/friendApi";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { setSelectedFriend } from "../../../../redux/features/slices/otherSlice";
+import {
+    setSelectedFriend,
+    toggleChatOpen,
+} from "../../../../redux/features/slices/otherSlice";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const dispatch = useAppDispatch();
@@ -13,6 +16,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
         dispatch(
             setSelectedFriend({ _id: friend._id, username: friend.username })
         );
+        dispatch(toggleChatOpen());
     };
 
     return (

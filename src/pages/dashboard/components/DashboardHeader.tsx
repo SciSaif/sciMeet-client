@@ -1,13 +1,12 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import React from "react";
 import SettingsDropdown from "./SettingsDropdown";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { toggleChatOpen } from "../../../redux/features/slices/otherSlice";
 
-interface Props {
-    toggle: () => void;
-}
+const DashboardHeader = () => {
+    const dispatch = useAppDispatch();
 
-const DashboardHeader = ({ toggle }: Props) => {
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
@@ -16,7 +15,7 @@ const DashboardHeader = ({ toggle }: Props) => {
         <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-secondaryDark">
             <div className="w-fit flex items-center">
                 <div
-                    onClick={toggle}
+                    onClick={() => dispatch(toggleChatOpen())}
                     className="ml-4  w-fit flex  items-center text-gray-300 p-2 cursor-pointer"
                 >
                     <Bars3Icon width={20} />
