@@ -2,7 +2,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import React from "react";
 import SettingsDropdown from "./SettingsDropdown";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { toggleChatOpen } from "../../../redux/features/slices/otherSlice";
+import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
 
 const DashboardHeader = () => {
     const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const DashboardHeader = () => {
         <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-secondaryDark">
             <div className="w-fit flex items-center">
                 <div
-                    onClick={() => dispatch(toggleChatOpen())}
+                    onClick={() => dispatch(toggleSidebar())}
                     className="ml-4  w-fit flex  items-center text-gray-300 p-2 cursor-pointer"
                 >
                     <Bars3Icon width={20} />

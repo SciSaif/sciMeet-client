@@ -3,7 +3,7 @@ import { Friend } from "../../../../redux/features/apis/friendApi";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
     setSelectedFriend,
-    toggleChatOpen,
+    toggleSidebar,
 } from "../../../../redux/features/slices/otherSlice";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
@@ -16,7 +16,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
         dispatch(
             setSelectedFriend({ _id: friend._id, username: friend.username })
         );
-        dispatch(toggleChatOpen());
+        dispatch(toggleSidebar());
     };
 
     return (

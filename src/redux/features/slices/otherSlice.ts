@@ -11,14 +11,14 @@ interface initialStateProps {
         _id: string;
         username: string;
     };
-    chatOpen: boolean;
+    sidebarOpen: boolean;
 }
 
 const initialState: initialStateProps = {
     theme: theme === "light" ? "light" : "dark",
     pendingInvitations: [],
     selectedFriend: undefined,
-    chatOpen: false,
+    sidebarOpen: true,
 };
 
 export const otherSlice = createSlice({
@@ -40,8 +40,8 @@ export const otherSlice = createSlice({
             state.selectedFriend = action.payload;
         },
 
-        toggleChatOpen: (state) => {
-            state.chatOpen = !state.chatOpen;
+        toggleSidebar: (state) => {
+            state.sidebarOpen = !state.sidebarOpen;
         },
 
         resetState: () => initialState,
@@ -53,6 +53,6 @@ export const {
     setPendingInvitations,
     setSelectedFriend,
     resetState,
-    toggleChatOpen,
+    toggleSidebar,
 } = otherSlice.actions;
 export default otherSlice.reducer;
