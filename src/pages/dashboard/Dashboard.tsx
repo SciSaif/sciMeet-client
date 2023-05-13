@@ -21,10 +21,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="bg-red-300 w-10 h-10 fixed right-20 z-[100] top-0 text-blue-400">
-                sfdasdf
-            </div>
-            <div className="bg-primaryDark h-screen flex flex-row relative overflow-hidden">
+            <div className="bg-primaryDark h-screen fixed flex flex-row  overflow-hidden">
                 <Sidebar />
 
                 <div
@@ -35,7 +32,9 @@ const Dashboard = () => {
                     } `}
                 >
                     <DashboardHeader />
-
+                    <div className="bg-red-300 w-10 h-10 fixed right-20 z-[100] top-0 text-blue-400">
+                        sfdasdf
+                    </div>
                     <div className="">
                         <ChatWindow />
                     </div>
