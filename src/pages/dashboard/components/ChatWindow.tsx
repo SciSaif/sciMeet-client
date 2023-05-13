@@ -7,6 +7,7 @@ import {
     useGetMessageHistoryQuery,
 } from "../../../redux/features/apis/chatApi";
 import { isSameDay } from "../../../utils/dateFunctions";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 const ChatWindow = () => {
     const [message, setMessage] = useState("");
@@ -68,14 +69,22 @@ const ChatWindow = () => {
                 </div>
             )}
             {selectedFriend !== undefined && (
-                <form onSubmit={handleSubmit} className="pb-5  w-full  px-5">
-                    <input
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        type="text"
-                        placeholder={`Message ${selectedFriend?.username}`}
-                        className="w-full rounded-xl border-0 bg-[#393A3A] focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
-                    />
+                <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
+                    <div className="w-full  flex flex-row items-center bg-[#393A3A] rounded-xl">
+                        <input
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            type="text"
+                            placeholder={`Message ${selectedFriend?.username}`}
+                            className="w-full rounded-l-xl border-0 pr-10 bg-[#393A3A] focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
+                        />
+                        <button
+                            type="submit"
+                            className="pl-2 pr-4 cursor-pointer text-textGray hover:text-textGray3 "
+                        >
+                            <PaperAirplaneIcon width={20} />
+                        </button>
+                    </div>
                 </form>
             )}
         </main>
