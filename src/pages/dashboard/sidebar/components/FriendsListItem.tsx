@@ -16,7 +16,8 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
         dispatch(
             setSelectedFriend({ _id: friend._id, username: friend.username })
         );
-        dispatch(toggleSidebar());
+        // @Todo only toggle in mobile
+        if (window.innerWidth < 768) dispatch(toggleSidebar());
     };
 
     return (

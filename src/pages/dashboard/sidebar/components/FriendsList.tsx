@@ -24,8 +24,8 @@ const FriendsList = () => {
     };
 
     return (
-        <div className="overflow-scroll">
-            <h4 className="text-textGray2 text-sm text-center w-full mt-3 font-semibold">
+        <div className="overflow-auto scrollbar">
+            <h4 className="text-textGray2  text-sm text-center w-full mt-3 font-semibold">
                 PRIVATE MESSAGES
             </h4>
 
