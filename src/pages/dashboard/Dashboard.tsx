@@ -8,11 +8,13 @@ import { connectWithSocketServer } from "../../realtimeCommunication/socketConne
 import { setTheme } from "../../redux/features/slices/otherSlice";
 import DashboardHeader from "./components/DashboardHeader";
 import ChatWindow from "./components/ChatWindow";
+import Room from "./room/Room";
 
 const Dashboard = () => {
     const user = useAppSelector((state) => state.auth.user);
     const sidebarOpen = useAppSelector((state) => state.other.sidebarOpen);
     const dispatch = useAppDispatch();
+    const isRoomOpen = useAppSelector((state) => state.room.isUserInRoom);
 
     // remove dark mode on load
     useEffect(() => {
@@ -36,6 +38,8 @@ const Dashboard = () => {
                     <div className="">
                         <ChatWindow />
                     </div>
+
+                    {isRoomOpen && <Room />}
                 </div>
             </div>
         </>

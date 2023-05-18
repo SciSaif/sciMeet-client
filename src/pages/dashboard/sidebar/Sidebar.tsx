@@ -4,6 +4,7 @@ import FriendsList from "./components/FriendsList";
 import PendingInvitations from "./components/PendingInvitationsList";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import { UsersIcon } from "@heroicons/react/20/solid";
+import SidebarLeft from "./components/SidebarLeft";
 
 const Sidebar = () => {
     const [showAddFriendModal, setShowAddFriendModal] = useState(false);
@@ -12,12 +13,7 @@ const Sidebar = () => {
         <div
             className={` h-screen w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
         >
-            <div className="bg-transparent h-screen w-24 px-2 py-4">
-                <div className="w-full h-16 text-white bg-primaryAccent  rounded-2xl flex justify-center items-center">
-                    {/* <UserGroupIcon width={20} /> */}
-                    <UsersIcon width={30} />
-                </div>
-            </div>
+            <SidebarLeft />
             <div className="bg-secondaryDark h-screen w-full rounded-lg mr-2 py-4">
                 <div className=" h-full grid grid-rows-[min-content_2fr_1fr]">
                     <div className="px-4">
