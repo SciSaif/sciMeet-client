@@ -15,7 +15,11 @@ const Message = ({ message, mergeMessage }: Props) => {
                     <div className="flex rounded-full h-fit min-w-[35px] ">
                         <img
                             className="h-8 w-8 rounded-full"
-                            src={`https://ui-avatars.com/api/?name=${message.author.username}&&background=16D162`}
+                            src={
+                                message.author.avatar
+                                    ? message.author.avatar
+                                    : "avatars/pikachu.png"
+                            }
                             alt=""
                         />
                     </div>

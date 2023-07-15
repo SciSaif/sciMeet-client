@@ -4,6 +4,7 @@ interface Props {
     friend: {
         username: string;
         _id: string;
+        avatar?: string;
     };
 }
 
@@ -13,7 +14,7 @@ const ChatBeginningHeader = ({ friend }: Props) => {
             <div className="flex rounded-full w-fit">
                 <img
                     className="h-24 w-24 rounded-full"
-                    src={`https://ui-avatars.com/api/?name=${friend.username}&&background=16D162`}
+                    src={friend.avatar ? friend.avatar : "avatars/pikachu.png"}
                     alt=""
                 />
             </div>

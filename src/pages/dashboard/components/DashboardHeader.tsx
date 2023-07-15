@@ -12,7 +12,7 @@ const DashboardHeader = () => {
     );
 
     return (
-        <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-secondaryDark">
+        <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-primary">
             <div className="w-fit flex items-center">
                 <div
                     onClick={() => dispatch(toggleSidebar())}

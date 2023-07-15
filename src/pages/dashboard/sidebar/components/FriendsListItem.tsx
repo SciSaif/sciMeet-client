@@ -31,8 +31,12 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
                 <div className="flex rounded-full ">
                     <img
                         className="h-10 w-10 rounded-full"
-                        src={`https://ui-avatars.com/api/?name=${friend.username}&&background=16D162`}
-                        alt=""
+                        src={
+                            friend.avatar
+                                ? friend.avatar
+                                : "avatars/pikachu.png"
+                        }
+                        alt="dp"
                     />
                 </div>
                 <div className="text-textGray2">{friend.username}</div>

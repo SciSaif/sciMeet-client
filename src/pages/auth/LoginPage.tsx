@@ -13,6 +13,7 @@ import { useAppSelector } from "../../redux/hooks";
 
 import RectangleShapes from "../../assets/RectangleShapes";
 import ALreadyLoggedIn from "../../components/ALreadyLoggedIn";
+import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 
 const Form = z.object({
     email: z.string().email(),

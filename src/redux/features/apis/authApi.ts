@@ -5,6 +5,8 @@ import {
     signInWithEmailAndPassword,
     sendEmailVerification,
 } from "firebase/auth";
+import { randomElement } from "../../../utils/other";
+import { avatars } from "../../../data/avatars";
 
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
@@ -96,6 +98,7 @@ export const authApi = apiSlice.injectEndpoints({
                 _id: string;
                 newUser: boolean;
                 username?: string;
+                avatar?: string;
             },
             { token: string }
         >({
@@ -109,12 +112,16 @@ export const authApi = apiSlice.injectEndpoints({
             }),
         }),
 
-        setUsername: build.mutation<{ username: string }, string>({
+        setUsername: build.mutation<
+            { username: string; avatar: string },
+            string
+        >({
             query: (username) => ({
                 url: "auth/setUsername",
                 method: "POST",
                 body: {
                     username,
+                    avatar: randomElement(avatars),
                 },
             }),
         }),

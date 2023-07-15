@@ -14,13 +14,13 @@ const SidebarLeft = () => {
         <>
             {" "}
             <div className="bg-transparent h-screen w-24 px-2 py-4 flex flex-col  gap-y-2">
-                <div className="w-full h-16 text-white bg-primaryAccent  rounded-2xl flex justify-center items-center">
+                <div className="w-full h-16 text-white bg-secondary  rounded-2xl flex justify-center items-center">
                     {/* <UserGroupIcon width={20} /> */}
                     <UsersIcon width={30} />
                 </div>
                 <button
                     onClick={handleAddRoom}
-                    className="w-full h-16 text-white bg-blue-500 hover:bg-blue-600  rounded-2xl flex justify-center items-center"
+                    className="w-full h-16 text-white bg-tertiary hover:bg-tertiary-600  rounded-2xl flex justify-center items-center"
                 >
                     {/* <UserGroupIcon width={20} /> */}
                     <PlusIcon width={30} />

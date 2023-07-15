@@ -70,13 +70,13 @@ const ChatWindow = () => {
             )}
             {selectedFriend !== undefined && (
                 <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
-                    <div className="w-full  flex flex-row items-center bg-[#393A3A] rounded-xl">
+                    <div className="w-full  flex flex-row items-center bg-primary-700 rounded-xl">
                         <input
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             type="text"
                             placeholder={`Message ${selectedFriend?.username}`}
-                            className="w-full rounded-l-xl border-0 pr-10 bg-[#393A3A] focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
+                            className="w-full rounded-l-xl border-0 pr-10 bg-primary-700 focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
                         />
                         <button
                             type="submit"

@@ -23,11 +23,11 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="bg-primaryDark h-screen  w-full flex flex-row  overflow-hidden">
+            <div className="bg-primary-900 h-screen  w-full flex flex-row  overflow-hidden">
                 <Sidebar />
 
                 <div
-                    className={`bg-secondaryDark  h-screen w-full  rounded-l-lg   transition-all ease-out   md:absolute md:top-0 ${
+                    className={`bg-primary  h-screen w-full  rounded-l-lg   transition-all ease-out   md:absolute md:top-0 ${
                         sidebarOpen
                             ? "translate-x-[calc(100%-60px)] md:translate-x-0 md:left-[400px] md:w-[calc(100%-400px)]"
                             : "translate-x-0 md:translate-x-0 md:left-0"

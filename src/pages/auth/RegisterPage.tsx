@@ -33,7 +33,7 @@ const RegisterPage = () => {
         formState: { errors },
     } = useForm<FormType>({ resolver: zodResolver(Form) });
 
-    const handleLogin = (data: FormType) => {
+    const handleSignUp = (data: FormType) => {
         console.log(data);
         signup(data)
             .unwrap()
@@ -56,7 +56,7 @@ const RegisterPage = () => {
                     </p>
 
                     <form
-                        onSubmit={handleSubmit(handleLogin)}
+                        onSubmit={handleSubmit(handleSignUp)}
                         className="flex gap-y-2 flex-col mb-24"
                     >
                         <Input

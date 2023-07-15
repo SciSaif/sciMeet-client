@@ -8,7 +8,7 @@ import React from "react";
 
 const RoomButtons = () => {
     return (
-        <div className="w-full  bg-primaryAccent flex justify-center items-center ">
+        <div className="w-full  bg-secondary flex justify-center items-center ">
             <div className="flex flex-row gap-x-4 text-white">
                 <div className="cursor-pointer hover:text-white/80 p-3">
                     <ComputerDesktopIcon width={20} />

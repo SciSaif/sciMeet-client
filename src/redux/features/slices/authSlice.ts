@@ -11,8 +11,9 @@ export interface UserProps {
     _id: string;
     email: string;
     token: string;
-    username?: string;
     newUser: boolean;
+    username?: string;
+    avatar?: string;
 }
 
 interface initialStateProps {
@@ -46,6 +47,7 @@ export const authSlice = createSlice({
                     token: action.payload.token,
                     newUser: action.payload.newUser,
                     username: action.payload.username,
+                    avatar: action.payload.avatar,
                 };
 
                 // add to local storage
@@ -61,6 +63,7 @@ export const authSlice = createSlice({
                     ...state.user,
                     username: action.payload.username,
                     newUser: false,
+                    avatar: action.payload.avatar,
                 };
 
                 // add to local storage

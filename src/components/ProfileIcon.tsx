@@ -2,12 +2,15 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../redux/hooks";
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
 
 export default function ProfileDropdown() {
+    const user = useAppSelector((state) => state.auth.user);
+
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -15,7 +18,11 @@ export default function ProfileDropdown() {
                     <span className="sr-only">Open user menu</span>
                     <img
                         className="h-8 w-8 rounded-full"
-                        src={`https://ui-avatars.com/api/?name=John+Doe`}
+                        src={
+                            user?.avatar
+                                ? user.avatar
+                                : `https://ui-avatars.com/api/?name=John+Doe`
+                        }
                         alt=""
                     />
                 </Menu.Button>

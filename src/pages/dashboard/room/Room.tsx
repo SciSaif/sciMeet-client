@@ -2,7 +2,7 @@ import {
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
 } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
 import VideoContainer from "./VideoContainer";
@@ -23,7 +23,7 @@ const Room = () => {
                 fullScreen
                     ? "h-full w-full "
                     : "h-full w-full sm:h-1/2 sm:w-[500px] sm:max-h-1/2 sm:max-w-1/2"
-            }  bg-primaryDark`}
+            }  bg-primary-900`}
         >
             <VideoContainer />
             <RoomButtons />

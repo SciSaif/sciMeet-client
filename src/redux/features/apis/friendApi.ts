@@ -7,6 +7,7 @@ export interface Invitation {
     senderId: {
         email: string;
         username: string;
+        avatar?: string;
     };
 }
 
@@ -14,6 +15,7 @@ export interface Friend {
     _id: string;
     username: string;
     isOnline: boolean;
+    avatar?: string;
 }
 
 export interface OnlineUser {

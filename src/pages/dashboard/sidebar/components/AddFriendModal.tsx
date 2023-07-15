@@ -43,7 +43,7 @@ const AddFriendModal = ({ close }: Props) => {
                 )}
                 <button
                     type="submit"
-                    className=" mt-4 inline-block rounded bg-primaryAccent px-8 py-2 text-sm w-full font-medium text-white transition  hover:scale-105 focus:outline-none focus:ring focus:ring-primaryAccent active:bg-primaryAccentLighter"
+                    className=" mt-4 inline-block rounded bg-secondary px-8 py-2 text-sm w-full font-medium text-white transition  hover:scale-105 focus:outline-none focus:ring focus:ring-secondary active:bg-secondary-400"
                 >
                     Add Friend
                 </button>
