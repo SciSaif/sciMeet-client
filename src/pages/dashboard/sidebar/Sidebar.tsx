@@ -11,10 +11,10 @@ const Sidebar = () => {
 
     return (
         <div
-            className={` h-screen w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
+            className={` h-[100dvh] w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
         >
             <SidebarLeft />
-            <div className="bg-primary h-screen w-full rounded-lg mr-2 py-4">
+            <div className="bg-primary h-[100dvh] w-full rounded-lg mr-2 py-4">
                 <div className=" h-full grid grid-rows-[min-content_2fr_1fr]">
                     <div className="px-4">
                         <button

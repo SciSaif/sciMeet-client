@@ -34,7 +34,7 @@ const ChatWindow = () => {
     };
 
     return (
-        <main className="max-h-screen  pt-14 h-screen flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
+        <main className="max-h-[100dvh]  pt-14 h-[100dvh] flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
             {selectedFriend === undefined && (
                 <div className="flex w-full items-center justify-center h-full text-textGray font-semibold">
                     To start chatting, select a friend from the sidebar
