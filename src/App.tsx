@@ -29,7 +29,7 @@ function App() {
         }
     }, [theme]);
     return (
-        <div className="font-sans  lightHeroGradient dark:darkHeroGradient  h-[100dvh] bg-red-500">
+        <div className="font-sans  lightHeroGradient dark:darkHeroGradient  h-[100dvh] ">
             <Router>
                 <Routes>
                     <>
