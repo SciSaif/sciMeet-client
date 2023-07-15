@@ -10,6 +10,7 @@ interface initialStateProps {
     selectedFriend?: {
         _id: string;
         username: string;
+        avatar?: string;
     };
     sidebarOpen: boolean;
 }
@@ -35,7 +36,11 @@ export const otherSlice = createSlice({
 
         setSelectedFriend: (
             state,
-            action: PayloadAction<{ _id: string; username: string }>
+            action: PayloadAction<{
+                _id: string;
+                username: string;
+                avatar?: string;
+            }>
         ) => {
             state.selectedFriend = action.payload;
         },
