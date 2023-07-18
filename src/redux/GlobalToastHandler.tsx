@@ -19,7 +19,7 @@ const GlobalToastHandler = () => {
             addListener({
                 matcher: isRejectedWithValue(),
                 effect: (action) => {
-                    console.log(action);
+                    // console.log(action);
                     if (action?.payload?.status >= 500) {
                         enqueueSnackbar("Something went wrong", {
                             variant: "error",

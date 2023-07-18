@@ -1,16 +1,16 @@
 import FriendsListItem from "./FriendsListItem";
+import { useAppSelector } from "../../../../redux/hooks";
 import {
     Friend,
     OnlineUser,
-    useGetFriendsQuery,
-    useGetOnlineUsersQuery,
-} from "../../../../redux/features/apis/friendApi";
+} from "../../../../redux/features/slices/friendSlice";
 
 const FriendsList = () => {
-    const { data } = useGetFriendsQuery();
-    const { data: onlineUsers } = useGetOnlineUsersQuery();
-    console.log("friends: ", data);
+    const { friends: allFriends, onlineUsers } = useAppSelector(
+        (state) => state.friend
+    );
 
+    // add online status to friends
     const friends = (friends: Friend[], onlineUsers: OnlineUser[]) => {
         return friends.map((friend) => {
             const isOnline = onlineUsers.find(
@@ -30,9 +30,9 @@ const FriendsList = () => {
             </h4>
 
             <div className="mt-4 pl-4 grid gap-y-2">
-                {data &&
+                {allFriends &&
                     onlineUsers &&
-                    friends(data, onlineUsers)?.map((friend) => (
+                    friends(allFriends, onlineUsers)?.map((friend) => (
                         <FriendsListItem key={friend._id} friend={friend} />
                     ))}
             </div>

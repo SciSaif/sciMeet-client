@@ -34,11 +34,10 @@ const RegisterPage = () => {
     } = useForm<FormType>({ resolver: zodResolver(Form) });
 
     const handleSignUp = (data: FormType) => {
-        console.log(data);
         signup(data)
             .unwrap()
             .then((res) => {
-                console.log(":res:", res);
+                // console.log(":res:", res);
             });
     };
 

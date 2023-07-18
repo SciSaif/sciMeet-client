@@ -1,11 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+interface RoomDetails {
+    roomCreator: {
+        userId: string;
+        socketId: string;
+    };
+    participants: {
+        userId: string;
+        socketId: string;
+    }[];
+    roomid: string;
+}
+
+export interface ActiveRoom {
+    roomCreator: {
+        userId: string;
+        socketId: string;
+        username?: string;
+    };
+    participants: {
+        userId: string;
+        socketId: string;
+    }[];
+    roomid: string;
+}
+
 interface initialStateProps {
     isUserInRoom?: boolean;
     isUserRoomCreator?: boolean;
-    roomDetails: null;
-    activeRooms: [];
+    roomDetails: RoomDetails | null;
+    activeRooms: ActiveRoom[];
     localStream: null;
     remoteStreams: [];
     audioOnly: boolean;
@@ -29,18 +54,29 @@ export const roomSlice = createSlice({
     name: "room",
     initialState,
     reducers: {
-        // setTheme: (state, action: PayloadAction<"light" | "dark">) => {
-        //     state.theme = action.payload;
-        // },
+        setRoomState: (
+            state,
+            action: PayloadAction<{
+                isUserInRoom: boolean;
+                isUserRoomCreator: boolean;
+            }>
+        ) => {
+            state.isUserInRoom = action.payload.isUserInRoom;
+            state.isUserRoomCreator = action.payload.isUserRoomCreator;
+        },
 
-        createNewRoom: (state) => {
-            state.isUserInRoom = true;
-            state.isUserRoomCreator = true;
+        setRoomDetails: (state, action: PayloadAction<RoomDetails>) => {
+            state.roomDetails = action.payload;
+        },
+
+        setActiveRooms: (state, action: PayloadAction<ActiveRoom[]>) => {
+            state.activeRooms = action.payload;
         },
 
         resetState: () => initialState,
     },
 });
 
-export const { createNewRoom } = roomSlice.actions;
+export const { setRoomState, setRoomDetails, setActiveRooms } =
+    roomSlice.actions;
 export default roomSlice.reducer;
