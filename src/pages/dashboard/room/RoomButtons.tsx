@@ -6,12 +6,34 @@ import {
 } from "@heroicons/react/20/solid";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { setRoomState } from "../../../redux/features/slices/roomSlice";
+import {
+    setLocalStream,
+    setRoomState,
+} from "../../../redux/features/slices/roomSlice";
 import { leaveRoom } from "../../../redux/utils/socketHandler";
 
 const RoomButtons = () => {
     const dispatch = useAppDispatch();
     const roomid = useAppSelector((state) => state.room.roomDetails?.roomid);
+    const { localStream } = useAppSelector((state) => state.room);
+
+    const leaveRoomHandler = () => {
+        dispatch(
+            setRoomState({
+                isUserInRoom: false,
+                isUserRoomCreator: false,
+            })
+        );
+
+        if (localStream) {
+            localStream.getTracks().forEach((track) => track.stop());
+            dispatch(setLocalStream(null));
+        }
+
+        if (roomid) {
+            leaveRoom(roomid);
+        }
+    };
 
     return (
         <div className="w-full  bg-secondary flex justify-center items-center ">
@@ -23,18 +45,7 @@ const RoomButtons = () => {
                     <MicrophoneIcon width={20} />
                 </div>
                 <div
-                    onClick={() => {
-                        console.log("d");
-                        dispatch(
-                            setRoomState({
-                                isUserInRoom: false,
-                                isUserRoomCreator: false,
-                            })
-                        );
-                        if (roomid) {
-                            leaveRoom(roomid);
-                        }
-                    }}
+                    onClick={leaveRoomHandler}
                     className="cursor-pointer hover:text-white/80 p-3"
                 >
                     <XMarkIcon width={20} />

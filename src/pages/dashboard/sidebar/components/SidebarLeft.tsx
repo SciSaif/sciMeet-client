@@ -8,6 +8,7 @@ import { useCreateNewRoomMutation } from "../../../../redux/features/apis/roomAp
 import { useAppSelector } from "../../../../redux/hooks";
 import ActiveRoomButton from "./ActiveRoomButton";
 import { setRoomState } from "../../../../redux/features/slices/roomSlice";
+import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
 
 const SidebarLeft = () => {
     const dispatch = useDispatch();
@@ -19,15 +20,19 @@ const SidebarLeft = () => {
     const activeRooms = useAppSelector((state) => state.room.activeRooms);
 
     const handleAddRoom = () => {
-        dispatch(
-            setRoomState({
-                isUserInRoom: true,
-                isUserRoomCreator: true,
-            })
-        );
-        // if (size === "sm") dispatch(toggleSidebar());
-        if (windowSize.current[0] < 760) dispatch(toggleSidebar());
-        createRoom();
+        const successCallbackFunc = () => {
+            dispatch(
+                setRoomState({
+                    isUserInRoom: true,
+                    isUserRoomCreator: true,
+                })
+            );
+            // if (size === "sm") dispatch(toggleSidebar());
+            if (windowSize.current[0] < 760) dispatch(toggleSidebar());
+            createRoom();
+        };
+
+        getLocalStreamPreview(false, successCallbackFunc);
     };
 
     return (

@@ -31,7 +31,7 @@ interface initialStateProps {
     isUserRoomCreator?: boolean;
     roomDetails: RoomDetails | null;
     activeRooms: ActiveRoom[];
-    localStream: null;
+    localStream: MediaStream | null;
     remoteStreams: [];
     audioOnly: boolean;
     screenSharingStream: null;
@@ -73,10 +73,14 @@ export const roomSlice = createSlice({
             state.activeRooms = action.payload;
         },
 
+        setLocalStream: (state, action: PayloadAction<MediaStream | null>) => {
+            state.localStream = action.payload;
+        },
+
         resetState: () => initialState,
     },
 });
 
-export const { setRoomState, setRoomDetails, setActiveRooms } =
+export const { setRoomState, setRoomDetails, setLocalStream, setActiveRooms } =
     roomSlice.actions;
 export default roomSlice.reducer;

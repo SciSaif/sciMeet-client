@@ -1,5 +1,4 @@
 import { apiSlice } from "../apiSlice";
-import { getSocket } from "../../utils/socketHandler";
 
 export const friendApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
