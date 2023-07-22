@@ -5,7 +5,7 @@ import {
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
 import { useAppDispatch } from "../../../../redux/hooks";
-import { joinRoom } from "../../../../redux/utils/socketHandler";
+import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
 
 interface Props {

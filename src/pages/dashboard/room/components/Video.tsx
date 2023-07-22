@@ -19,7 +19,7 @@ const Video = ({ stream, isLocalStream }: Props) => {
     }, [stream]);
 
     return (
-        <div className="w-1/2 h-1/2 rounded bg-black">
+        <div className="w-full h-1/2 rounded bg-black">
             <video ref={videoRef} muted={isLocalStream} autoPlay playsInline />
         </div>
     );

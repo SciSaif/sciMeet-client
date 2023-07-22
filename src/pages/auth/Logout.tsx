@@ -8,7 +8,7 @@ import { auth } from "../../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { resetState as resetOtherState } from "../../redux/features/slices/otherSlice";
-import { closeSocket } from "../../redux/utils/socketHandler";
+import { closeSocket } from "../../realtimeCommunication/socketHandler";
 
 const Logout = () => {
     const dispatch = useAppDispatch();

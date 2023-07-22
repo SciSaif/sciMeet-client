@@ -8,7 +8,7 @@ import { setTheme } from "../../redux/features/slices/otherSlice";
 import DashboardHeader from "./components/DashboardHeader";
 import ChatWindow from "./components/ChatWindow";
 import Room from "./room/Room";
-import { connectWithSocketServer } from "../../redux/utils/socketHandler";
+import { connectWithSocketServer } from "../../realtimeCommunication/socketHandler";
 import { store } from "../../redux/store";
 
 const Dashboard = () => {

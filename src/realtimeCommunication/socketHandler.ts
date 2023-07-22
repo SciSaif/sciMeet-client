@@ -1,21 +1,24 @@
-import { OnlineUser } from "./../features/slices/friendSlice";
-import { auth } from "./../../../firebase-config";
+import { OnlineUser } from "../redux/features/slices/friendSlice";
+import { auth } from "../../firebase-config";
 import { Socket, io } from "socket.io-client";
-import { RootState, store } from "../store";
-import { MessageContent, MessageHistory } from "../features/apis/chatApi";
+import { RootState, store } from "../redux/store";
+import { MessageContent, MessageHistory } from "../redux/features/apis/chatApi";
 import {
     ActiveRoom,
     setActiveRooms,
     setRoomDetails,
-} from "../features/slices/roomSlice";
+} from "../redux/features/slices/roomSlice";
 import {
     Friend,
     Invitation,
     setFriends,
     setInvitations,
     setOnlineUsers,
-} from "../features/slices/friendSlice";
-
+} from "../redux/features/slices/friendSlice";
+import { handleSignalingData, prepareNewPeerConnection } from "./webRTCHandler";
+export type ConnUserSocketIdType = {
+    connUserSocketId: string;
+};
 interface ServerToClientEvents {
     // noArg: () => void;
     // basicEmit: (a: number, b: string, c: Buffer) => void;
@@ -26,6 +29,9 @@ interface ServerToClientEvents {
     "direct-chat-history": (data: MessageHistory) => void;
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
+    "conn-prepare": (data: ConnUserSocketIdType) => void;
+    "conn-init": (data: ConnUserSocketIdType) => void;
+    "conn-signal": (data: any) => void;
 }
 
 interface ClientToServerEvents {
@@ -35,6 +41,8 @@ interface ClientToServerEvents {
     "room-create": () => void;
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;
+    "conn-init": (data: ConnUserSocketIdType) => void;
+    "conn-signal": (data: any) => void;
 }
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -95,6 +103,35 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     socket.on("friends-invitations", ({ pendingInvitations }) => {
         dispatch(setInvitations(pendingInvitations));
     });
+
+    // webrtc
+    // here we receive the offer from the initiator
+    // and create a new peer connection
+    socket.on("conn-prepare", (data) => {
+        console.log("conn-prepare", data);
+        const { connUserSocketId } = data;
+        // since we are the receiver, we are not the initiator
+        prepareNewPeerConnection(connUserSocketId, false);
+        console.log("conn-prepare");
+
+        // send back a signal to the initiator to let them know that we are ready
+        socket.emit("conn-init", {
+            connUserSocketId,
+        });
+    });
+
+    // here we receive the signal from the receiver (we are the initiator)
+    // and send back our signal
+    socket.on("conn-init", (data) => {
+        const { connUserSocketId } = data;
+
+        // here we are the initiator so we create a new peer connection
+        prepareNewPeerConnection(connUserSocketId, true);
+    });
+
+    socket.on("conn-signal", (data) => {
+        handleSignalingData(data);
+    });
 };
 
 export const joinRoom = (roomid: string) => {
@@ -103,4 +140,8 @@ export const joinRoom = (roomid: string) => {
 
 export const leaveRoom = (roomid: string) => {
     socket.emit("leave-room", { roomid });
+};
+
+export const signalPeerData = (data: any) => {
+    socket.emit("conn-signal", data);
 };

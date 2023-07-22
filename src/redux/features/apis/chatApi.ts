@@ -1,5 +1,5 @@
 import { apiSlice } from "../apiSlice";
-import { getSocket } from "../../utils/socketHandler";
+import { getSocket } from "../../../realtimeCommunication/socketHandler";
 
 export interface MessageContent {
     receiverUserId: string;

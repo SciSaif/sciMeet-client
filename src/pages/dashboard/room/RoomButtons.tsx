@@ -10,7 +10,7 @@ import {
     setLocalStream,
     setRoomState,
 } from "../../../redux/features/slices/roomSlice";
-import { leaveRoom } from "../../../redux/utils/socketHandler";
+import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
 
 const RoomButtons = () => {
     const dispatch = useAppDispatch();
