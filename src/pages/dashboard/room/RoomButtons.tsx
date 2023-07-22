@@ -8,6 +8,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
     setLocalStream,
+    setRemoteStreams,
     setRoomState,
 } from "../../../redux/features/slices/roomSlice";
 import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
@@ -30,6 +31,8 @@ const RoomButtons = () => {
             localStream.getTracks().forEach((track) => track.stop());
             dispatch(setLocalStream(null));
         }
+
+        dispatch(setRemoteStreams([]));
 
         closeAllConnections();
 

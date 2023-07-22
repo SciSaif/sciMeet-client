@@ -4,7 +4,7 @@ import {
     setRoomDetails,
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
-import { useAppDispatch } from "../../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
 
@@ -16,8 +16,13 @@ const ActiveRoomButton = ({ room }: Props) => {
     const numberOfParticipants = room.participants.length;
     const dispatch = useAppDispatch();
     const activeRoomButtonDisabled = numberOfParticipants > 3;
+    const currentRoomId = useAppSelector(
+        (state) => state.room.roomDetails?.roomid
+    );
 
     const handleJoin = () => {
+        if (currentRoomId === room.roomid) return;
+
         if (numberOfParticipants < 4) {
             // join room
             const successCallbackFunc = () => {
