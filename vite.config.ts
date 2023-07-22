@@ -22,11 +22,11 @@ export default defineConfig({
             protocolImports: true,
         }),
     ],
-    define: {
-        // By default, Vite doesn't include shims for NodeJS/
-        // necessary for segment analytics lib to work
-        global: {},
-    },
+    // define: {
+    //     // By default, Vite doesn't include shims for NodeJS/
+    //     // necessary for segment analytics lib to work
+    //     global: {},
+    // },
 
     // resolve: {
     //     alias: {

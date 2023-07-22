@@ -16,10 +16,6 @@ import { useAppSelector } from "./redux/hooks";
 import Home from "./pages/home/Home";
 import Logout from "./pages/auth/Logout";
 
-import global from "global";
-import * as process from "process";
-global.process = process;
-
 function App() {
     const theme = useAppSelector((state) => state.other.theme);
 
