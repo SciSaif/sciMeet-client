@@ -112,3 +112,25 @@ export const addNewRemoteStream = (remoteStream: MediaStream) => {
 
     store.dispatch(setRemoteStreams(newRemoteStreams));
 };
+
+export const closeAllConnections = () => {
+    Object.entries(peers).forEach(([connUserSocketId, peer]) => {
+        peer.destroy();
+        delete peers[connUserSocketId];
+    });
+};
+
+export const handleParticipantLeftRoom = (connUserSocketId: string) => {
+    if (peers[connUserSocketId]) {
+        peers[connUserSocketId].destroy();
+        delete peers[connUserSocketId];
+    }
+
+    const remoteStreams = store.getState().room.remoteStreams;
+    const newRemoteStreams = remoteStreams.filter(
+        // @ts-ignore
+        (stream) => stream.connUsersocketId !== connUserSocketId
+    );
+
+    store.dispatch(setRemoteStreams(newRemoteStreams));
+};

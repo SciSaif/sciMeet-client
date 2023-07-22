@@ -15,7 +15,11 @@ import {
     setInvitations,
     setOnlineUsers,
 } from "../redux/features/slices/friendSlice";
-import { handleSignalingData, prepareNewPeerConnection } from "./webRTCHandler";
+import {
+    handleParticipantLeftRoom,
+    handleSignalingData,
+    prepareNewPeerConnection,
+} from "./webRTCHandler";
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
 };
@@ -32,6 +36,7 @@ interface ServerToClientEvents {
     "conn-prepare": (data: ConnUserSocketIdType) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;
     "conn-signal": (data: any) => void;
+    "room-participant-left": (data: ConnUserSocketIdType) => void;
 }
 
 interface ClientToServerEvents {
@@ -131,6 +136,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
 
     socket.on("conn-signal", (data) => {
         handleSignalingData(data);
+    });
+
+    socket.on("room-participant-left", (data) => {
+        handleParticipantLeftRoom(data.connUserSocketId);
     });
 };
 

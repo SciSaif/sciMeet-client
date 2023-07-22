@@ -11,6 +11,7 @@ import {
     setRoomState,
 } from "../../../redux/features/slices/roomSlice";
 import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
+import { closeAllConnections } from "../../../realtimeCommunication/webRTCHandler";
 
 const RoomButtons = () => {
     const dispatch = useAppDispatch();
@@ -29,6 +30,8 @@ const RoomButtons = () => {
             localStream.getTracks().forEach((track) => track.stop());
             dispatch(setLocalStream(null));
         }
+
+        closeAllConnections();
 
         if (roomid) {
             leaveRoom(roomid);

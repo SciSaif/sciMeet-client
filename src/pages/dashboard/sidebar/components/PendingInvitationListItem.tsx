@@ -1,10 +1,10 @@
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import {
-    Invitation,
     useAcceptInvitationMutation,
     useRejectInvitationMutation,
 } from "../../../../redux/features/apis/friendApi";
+import { Invitation } from "../../../../redux/features/slices/friendSlice";
 
 const PendingInvitationListItem = ({
     invitation,

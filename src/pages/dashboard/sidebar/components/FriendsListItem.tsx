@@ -1,10 +1,10 @@
 import React from "react";
-import { Friend } from "../../../../redux/features/apis/friendApi";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
     setSelectedFriend,
     toggleSidebar,
 } from "../../../../redux/features/slices/otherSlice";
+import { Friend } from "../../../../redux/features/slices/friendSlice";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const dispatch = useAppDispatch();
