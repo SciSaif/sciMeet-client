@@ -7,17 +7,24 @@ import {
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
-    setLocalStream,
-    setRemoteStreams,
+    setRoomDetails,
+    // setLocalStream,
+    // setRemoteStreams,
     setRoomState,
 } from "../../../redux/features/slices/roomSlice";
 import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
-import { closeAllConnections } from "../../../realtimeCommunication/webRTCHandler";
+import {
+    closeAllConnections,
+    getLocalStream,
+    setLocalStream,
+    setRemoteStreams,
+} from "../../../realtimeCommunication/webRTCHandler";
 
 const RoomButtons = () => {
     const dispatch = useAppDispatch();
     const roomid = useAppSelector((state) => state.room.roomDetails?.roomid);
-    const { localStream } = useAppSelector((state) => state.room);
+    // const { localStream } = useAppSelector((state) => state.room);
+    const localStream = getLocalStream();
 
     const leaveRoomHandler = () => {
         dispatch(
@@ -26,13 +33,16 @@ const RoomButtons = () => {
                 isUserRoomCreator: false,
             })
         );
+        dispatch(setRoomDetails(null));
 
         if (localStream) {
             localStream.getTracks().forEach((track) => track.stop());
-            dispatch(setLocalStream(null));
+            // dispatch(setLocalStream(null));
+            setLocalStream(null);
         }
 
-        dispatch(setRemoteStreams([]));
+        // dispatch(setRemoteStreams([]));
+        setRemoteStreams([]);
 
         closeAllConnections();
 

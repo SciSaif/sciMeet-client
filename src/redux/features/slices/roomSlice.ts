@@ -65,7 +65,7 @@ export const roomSlice = createSlice({
             state.isUserRoomCreator = action.payload.isUserRoomCreator;
         },
 
-        setRoomDetails: (state, action: PayloadAction<RoomDetails>) => {
+        setRoomDetails: (state, action: PayloadAction<RoomDetails | null>) => {
             state.roomDetails = action.payload;
         },
 
@@ -87,9 +87,9 @@ export const roomSlice = createSlice({
 
 export const {
     setRoomState,
-    setRemoteStreams,
+    // setRemoteStreams,
     setRoomDetails,
-    setLocalStream,
+    // setLocalStream,
     setActiveRooms,
 } = roomSlice.actions;
 export default roomSlice.reducer;

@@ -90,6 +90,15 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
                     });
                 }
             });
+
+            // also add rooms that we created ourselves
+            const user = store.getState().auth.user;
+            if (user && user._id === room.roomCreator.userId) {
+                room.roomCreator.username = user.username;
+                rooms.push({
+                    ...room,
+                });
+            }
         });
 
         dispatch(setActiveRooms(rooms));

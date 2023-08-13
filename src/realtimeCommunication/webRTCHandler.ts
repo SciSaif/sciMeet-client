@@ -1,7 +1,7 @@
-import {
-    setLocalStream,
-    setRemoteStreams,
-} from "../redux/features/slices/roomSlice";
+// import {
+//     setLocalStream,
+//     setRemoteStreams,
+// } from "../redux/features/slices/roomSlice";
 import { store } from "../redux/store";
 import Peer from "simple-peer";
 import { signalPeerData } from "./socketHandler";
@@ -32,6 +32,25 @@ const defaultConstraints = {
     audio: true,
 };
 
+let localStream: MediaStream | null = null;
+let remoteStreams: MediaStream[] = [];
+
+export const getLocalStream = () => {
+    return localStream;
+};
+
+export const getRemoteStreams = () => {
+    return remoteStreams;
+};
+
+export const setLocalStream = (stream: MediaStream | null) => {
+    localStream = stream;
+};
+
+export const setRemoteStreams = (streams: MediaStream[]) => {
+    remoteStreams = streams;
+};
+
 export const getLocalStreamPreview = (
     onlyAudio: boolean = false,
     callbackFunc: () => void
@@ -41,7 +60,9 @@ export const getLocalStreamPreview = (
     navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            store.dispatch(setLocalStream(stream));
+            // store.dispatch(setLocalStream(stream));
+            localStream = stream;
+
             callbackFunc();
         })
         .catch((err) => {
@@ -60,7 +81,7 @@ export const prepareNewPeerConnection = (
     connUserSocketId: string,
     isInitiator: boolean
 ) => {
-    const localStream = store.getState().room.localStream;
+    // const localStream = store.getState().room.localStream;
 
     if (!localStream) return;
 
@@ -107,10 +128,12 @@ export const handleSignalingData = (data: any) => {
 };
 
 export const addNewRemoteStream = (remoteStream: MediaStream) => {
-    const remoteStreams = store.getState().room.remoteStreams;
+    // const remoteStreams = store.getState().room.remoteStreams;
+    // const newRemoteStreams = [...remoteStreams, remoteStream];
     const newRemoteStreams = [...remoteStreams, remoteStream];
 
-    store.dispatch(setRemoteStreams(newRemoteStreams));
+    // store.dispatch(setRemoteStreams(newRemoteStreams));
+    remoteStreams = newRemoteStreams;
 };
 
 export const closeAllConnections = () => {
@@ -126,11 +149,12 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
         delete peers[connUserSocketId];
     }
 
-    const remoteStreams = store.getState().room.remoteStreams;
+    // const remoteStreams = store.getState().room.remoteStreams;
     const newRemoteStreams = remoteStreams.filter(
         // @ts-ignore
         (stream) => stream.connUsersocketId !== connUserSocketId
     );
 
-    store.dispatch(setRemoteStreams(newRemoteStreams));
+    // store.dispatch(setRemoteStreams(newRemoteStreams));
+    remoteStreams = newRemoteStreams;
 };

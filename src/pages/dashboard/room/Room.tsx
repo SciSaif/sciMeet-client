@@ -19,7 +19,7 @@ const Room = () => {
 
     return (
         <div
-            className={`rounded-l-xl flex flex-col rounded-b-none absolute bottom-0 right-0 ${
+            className={`rounded-l-xl flex flex-col rounded-b-none absolute bottom-0 z-50 right-0 ${
                 fullScreen
                     ? "h-full w-full "
                     : "h-full w-full sm:h-1/2 sm:w-[500px] sm:max-h-1/2 sm:max-w-1/2"

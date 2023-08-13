@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
     stream: MediaStream;
@@ -19,7 +20,12 @@ const Video = ({ stream, isLocalStream }: Props) => {
     }, [stream]);
 
     return (
-        <div className="w-full h-1/2 rounded bg-black">
+        <div
+            className={twMerge(
+                "w-full flex justify-center rounded bg-black overflow-hidden p-1",
+                isLocalStream && "border border-secondary-600"
+            )}
+        >
             <video ref={videoRef} muted={isLocalStream} autoPlay playsInline />
         </div>
     );
