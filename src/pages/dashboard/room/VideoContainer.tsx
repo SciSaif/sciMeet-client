@@ -8,7 +8,8 @@ import {
 import { twMerge } from "tailwind-merge";
 
 const VideoContainer = () => {
-    // const room = useAppSelector((state) => state.room);
+    // !! required for rerender
+    const rerenderOnStateChange = useAppSelector((state) => state.room);
     const localStream = getLocalStream();
     const remoteStreams = getRemoteStreams();
     console.log("remoteStreams", remoteStreams);

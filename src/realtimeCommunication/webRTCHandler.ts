@@ -5,6 +5,10 @@
 import { store } from "../redux/store";
 import Peer from "simple-peer";
 import { signalPeerData } from "./socketHandler";
+import {
+    toggleLocalStreamChanged,
+    toggleRemoteStreamsChanged,
+} from "../redux/features/slices/roomSlice";
 
 const getConfiguration = () => {
     const turnIceServers = null;
@@ -45,10 +49,12 @@ export const getRemoteStreams = () => {
 
 export const setLocalStream = (stream: MediaStream | null) => {
     localStream = stream;
+    store.dispatch(toggleLocalStreamChanged());
 };
 
 export const setRemoteStreams = (streams: MediaStream[]) => {
     remoteStreams = streams;
+    store.dispatch(toggleRemoteStreamsChanged());
 };
 
 export const getLocalStreamPreview = (
@@ -60,8 +66,8 @@ export const getLocalStreamPreview = (
     navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            // store.dispatch(setLocalStream(stream));
             localStream = stream;
+            store.dispatch(toggleLocalStreamChanged());
 
             callbackFunc();
         })
@@ -81,8 +87,6 @@ export const prepareNewPeerConnection = (
     connUserSocketId: string,
     isInitiator: boolean
 ) => {
-    // const localStream = store.getState().room.localStream;
-
     if (!localStream) return;
 
     if (isInitiator) {
@@ -128,12 +132,10 @@ export const handleSignalingData = (data: any) => {
 };
 
 export const addNewRemoteStream = (remoteStream: MediaStream) => {
-    // const remoteStreams = store.getState().room.remoteStreams;
-    // const newRemoteStreams = [...remoteStreams, remoteStream];
     const newRemoteStreams = [...remoteStreams, remoteStream];
 
-    // store.dispatch(setRemoteStreams(newRemoteStreams));
     remoteStreams = newRemoteStreams;
+    store.dispatch(toggleRemoteStreamsChanged());
 };
 
 export const closeAllConnections = () => {
@@ -149,12 +151,11 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
         delete peers[connUserSocketId];
     }
 
-    // const remoteStreams = store.getState().room.remoteStreams;
     const newRemoteStreams = remoteStreams.filter(
         // @ts-ignore
         (stream) => stream.connUsersocketId !== connUserSocketId
     );
 
-    // store.dispatch(setRemoteStreams(newRemoteStreams));
     remoteStreams = newRemoteStreams;
+    store.dispatch(toggleRemoteStreamsChanged());
 };
