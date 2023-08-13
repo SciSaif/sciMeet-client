@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
     ActiveRoom,
     setRoomDetails,
@@ -7,12 +7,14 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
+import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
 
 interface Props {
     room: ActiveRoom;
 }
 
 const ActiveRoomButton = ({ room }: Props) => {
+    const windowWidth = useRef(window.innerWidth);
     const numberOfParticipants = room.participants.length;
     const dispatch = useAppDispatch();
     const activeRoomButtonDisabled = numberOfParticipants > 3;
@@ -34,6 +36,10 @@ const ActiveRoomButton = ({ room }: Props) => {
                     })
                 );
                 joinRoom(room.roomid);
+
+                if (windowWidth.current < 768) {
+                    dispatch(toggleSidebar());
+                }
             };
 
             getLocalStreamPreview(false, successCallbackFunc);

@@ -4,7 +4,7 @@ import {
     VideoCameraIcon,
     XMarkIcon,
 } from "@heroicons/react/20/solid";
-import React from "react";
+import React, { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
     setRoomDetails,
@@ -19,8 +19,11 @@ import {
     setLocalStream,
     setRemoteStreams,
 } from "../../../realtimeCommunication/webRTCHandler";
+import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
 
 const RoomButtons = () => {
+    const windowWidth = useRef(window.innerWidth);
+
     const dispatch = useAppDispatch();
     const roomid = useAppSelector((state) => state.room.roomDetails?.roomid);
     // const { localStream } = useAppSelector((state) => state.room);
@@ -34,6 +37,9 @@ const RoomButtons = () => {
             })
         );
         dispatch(setRoomDetails(null));
+        if (windowWidth.current < 768) {
+            dispatch(toggleSidebar());
+        }
 
         if (localStream) {
             localStream.getTracks().forEach((track) => track.stop());
