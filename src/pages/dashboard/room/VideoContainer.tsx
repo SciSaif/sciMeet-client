@@ -4,6 +4,7 @@ import Video from "./components/Video";
 import {
     getLocalStream,
     getRemoteStreams,
+    getScreenSharingStream,
 } from "../../../realtimeCommunication/webRTCHandler";
 import { twMerge } from "tailwind-merge";
 
@@ -12,6 +13,7 @@ const VideoContainer = () => {
     const rerenderOnStateChange = useAppSelector((state) => state.room);
     const localStream = getLocalStream();
     const remoteStreams = getRemoteStreams();
+    const screenSharingStream = getScreenSharingStream();
     console.log("remoteStreams", remoteStreams);
 
     return (
@@ -21,7 +23,14 @@ const VideoContainer = () => {
                 remoteStreams.length === 0 && "sm:grid-cols-1"
             )}
         >
-            {localStream && <Video stream={localStream} isLocalStream={true} />}
+            {localStream && (
+                <Video
+                    stream={
+                        screenSharingStream ? screenSharingStream : localStream
+                    }
+                    isLocalStream={true}
+                />
+            )}
 
             {remoteStreams.map((stream) => (
                 <Video key={stream.id} stream={stream} isLocalStream={false} />

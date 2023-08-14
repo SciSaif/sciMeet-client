@@ -33,9 +33,8 @@ interface initialStateProps {
     activeRooms: ActiveRoom[];
     localStreamChanged: boolean;
     remoteStreamsChanged: boolean;
+    screenShareChanged: boolean;
     audioOnly: boolean;
-    screenSharingStream: null;
-    isScreenSharingActive: boolean;
 }
 
 const initialState: initialStateProps = {
@@ -45,9 +44,8 @@ const initialState: initialStateProps = {
     activeRooms: [],
     localStreamChanged: false,
     remoteStreamsChanged: false,
+    screenShareChanged: false,
     audioOnly: false,
-    screenSharingStream: null,
-    isScreenSharingActive: false,
 };
 
 export const roomSlice = createSlice({
@@ -81,6 +79,9 @@ export const roomSlice = createSlice({
             state.remoteStreamsChanged = !state.remoteStreamsChanged;
         },
 
+        toggleScreenShareChanged: (state) => {
+            state.screenShareChanged = !state.screenShareChanged;
+        },
         resetState: () => initialState,
     },
 });
@@ -93,5 +94,6 @@ export const {
     setActiveRooms,
     toggleLocalStreamChanged,
     toggleRemoteStreamsChanged,
+    toggleScreenShareChanged,
 } = roomSlice.actions;
 export default roomSlice.reducer;

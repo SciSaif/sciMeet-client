@@ -8,6 +8,7 @@ import { signalPeerData } from "./socketHandler";
 import {
     toggleLocalStreamChanged,
     toggleRemoteStreamsChanged,
+    toggleScreenShareChanged,
 } from "../redux/features/slices/roomSlice";
 
 const getConfiguration = () => {
@@ -158,4 +159,45 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
 
     remoteStreams = newRemoteStreams;
     store.dispatch(toggleRemoteStreamsChanged());
+};
+
+let screenSharingStream: MediaStream | null = null;
+
+export const getScreenSharingStream = () => {
+    return screenSharingStream;
+};
+
+export const stopScreenSharing = () => {
+    if (screenSharingStream) {
+        screenSharingStream.getTracks().forEach((track) => track.stop());
+        screenSharingStream = null;
+        store.dispatch(toggleScreenShareChanged());
+    }
+};
+
+export const switchOutgoingTracks = (
+    stream: MediaStream,
+    isLocalStream: boolean = false
+) => {
+    if (!isLocalStream) {
+        screenSharingStream = stream;
+        store.dispatch(toggleScreenShareChanged());
+    }
+    for (let socket_id in peers) {
+        for (let index in peers[socket_id].streams[0].getTracks()) {
+            for (let index2 in stream.getTracks()) {
+                if (
+                    peers[socket_id].streams[0].getTracks()[index].kind ===
+                    stream.getTracks()[index2].kind
+                ) {
+                    peers[socket_id].replaceTrack(
+                        peers[socket_id].streams[0].getTracks()[index],
+                        stream.getTracks()[index2],
+                        peers[socket_id].streams[0]
+                    );
+                    break;
+                }
+            }
+        }
+    }
 };

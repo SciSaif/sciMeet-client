@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props {
@@ -10,6 +10,7 @@ const Video = ({ stream, isLocalStream }: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
+        console.log(stream);
         const video = videoRef.current;
         if (!video) return;
         video.srcObject = stream;
