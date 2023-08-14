@@ -1,2 +1,2 @@
 /// <reference types="vite/client" />
-// declare module "global";
+// declare module "react-input-emoji";

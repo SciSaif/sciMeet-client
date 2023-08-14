@@ -59,6 +59,7 @@ const RoomButtons = () => {
         }
 
         setRemoteStreams([]);
+        stopScreenSharing();
 
         closeAllConnections();
 
@@ -117,7 +118,7 @@ const RoomButtons = () => {
         <div className="w-full  bg-secondary flex justify-center items-center ">
             <div className="flex flex-row gap-x-4 text-white">
                 <div
-                    className="cursor-pointer hover:text-white/80 group p-3 relative hover:bg-white/10 rounded-full "
+                    className="hidden sm:flex cursor-pointer hover:text-white/80 group p-3 relative hover:bg-white/10 rounded-full "
                     onClick={handleToggleScreenShare}
                 >
                     <div className="sm:group-hover:scale-125">

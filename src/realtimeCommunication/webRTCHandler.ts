@@ -11,20 +11,50 @@ import {
     toggleScreenShareChanged,
 } from "../redux/features/slices/roomSlice";
 
-const getConfiguration = () => {
-    const turnIceServers = null;
+// const getConfiguration = () => {
+//     const turnIceServers = null;
 
-    if (!turnIceServers) {
-        console.warn("Using only STUN server");
-    } else {
-        return {
-            iceServers: [
-                {
-                    urls: "stun:stun.l.google.com:19302",
-                },
-            ],
-        };
-    }
+//     if (!turnIceServers) {
+//         console.warn("Using only STUN server");
+//     } else {
+//         return {
+//             iceServers: [
+//                 {
+//                     urls: "stun:stun.l.google.com:19302",
+//                 },
+//             ],
+//         };
+//     }
+// };
+const getConfiguration = async () => {
+    // Calling the REST API TO fetch the TURN Server Credentials
+    const response = await fetch(
+        "https://scimeet.metered.live/api/v1/turn/credentials?apiKey=10ef8a6a4f7d190368963d9362b79daf56fa"
+    );
+
+    // Saving the response in the iceServers array
+    const iceServers = await response.json();
+
+    console.log(iceServers);
+
+    return iceServers;
+
+    // const turnIceServers = [
+    //     {
+    //         urls: "stun:stun.l.google.com:19302",
+    //     },
+    //     {
+    //         urls: "turn:turn.l.google.com:19302",
+    //     },
+    // ];
+
+    // if (!turnIceServers) {
+    //     console.warn("Using only STUN server");
+    // } else {
+    //     return {
+    //         iceServers: turnIceServers,
+    //     };
+    // }
 };
 
 const onlyAudioConstraints = {
@@ -84,7 +114,7 @@ let peers = <
     }
 >{};
 
-export const prepareNewPeerConnection = (
+export const prepareNewPeerConnection = async (
     connUserSocketId: string,
     isInitiator: boolean
 ) => {
@@ -96,9 +126,21 @@ export const prepareNewPeerConnection = (
         console.log("preparing new peer connection as receiver");
     }
 
+    const response = await fetch(
+        "https://scimeet.metered.live/api/v1/turn/credentials?apiKey=10ef8a6a4f7d190368963d9362b79daf56fa"
+    );
+
+    // Saving the response in the iceServers array
+    const iceServers = await response.json();
+
+    console.log(iceServers);
+
     peers[connUserSocketId] = new Peer({
         initiator: isInitiator,
-        config: getConfiguration(),
+        // config: getConfiguration(),
+        config: {
+            iceServers: iceServers,
+        },
         stream: localStream,
     });
 

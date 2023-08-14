@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import ChatBeginningHeader from "./ChatBeginningHeader";
 import Message from "./Message";
@@ -25,6 +25,7 @@ const ChatWindow = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!selectedFriend) return;
         setMessage("");
         sendDirectMessage({
@@ -71,6 +72,8 @@ const ChatWindow = () => {
             {selectedFriend !== undefined && (
                 <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
                     <div className="w-full  flex flex-row items-center bg-primary-700 rounded-xl">
+                        {/* <EmojiPicker /> */}
+
                         <input
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -78,6 +81,7 @@ const ChatWindow = () => {
                             placeholder={`Message ${selectedFriend?.username}`}
                             className="w-full rounded-l-xl border-0 pr-10 bg-primary-700 focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
                         />
+
                         <button
                             type="submit"
                             className="pl-2 pr-4 cursor-pointer text-textGray hover:text-textGray3 "
