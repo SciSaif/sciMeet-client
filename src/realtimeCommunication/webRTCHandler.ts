@@ -195,6 +195,8 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
         delete peers[connUserSocketId];
     }
 
+    console.log("peers", peers);
+
     const newRemoteStreams = remoteStreams.filter(
         // @ts-ignore
         (stream) => stream.connUsersocketId !== connUserSocketId
