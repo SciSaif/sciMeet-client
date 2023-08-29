@@ -189,6 +189,7 @@ export const closeAllConnections = () => {
 };
 
 export const handleParticipantLeftRoom = (connUserSocketId: string) => {
+    console.log("handleParticipantLeftRoom", connUserSocketId);
     if (peers[connUserSocketId]) {
         peers[connUserSocketId].destroy();
         delete peers[connUserSocketId];
@@ -200,6 +201,7 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
     );
 
     remoteStreams = newRemoteStreams;
+    console.log("newremoteStreams", remoteStreams);
     store.dispatch(toggleRemoteStreamsChanged());
 };
 
