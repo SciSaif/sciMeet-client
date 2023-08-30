@@ -148,6 +148,7 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     });
 
     socket.on("room-participant-left", (data) => {
+        console.log("on room-participant-left");
         handleParticipantLeftRoom(data.connUserSocketId);
     });
 };
@@ -158,6 +159,7 @@ export const joinRoom = (roomid: string) => {
 
 export const leaveRoom = (roomid: string) => {
     socket.emit("leave-room", { roomid });
+    console.log("emit leaving room");
 };
 
 export const signalPeerData = (data: any) => {
