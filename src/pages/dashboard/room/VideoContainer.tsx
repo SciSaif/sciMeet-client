@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import Video from "./components/Video";
 import {
@@ -16,11 +16,14 @@ const VideoContainer = () => {
     const screenSharingStream = getScreenSharingStream();
     // console.log("remoteStreams", remoteStreams);
 
+    const [pinnedId, setPinnedId] = useState<string>("none");
+
     return (
         <div
             className={twMerge(
                 "w-full overflow-hidden grow grid grid-cols-1 sm:grid-cols-2  gap-2 p-2 ",
-                remoteStreams.length === 0 && "sm:grid-cols-1"
+                remoteStreams.length === 0 && "sm:grid-cols-1",
+                pinnedId !== "none" && "grid-cols-1 sm:grid-cols-1"
             )}
         >
             {localStream && (
@@ -29,11 +32,19 @@ const VideoContainer = () => {
                         screenSharingStream ? screenSharingStream : localStream
                     }
                     isLocalStream={true}
+                    pinnedId={pinnedId}
+                    setPinnedId={setPinnedId}
                 />
             )}
 
             {remoteStreams.map((stream) => (
-                <Video key={stream.id} stream={stream} isLocalStream={false} />
+                <Video
+                    key={stream.id}
+                    stream={stream}
+                    isLocalStream={false}
+                    pinnedId={pinnedId}
+                    setPinnedId={setPinnedId}
+                />
             ))}
         </div>
     );
