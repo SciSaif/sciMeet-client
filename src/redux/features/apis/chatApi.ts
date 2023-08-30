@@ -57,6 +57,7 @@ export const chatApi = apiSlice.injectEndpoints({
                         console.log("Connected to socket server");
                         console.log(socket.id);
                     });
+                    // con
 
                     socket.emit("direct-chat-history", { receiverUserId });
                     socket.on("direct-chat-history", (data) => {
