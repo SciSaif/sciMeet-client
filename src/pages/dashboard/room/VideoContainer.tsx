@@ -14,7 +14,7 @@ const VideoContainer = () => {
     const localStream = getLocalStream();
     const remoteStreams = getRemoteStreams();
     const screenSharingStream = getScreenSharingStream();
-    console.log("remoteStreams", remoteStreams);
+    // console.log("remoteStreams", remoteStreams);
 
     return (
         <div

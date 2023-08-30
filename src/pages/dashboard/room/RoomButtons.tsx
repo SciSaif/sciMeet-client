@@ -23,6 +23,7 @@ import {
     switchOutgoingTracks,
 } from "../../../realtimeCommunication/webRTCHandler";
 import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
+import { leaveRoomHandler } from "../../../utils/roomUtils";
 
 const constraints = {
     audio: false,
@@ -33,40 +34,12 @@ const RoomButtons = () => {
     const windowWidth = useRef(window.innerWidth);
 
     const dispatch = useAppDispatch();
-    const roomid = useAppSelector((state) => state.room.roomDetails?.roomid);
+    //  dont remove room here, its needed for rerendering
     const room = useAppSelector((state) => state.room);
     const localStream = getLocalStream();
     const [cameraEnabled, setCameraEnabled] = React.useState(true);
     const [micEnabled, setMicEnabled] = React.useState(true);
     const [screenShareEnabled, setScreenShareEnabled] = React.useState(false);
-
-    const leaveRoomHandler = () => {
-        dispatch(
-            setRoomState({
-                isUserInRoom: false,
-                isUserRoomCreator: false,
-            })
-        );
-        dispatch(setRoomDetails(null));
-        if (windowWidth.current < 768) {
-            dispatch(toggleSidebar());
-        }
-
-        if (localStream) {
-            localStream.getTracks().forEach((track) => track.stop());
-            // dispatch(setLocalStream(null));
-            setLocalStream(null);
-        }
-
-        setRemoteStreams([]);
-        stopScreenSharing();
-
-        closeAllConnections();
-
-        if (roomid) {
-            leaveRoom(roomid);
-        }
-    };
 
     const handleToggleCamera = () => {
         if (localStream) {
@@ -140,7 +113,7 @@ const RoomButtons = () => {
                     </div>
                 </div>
                 <div
-                    onClick={leaveRoomHandler}
+                    onClick={() => leaveRoomHandler(windowWidth.current)}
                     className="cursor-pointer hover:text-white/80 group p-3 hover:bg-white/10 rounded-full "
                 >
                     <XMarkIcon

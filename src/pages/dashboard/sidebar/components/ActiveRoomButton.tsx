@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
 import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
+import { leaveRoomHandler } from "../../../../utils/roomUtils";
+import { getCurrentTimeInMilliseconds } from "../../../../utils/other";
 
 interface Props {
     room: ActiveRoom;
@@ -26,6 +28,10 @@ const ActiveRoomButton = ({ room }: Props) => {
         if (currentRoomId === room.roomid) return;
 
         if (numberOfParticipants < 4) {
+            // if user is already in a room, exit
+            leaveRoomHandler();
+            // console.log("l2", getCurrentTimeInMilliseconds());
+
             // join room
             const successCallbackFunc = () => {
                 dispatch(setRoomDetails(room));

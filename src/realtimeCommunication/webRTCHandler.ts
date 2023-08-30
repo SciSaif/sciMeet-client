@@ -10,6 +10,7 @@ import {
     toggleRemoteStreamsChanged,
     toggleScreenShareChanged,
 } from "../redux/features/slices/roomSlice";
+import { getCurrentTimeInMilliseconds } from "../utils/other";
 
 // const getConfiguration = () => {
 //     const turnIceServers = null;
@@ -121,9 +122,15 @@ export const prepareNewPeerConnection = async (
     if (!localStream) return;
 
     if (isInitiator) {
-        console.log("preparing new peer connection as initiator");
+        console.log(
+            "preparing new peer connection as initiator"
+            // getCurrentTimeInMilliseconds()
+        );
     } else {
-        console.log("preparing new peer connection as receiver");
+        console.log(
+            "preparing new peer connection as receiver"
+            // getCurrentTimeInMilliseconds()
+        );
     }
 
     const response = await fetch(
@@ -133,7 +140,7 @@ export const prepareNewPeerConnection = async (
     // Saving the response in the iceServers array
     const iceServers = await response.json();
 
-    console.log(iceServers);
+    // console.log(iceServers);
 
     peers[connUserSocketId] = new Peer({
         initiator: isInitiator,
@@ -151,13 +158,20 @@ export const prepareNewPeerConnection = async (
             connUserSocketId,
         };
 
+        // console.log("singal", signalData.signal);
+
+        // console.log("on peer signal", getCurrentTimeInMilliseconds());
+
         // send signal to the other peer
         signalPeerData(signalData);
     });
 
     peers[connUserSocketId].on("stream", (remoteStream) => {
         console.log("remote stream came from other user");
-        console.log("direct connection has been established");
+        console.log(
+            "direct connection has been established"
+            // getCurrentTimeInMilliseconds()
+        );
         // @ts-ignore
         remoteStream.connUsersocketId = connUserSocketId;
 
@@ -168,6 +182,8 @@ export const prepareNewPeerConnection = async (
 
 export const handleSignalingData = (data: any) => {
     const { signal, connUserSocketId } = data;
+
+    // console.log("signalling now", getCurrentTimeInMilliseconds());
 
     if (peers[connUserSocketId]) {
         peers[connUserSocketId].signal(signal);
@@ -194,8 +210,6 @@ export const handleParticipantLeftRoom = (connUserSocketId: string) => {
         peers[connUserSocketId].destroy();
         delete peers[connUserSocketId];
     }
-
-    console.log("peers", peers);
 
     const newRemoteStreams = remoteStreams.filter(
         // @ts-ignore

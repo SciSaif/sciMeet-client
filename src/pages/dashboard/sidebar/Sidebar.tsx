@@ -2,8 +2,6 @@ import { useState } from "react";
 import AddFriendModal from "./components/AddFriendModal";
 import FriendsList from "./components/FriendsList";
 import PendingInvitations from "./components/PendingInvitationsList";
-import { UserGroupIcon } from "@heroicons/react/24/outline";
-import { UsersIcon } from "@heroicons/react/20/solid";
 import SidebarLeft from "./components/SidebarLeft";
 
 const Sidebar = () => {

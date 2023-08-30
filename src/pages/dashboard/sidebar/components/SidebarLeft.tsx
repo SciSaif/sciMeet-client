@@ -12,6 +12,9 @@ import {
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
+import { leaveRoomHandler } from "../../../../utils/roomUtils";
+import settings from "../../../../utils/settings";
+const md = settings.md;
 
 const SidebarLeft = () => {
     const dispatch = useDispatch();
@@ -19,11 +22,15 @@ const SidebarLeft = () => {
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
     const [createRoom] = useCreateNewRoomMutation();
+    const room = useAppSelector((state) => state.room);
 
     const activeRooms = useAppSelector((state) => state.room.activeRooms);
 
     const handleAddRoom = () => {
         const successCallbackFunc = () => {
+            // don't Let user Create a room if he is already in a room
+            if (room.isUserInRoom) return;
+
             dispatch(
                 setRoomState({
                     isUserInRoom: true,
@@ -31,8 +38,7 @@ const SidebarLeft = () => {
                 })
             );
 
-            // if (size === "sm") dispatch(toggleSidebar());
-            if (windowSize.current[0] < 760) dispatch(toggleSidebar());
+            if (windowSize.current[0] < md) dispatch(toggleSidebar());
             createRoom();
         };
 

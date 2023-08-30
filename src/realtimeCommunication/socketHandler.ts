@@ -20,6 +20,7 @@ import {
     handleSignalingData,
     prepareNewPeerConnection,
 } from "./webRTCHandler";
+import { getCurrentTimeInMilliseconds } from "../utils/other";
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
 };
@@ -122,13 +123,19 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     // here we receive the offer from the initiator
     // and create a new peer connection
     socket.on("conn-prepare", (data) => {
-        console.log("conn-prepare", data);
+        console.log(
+            " on conn-prepare"
+            //  getCurrentTimeInMilliseconds()
+        );
         const { connUserSocketId } = data;
         // since we are the receiver, we are not the initiator
         prepareNewPeerConnection(connUserSocketId, false);
-        console.log("conn-prepare");
 
         // send back a signal to the initiator to let them know that we are ready
+        console.log(
+            "emit conn-init"
+            //  getCurrentTimeInMilliseconds()
+        );
         socket.emit("conn-init", {
             connUserSocketId,
         });
@@ -138,12 +145,20 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     // and send back our signal
     socket.on("conn-init", (data) => {
         const { connUserSocketId } = data;
+        console.log(
+            "on conn init "
+            //  getCurrentTimeInMilliseconds()
+        );
 
         // here we are the initiator so we create a new peer connection
         prepareNewPeerConnection(connUserSocketId, true);
     });
 
     socket.on("conn-signal", (data) => {
+        console.log(
+            "on conn-signal"
+            // getCurrentTimeInMilliseconds()
+        );
         handleSignalingData(data);
     });
 
@@ -154,6 +169,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
 };
 
 export const joinRoom = (roomid: string) => {
+    console.log(
+        "emit join-room"
+        // getCurrentTimeInMilliseconds()
+    );
     socket.emit("join-room", { roomid });
 };
 
@@ -163,5 +182,10 @@ export const leaveRoom = (roomid: string) => {
 };
 
 export const signalPeerData = (data: any) => {
+    // console.log(
+    //     "emit conn-signal"
+    //     //  getCurrentTimeInMilliseconds()
+    // );
+
     socket.emit("conn-signal", data);
 };

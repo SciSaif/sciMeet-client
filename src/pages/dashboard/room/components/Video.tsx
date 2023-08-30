@@ -10,7 +10,7 @@ const Video = ({ stream, isLocalStream }: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        console.log(stream);
+        // console.log(stream);
         const video = videoRef.current;
         if (!video) return;
         video.srcObject = stream;
