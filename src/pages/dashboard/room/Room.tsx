@@ -1,9 +1,11 @@
 import {
+    ArrowLeftIcon,
+    ArrowRightIcon,
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
 import VideoContainer from "./VideoContainer";
 import RoomButtons from "./RoomButtons";
@@ -11,6 +13,7 @@ import RoomButtons from "./RoomButtons";
 const Room = () => {
     const dispatch = useAppDispatch();
     const [fullScreen, setFullScreen] = useState(false);
+    const sidebarOpen = useAppSelector((state) => state.other.sidebarOpen);
 
     const handleResize = () => {
         setFullScreen(!fullScreen);
@@ -34,6 +37,15 @@ const Room = () => {
             >
                 {fullScreen === false && <ArrowsPointingOutIcon width={20} />}
                 {fullScreen && <ArrowsPointingInIcon width={20} />}
+            </div>
+            <div
+                onClick={() => {
+                    dispatch(toggleSidebar());
+                }}
+                className="bottom-[5px]  sm:hidden flex absolute  text-white left-2 w-8 h-8    justify-center items-center cursor-pointer"
+            >
+                {sidebarOpen === false && <ArrowRightIcon width={25} />}
+                {sidebarOpen && <ArrowLeftIcon width={25} />}
             </div>
         </div>
     );

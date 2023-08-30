@@ -96,6 +96,7 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
             const user = store.getState().auth.user;
             if (user && user._id === room.roomCreator.userId) {
                 room.roomCreator.username = user.username;
+
                 rooms.push({
                     ...room,
                 });
@@ -155,10 +156,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     });
 
     socket.on("conn-signal", (data) => {
-        console.log(
-            "on conn-signal"
-            // getCurrentTimeInMilliseconds()
-        );
+        // console.log(
+        //     "on conn-signal"
+        //     // getCurrentTimeInMilliseconds()
+        // );
         handleSignalingData(data);
     });
 

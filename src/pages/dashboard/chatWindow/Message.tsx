@@ -1,6 +1,8 @@
 import React from "react";
 import { Message as MessageType } from "../../../redux/features/apis/chatApi";
 import { toReadableDate } from "../../../utils/dateFunctions";
+import settings from "../../../utils/settings";
+const defaultImg = settings.defaultImg;
 
 interface Props {
     message: MessageType;
@@ -18,7 +20,7 @@ const Message = ({ message, mergeMessage }: Props) => {
                             src={
                                 message.author.avatar
                                     ? message.author.avatar
-                                    : "avatars/pikachu.png"
+                                    : defaultImg
                             }
                             alt=""
                         />

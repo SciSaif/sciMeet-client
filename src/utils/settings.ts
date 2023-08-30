@@ -2,4 +2,5 @@ export default {
     sm: 640,
     md: 768,
     lg: 1024,
+    defaultImg: "avatars/pikachu.png",
 };

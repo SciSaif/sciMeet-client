@@ -12,7 +12,8 @@ import {
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
-import { leaveRoomHandler } from "../../../../utils/roomUtils";
+import { useSnackbar } from "notistack";
+
 import settings from "../../../../utils/settings";
 const md = settings.md;
 
@@ -26,10 +27,17 @@ const SidebarLeft = () => {
 
     const activeRooms = useAppSelector((state) => state.room.activeRooms);
 
+    const { enqueueSnackbar } = useSnackbar();
+
     const handleAddRoom = () => {
         const successCallbackFunc = () => {
             // don't Let user Create a room if he is already in a room
-            if (room.isUserInRoom) return;
+            if (room.isUserInRoom) {
+                enqueueSnackbar("Already in a room", {
+                    variant: "info",
+                });
+                return;
+            }
 
             dispatch(
                 setRoomState({

@@ -1,68 +1,98 @@
-import React, { useRef } from "react";
-import {
-    ActiveRoom,
-    setRoomDetails,
-    setRoomState,
-} from "../../../../redux/features/slices/roomSlice";
+import React, { useEffect, useRef, useState } from "react";
+import { ActiveRoom } from "../../../../redux/features/slices/roomSlice";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
-import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
-import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
-import { leaveRoomHandler } from "../../../../utils/roomUtils";
-import { getCurrentTimeInMilliseconds } from "../../../../utils/other";
 
+import settings from "../../../../utils/settings";
+import JoinConfirmModal from "./JoinConfirmModal";
+import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
+const defaultImg = settings.defaultImg;
+const md = settings.md;
+const colors = ["#67e8f9", "#5eead4", "#c4b5fd"];
+// function to select a random color
+
+const randomColor = () => {
+    return colors[Math.floor(Math.random() * colors.length)];
+};
 interface Props {
     room: ActiveRoom;
 }
 
+interface Participant {
+    avatar: string;
+    _id: string;
+    username: string;
+}
+
 const ActiveRoomButton = ({ room }: Props) => {
     const windowWidth = useRef(window.innerWidth);
-    const numberOfParticipants = room.participants.length;
     const dispatch = useAppDispatch();
-    const activeRoomButtonDisabled = numberOfParticipants > 3;
+    const [participants, setParticipants] = useState<Participant[]>([]);
+    const friends = useAppSelector((state) => state.friend.friends);
+    const user = useAppSelector((state) => state.auth.user);
     const currentRoomId = useAppSelector(
         (state) => state.room.roomDetails?.roomid
     );
 
-    const handleJoin = () => {
-        if (currentRoomId === room.roomid) return;
+    const [joinRoomModal, setJoinRoomModal] = useState(false);
 
-        if (numberOfParticipants < 4) {
-            // if user is already in a room, exit
-            leaveRoomHandler();
-            // console.log("l2", getCurrentTimeInMilliseconds());
-
-            // join room
-            const successCallbackFunc = () => {
-                dispatch(setRoomDetails(room));
-                dispatch(
-                    setRoomState({
-                        isUserInRoom: true,
-                        isUserRoomCreator: false,
-                    })
+    useEffect(() => {
+        if ((friends && room.participants, user)) {
+            const participants = room.participants.map((participant) => {
+                const friend = friends.find(
+                    (friend) => friend._id === participant.userId
                 );
-                joinRoom(room.roomid);
 
-                if (windowWidth.current < 768) {
-                    dispatch(toggleSidebar());
-                }
-            };
+                return {
+                    _id: friend?._id || user?._id || "0",
+                    avatar: friend?.avatar || user?.avatar || defaultImg,
+                    username: friend?.username || user.username || "unknown",
+                };
+            });
 
-            getLocalStreamPreview(false, successCallbackFunc);
+            setParticipants(participants);
         }
-    };
-
-    const roomTitle = `Creator: ${room.roomCreator.username}. Connected: ${numberOfParticipants}`;
+    }, [friends, room.participants, user]);
 
     return (
         <button
-            // disabled={activeRoomButtonDisabled }
-            onClick={handleJoin}
-            className="w-full h-16 text-4xl text-white bg-secondary hover:bg-secondary-600  rounded-2xl flex justify-center items-center"
+            onClick={() => {
+                if (currentRoomId === room.roomid) {
+                    if (windowWidth.current < md) {
+                        dispatch(toggleSidebar());
+                    }
+                    return;
+                }
+                setJoinRoomModal(true);
+            }}
+            className="w-full h-16 overflow-hidden group text-4xl text-white bg-secondary hover:bg-secondary-600  rounded-2xl flex justify-center items-center"
         >
-            <span className="-translate-y-[4px]">
-                {room.roomCreator.username?.slice(0, 2)}
-            </span>
+            <div
+                className="grid grid-cols-2 text-sm w-full h-full p-2 gap-1 "
+                style={{ backgroundColor: randomColor() }}
+            >
+                {participants?.map((participant) => {
+                    return (
+                        <div
+                            key={participant._id}
+                            className="w-full h-fit group-hover:rotate-6 group-hover:scale-105   transition"
+                        >
+                            <img
+                                src={participant.avatar}
+                                alt="friend"
+                                className=""
+                            />
+                        </div>
+                    );
+                })}
+            </div>
+
+            {joinRoomModal && (
+                <JoinConfirmModal
+                    close={() => setJoinRoomModal(false)}
+                    participants={participants}
+                    room={room}
+                />
+            )}
         </button>
     );
 };
