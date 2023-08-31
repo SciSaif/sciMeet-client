@@ -50,7 +50,7 @@ const Video = ({ stream, isLocalStream, pinnedId, setPinnedId }: Props) => {
                 playsInline
             />
 
-            <div className="rounded-full bg-primary gap-3 opacity-40 transition hover:opacity-70 group-hover:flex hidden text-white absolute top-1/2 left-1/2   -translate-x-1/2">
+            <div className="rounded-full bg-primary gap-3 opacity-40 transition hover:opacity-70 group-hover:flex hidden text-white absolute top-1/2 left-1/2   -translate-x-1/2 -translate-y-1/2">
                 {!isLocalStream && (
                     <button
                         onClick={toggleMute}

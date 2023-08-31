@@ -6,29 +6,13 @@ import {
 } from "@heroicons/react/20/solid";
 import React, { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import {
-    setRoomDetails,
-    // setLocalStream,
-    // setRemoteStreams,
-    setRoomState,
-    toggleLocalStreamChanged,
-} from "../../../redux/features/slices/roomSlice";
+import { toggleLocalStreamChanged } from "../../../redux/features/slices/roomSlice";
 import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
 import {
-    closeAllConnections,
     getLocalStream,
-    setLocalStream,
-    setRemoteStreams,
-    stopScreenSharing,
-    switchOutgoingTracks,
+    toggleScreenShare,
 } from "../../../realtimeCommunication/webRTCHandler";
-import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
 import { leaveRoomHandler } from "../../../utils/roomUtils";
-
-const constraints = {
-    audio: false,
-    video: true,
-};
 
 const RoomButtons = () => {
     const windowWidth = useRef(window.innerWidth);
@@ -60,31 +44,8 @@ const RoomButtons = () => {
     };
 
     const handleToggleScreenShare = async () => {
-        if (!screenShareEnabled) {
-            let stream = null;
-            try {
-                stream = await navigator.mediaDevices.getDisplayMedia(
-                    constraints
-                );
-            } catch (e: any) {
-                console.error(
-                    "error when trying to get an access to screen share stream",
-                    e
-                );
-            }
-
-            if (stream) {
-                switchOutgoingTracks(stream);
-                setScreenShareEnabled(true);
-            }
-        } else {
-            // stop screen sharing
-            if (localStream) {
-                switchOutgoingTracks(localStream, true);
-                stopScreenSharing();
-                setScreenShareEnabled(false);
-            }
-        }
+        const res = await toggleScreenShare();
+        setScreenShareEnabled(res);
     };
 
     return (

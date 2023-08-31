@@ -1,7 +1,3 @@
-// import {
-//     setLocalStream,
-//     setRemoteStreams,
-// } from "../redux/features/slices/roomSlice";
 import { store } from "../redux/store";
 import Peer from "simple-peer";
 import { signalPeerData } from "./socketHandler";
@@ -11,52 +7,6 @@ import {
     toggleScreenShareChanged,
 } from "../redux/features/slices/roomSlice";
 import { getCurrentTimeInMilliseconds } from "../utils/other";
-
-// const getConfiguration = () => {
-//     const turnIceServers = null;
-
-//     if (!turnIceServers) {
-//         console.warn("Using only STUN server");
-//     } else {
-//         return {
-//             iceServers: [
-//                 {
-//                     urls: "stun:stun.l.google.com:19302",
-//                 },
-//             ],
-//         };
-//     }
-// };
-const getConfiguration = async () => {
-    // Calling the REST API TO fetch the TURN Server Credentials
-    const response = await fetch(
-        "https://scimeet.metered.live/api/v1/turn/credentials?apiKey=10ef8a6a4f7d190368963d9362b79daf56fa"
-    );
-
-    // Saving the response in the iceServers array
-    const iceServers = await response.json();
-
-    console.log(iceServers);
-
-    return iceServers;
-
-    // const turnIceServers = [
-    //     {
-    //         urls: "stun:stun.l.google.com:19302",
-    //     },
-    //     {
-    //         urls: "turn:turn.l.google.com:19302",
-    //     },
-    // ];
-
-    // if (!turnIceServers) {
-    //     console.warn("Using only STUN server");
-    // } else {
-    //     return {
-    //         iceServers: turnIceServers,
-    //     };
-    // }
-};
 
 const onlyAudioConstraints = {
     video: false,
@@ -176,7 +126,7 @@ export const prepareNewPeerConnection = async (
         remoteStream.connUsersocketId = connUserSocketId;
 
         addNewRemoteStream(remoteStream);
-        //TODO add new remote stream to our server store
+        console.log("remoteStreams", remoteStreams);
     });
 };
 
@@ -194,6 +144,10 @@ export const addNewRemoteStream = (remoteStream: MediaStream) => {
     const newRemoteStreams = [...remoteStreams, remoteStream];
 
     remoteStreams = newRemoteStreams;
+    // if screenshare is on then replace stream
+    if (screenSharingStream) {
+        replaceStreams(screenSharingStream);
+    }
     store.dispatch(toggleRemoteStreamsChanged());
 };
 
@@ -231,28 +185,73 @@ export const stopScreenSharing = () => {
     if (screenSharingStream) {
         screenSharingStream.getTracks().forEach((track) => track.stop());
         screenSharingStream = null;
-        store.dispatch(toggleScreenShareChanged());
+        store.dispatch(toggleScreenShareChanged()); // for rerendering
     }
 };
+const constraints = {
+    audio: false,
+    video: true,
+};
 
-export const switchOutgoingTracks = (
-    stream: MediaStream,
-    isLocalStream: boolean = false
-) => {
-    if (!isLocalStream) {
-        screenSharingStream = stream;
-        store.dispatch(toggleScreenShareChanged());
+export const toggleScreenShare = async () => {
+    let stream = null;
+    if (screenSharingStream) {
+        stopScreenSharing();
+        stream = localStream;
+        store.dispatch(toggleScreenShareChanged()); //for rerendering
+    } else {
+        try {
+            stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+
+            screenSharingStream = stream;
+            store.dispatch(toggleScreenShareChanged()); //for rerendering
+        } catch (e: unknown) {
+            console.error(
+                "error when trying to get an access to screen share stream",
+                e
+            );
+        }
     }
+
+    if (!stream) return false;
+
+    replaceStreams(stream);
+
+    // for every socket_id in peers
+
+    if (screenSharingStream) {
+        return true;
+    } else return false;
+};
+
+function replaceStreams(newStream: MediaStream) {
     for (let socket_id in peers) {
+        console.log("___socket_id___", socket_id);
+        // replace the track of the stream with the new stream
         for (let index in peers[socket_id].streams[0].getTracks()) {
-            for (let index2 in stream.getTracks()) {
+            console.log("index1", index);
+            for (let index2 in newStream.getTracks()) {
+                console.log("index2", index2);
+                console.log(
+                    "peers[socket_id].streams",
+                    peers[socket_id].streams
+                );
+                console.log(
+                    "tracks peer",
+                    peers[socket_id].streams[0].getTracks()
+                );
+                console.log("tracks stream", newStream.getTracks());
+
+                // in remoteStream there are 2 probably 2 tracks, audio and video
+                // in screensharingStream there is only 1 track, video
+                // so for each track of same kind we replace track
                 if (
                     peers[socket_id].streams[0].getTracks()[index].kind ===
-                    stream.getTracks()[index2].kind
+                    newStream.getTracks()[index2].kind
                 ) {
                     peers[socket_id].replaceTrack(
                         peers[socket_id].streams[0].getTracks()[index],
-                        stream.getTracks()[index2],
+                        newStream.getTracks()[index2],
                         peers[socket_id].streams[0]
                     );
                     break;
@@ -260,4 +259,4 @@ export const switchOutgoingTracks = (
             }
         }
     }
-};
+}

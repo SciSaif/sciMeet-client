@@ -14,14 +14,16 @@ const VideoContainer = () => {
     const localStream = getLocalStream();
     const remoteStreams = getRemoteStreams();
     const screenSharingStream = getScreenSharingStream();
-    // console.log("remoteStreams", remoteStreams);
+    console.log("remoteStreams", remoteStreams);
+    console.log("screenSharingStream", screenSharingStream);
+    console.log("localStream", getLocalStream());
 
     const [pinnedId, setPinnedId] = useState<string>("none");
 
     return (
         <div
             className={twMerge(
-                "w-full overflow-hidden grow grid grid-cols-1 sm:grid-cols-2  gap-2 p-2 ",
+                "w-full overflow-hidden grow grid transition grid-cols-1 sm:grid-cols-2  gap-2 p-2 ",
                 remoteStreams.length === 0 && "sm:grid-cols-1",
                 pinnedId !== "none" && "grid-cols-1 sm:grid-cols-1"
             )}
