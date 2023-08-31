@@ -4,9 +4,9 @@ import Video from "./components/Video";
 import {
     getLocalStream,
     getRemoteStreams,
-    getScreenSharingStream,
 } from "../../../realtimeCommunication/webRTCHandler";
 import { twMerge } from "tailwind-merge";
+import { getScreenSharingStream } from "../../../realtimeCommunication/screenShareHandler";
 
 const VideoContainer = () => {
     // !! required for rerender
@@ -15,8 +15,6 @@ const VideoContainer = () => {
     const remoteStreams = getRemoteStreams();
     const screenSharingStream = getScreenSharingStream();
     console.log("remoteStreams", remoteStreams);
-    console.log("screenSharingStream", screenSharingStream);
-    console.log("localStream", getLocalStream());
 
     const [pinnedId, setPinnedId] = useState<string>("none");
 

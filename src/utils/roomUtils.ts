@@ -2,7 +2,6 @@ import {
     closeAllConnections,
     setLocalStream,
     setRemoteStreams,
-    stopScreenSharing,
 } from "./../realtimeCommunication/webRTCHandler";
 import { getLocalStream } from "../realtimeCommunication/webRTCHandler";
 import { toggleSidebar } from "../redux/features/slices/otherSlice";
@@ -14,6 +13,7 @@ import { store } from "../redux/store";
 import settings from "./settings";
 import { leaveRoom } from "../realtimeCommunication/socketHandler";
 import { getCurrentTimeInMilliseconds } from "./other";
+import { stopScreenSharing } from "../realtimeCommunication/screenShareHandler";
 const md = settings.md;
 
 export const leaveRoomHandler = (windowWidth?: number) => {

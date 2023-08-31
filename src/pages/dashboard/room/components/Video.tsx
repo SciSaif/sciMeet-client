@@ -2,6 +2,7 @@ import { MicrophoneIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import PinIcon from "../../../../assets/PinIcon";
+import { useAppSelector } from "../../../../redux/hooks";
 
 interface Props {
     stream: MediaStream;
@@ -13,6 +14,12 @@ interface Props {
 const Video = ({ stream, isLocalStream, pinnedId, setPinnedId }: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isMuted, setIsMuted] = useState<boolean>(false);
+    const [userName, setUserName] = useState<string>("");
+    const user = useAppSelector((state) => state.auth.user);
+    const participants = useAppSelector(
+        (state) => state.room.roomDetails?.participants
+    );
+    const friends = useAppSelector((state) => state.friend.friends);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -34,10 +41,31 @@ const Video = ({ stream, isLocalStream, pinnedId, setPinnedId }: Props) => {
 
     const isPinned = pinnedId === stream.id;
 
+    useEffect(() => {
+        let userName = "";
+        if (!friends || !participants) return;
+        // @ts-ignore
+        const { connUsersocketId } = stream;
+
+        // find the connUsersocketId in participants
+        participants?.forEach((participant) => {
+            if (participant.socketId === connUsersocketId) {
+                // get the username of friend
+                friends.forEach((friend) => {
+                    if (friend._id === participant.userId) {
+                        userName = friend.username;
+                    }
+                });
+            }
+        });
+
+        setUserName(userName);
+    }, [friends, participants, stream]);
+
     return (
         <div
             className={twMerge(
-                "w-full flex justify-center relative hover:border group hover:border-white/20 rounded bg-black overflow-hidden p-1",
+                "w-full flex justify-center relative  group  rounded bg-black overflow-hidden p-1",
                 isLocalStream &&
                     "border border-secondary-600 hover:border-secondary-500",
                 pinnedId !== "none" && !isPinned && "hidden"
@@ -75,6 +103,10 @@ const Video = ({ stream, isLocalStream, pinnedId, setPinnedId }: Props) => {
                         <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 w-6 h-[2px] rotate-45 rounded-full bg-white"></div>
                     )}
                 </button>
+            </div>
+
+            <div className="absolute bottom-2 left-2  text-sm text-white opacity-70 hover:opacity-100">
+                <p>{isLocalStream ? user?.username : userName}</p>
             </div>
         </div>
     );
