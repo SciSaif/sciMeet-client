@@ -1,11 +1,11 @@
 import React from "react";
-import { Message as MessageType } from "../../../redux/features/apis/chatApi";
 import { toReadableDate } from "../../../utils/dateFunctions";
 import settings from "../../../utils/settings";
+import { IMessage } from "../../../redux/features/slices/chatSlice";
 const defaultImg = settings.defaultImg;
 
 interface Props {
-    message: MessageType;
+    message: IMessage;
     mergeMessage: boolean;
 }
 
