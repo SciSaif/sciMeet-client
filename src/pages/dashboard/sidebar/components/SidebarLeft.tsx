@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
 // import { getCurrentBreakpoint } from "../../../../hooks/useTailwindBreakpoints";
 import { useRef } from "react";
-import { useCreateNewRoomMutation } from "../../../../redux/features/apis/roomApi";
 import { useAppSelector } from "../../../../redux/hooks";
 import ActiveRoomButton from "./ActiveRoomButton";
 import {
@@ -15,6 +14,7 @@ import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCH
 import { useSnackbar } from "notistack";
 
 import settings from "../../../../utils/settings";
+import { createRoom } from "../../../../realtimeCommunication/socketHandler";
 const md = settings.md;
 
 const SidebarLeft = () => {
@@ -22,7 +22,6 @@ const SidebarLeft = () => {
     // const size = getCurrentBreakpoint();
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
-    const [createRoom] = useCreateNewRoomMutation();
     const room = useAppSelector((state) => state.room);
 
     const activeRooms = useAppSelector((state) => state.room.activeRooms);

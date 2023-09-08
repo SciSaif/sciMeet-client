@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { Friend } from "./friendSlice";
 
 // get theme from local storage
 const theme = localStorage.getItem("theme");
@@ -7,11 +8,7 @@ const theme = localStorage.getItem("theme");
 interface initialStateProps {
     theme: "light" | "dark";
     pendingInvitations: any;
-    selectedFriend?: {
-        _id: string;
-        username: string;
-        avatar?: string;
-    };
+    selectedFriend?: Friend;
     sidebarOpen: boolean;
 }
 
@@ -34,14 +31,7 @@ export const otherSlice = createSlice({
             state.pendingInvitations = action.payload;
         },
 
-        setSelectedFriend: (
-            state,
-            action: PayloadAction<{
-                _id: string;
-                username: string;
-                avatar?: string;
-            }>
-        ) => {
+        setSelectedFriend: (state, action: PayloadAction<Friend>) => {
             state.selectedFriend = action.payload;
         },
 

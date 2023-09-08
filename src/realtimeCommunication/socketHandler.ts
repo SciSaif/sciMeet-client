@@ -2,7 +2,6 @@ import { OnlineUser } from "../redux/features/slices/friendSlice";
 import { auth } from "../../firebase-config";
 import { Socket, io } from "socket.io-client";
 import { RootState, store } from "../redux/store";
-import { MessageContent, MessageHistory } from "../redux/features/apis/chatApi";
 import {
     ActiveRoom,
     setActiveRooms,
@@ -21,17 +20,25 @@ import {
     prepareNewPeerConnection,
 } from "./webRTCHandler";
 import { getCurrentTimeInMilliseconds } from "../utils/other";
+import {
+    IConversation,
+    updateConverstation,
+} from "../redux/features/slices/chatSlice";
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
 };
+
+export interface MessageContent {
+    friend_id: string;
+    content: string;
+}
+
 interface ServerToClientEvents {
-    // noArg: () => void;
-    // basicEmit: (a: number, b: string, c: Buffer) => void;
-    // withAck: (d: string, callback: (e: number) => void) => void;
     "friends-invitations": (data: { pendingInvitations: Invitation[] }) => void;
     "friends-list": (data: { friends: Friend[] }) => void;
     "online-users": (data: { onlineUsers: OnlineUser[] }) => void;
-    "direct-chat-history": (data: MessageHistory) => void;
+    "direct-chat-history": (data: IConversation) => void;
+    // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
     "conn-prepare": (data: ConnUserSocketIdType) => void;
@@ -44,6 +51,7 @@ interface ClientToServerEvents {
     hello: () => void;
     "direct-message": (data: MessageContent) => void;
     "direct-chat-history": (data: any) => void;
+    // -------------------------------------------------------------
     "room-create": () => void;
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;
@@ -77,6 +85,21 @@ export function closeSocket() {
 export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     const socket = getSocket(getState);
     if (!socket) return;
+
+    // friends
+    socket.on("friends-list", ({ friends }) => {
+        dispatch(setFriends(friends));
+    });
+    socket.on("online-users", ({ onlineUsers }) => {
+        dispatch(setOnlineUsers(onlineUsers));
+    });
+    socket.on("friends-invitations", ({ pendingInvitations }) => {
+        dispatch(setInvitations(pendingInvitations));
+    });
+
+    // ---------------------------------------------------------------------------
+    // rooms
+
     socket.on("active-rooms", ({ activeRooms }) => {
         console.log("active-rooms", activeRooms);
         const friends = getState().friend.friends;
@@ -109,17 +132,7 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
         dispatch(setRoomDetails(data.roomDetails));
     });
 
-    // friends
-    socket.on("friends-list", ({ friends }) => {
-        dispatch(setFriends(friends));
-    });
-    socket.on("online-users", ({ onlineUsers }) => {
-        dispatch(setOnlineUsers(onlineUsers));
-    });
-    socket.on("friends-invitations", ({ pendingInvitations }) => {
-        dispatch(setInvitations(pendingInvitations));
-    });
-
+    // ---------------------------------------------------------------------------
     // webrtc
     // here we receive the offer from the initiator
     // and create a new peer connection
@@ -167,6 +180,28 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
         console.log("on room-participant-left");
         handleParticipantLeftRoom(data.connUserSocketId);
     });
+
+    //------------------------------------------------------------------------
+    // chat
+    socket.on("direct-chat-history", (data) => {
+        console.log("on direct-chat-history");
+        dispatch(updateConverstation(data));
+    });
+};
+
+export const getChatHistory = (friend_id: string) => {
+    console.log("emit direct-chat-history");
+    socket.emit("direct-chat-history", { friend_id });
+};
+
+export const sendDirectMessage = (messageContent: MessageContent) => {
+    console.log("emit direct-message");
+    socket.emit("direct-message", messageContent);
+};
+
+export const createRoom = () => {
+    console.log("emit room-create");
+    socket.emit("room-create");
 };
 
 export const joinRoom = (roomid: string) => {

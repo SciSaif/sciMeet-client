@@ -6,6 +6,7 @@ export interface Friend {
     username: string;
     isOnline: boolean;
     avatar?: string;
+    conversationId?: string;
 }
 
 export interface Invitation {

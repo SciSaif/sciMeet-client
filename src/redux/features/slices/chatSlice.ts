@@ -1,53 +1,7 @@
-// getMessageHistory: build.query<Message[], { receiverUserId: string }>({
-//     queryFn: ({ receiverUserId }) => ({ data: [] }),
-//     async onCacheEntryAdded(
-//         { receiverUserId },
-//         {
-//             cacheDataLoaded,
-//             cacheEntryRemoved,
-//             updateCachedData,
-//             getState,
-//         }
-//     ) {
-//         try {
-//             await cacheDataLoaded;
-
-//             const socket = getSocket(getState);
-//             if (!socket) return;
-//             socket.on("connect", () => {
-//                 console.log("Connected to socket server");
-//                 console.log(socket.id);
-//             });
-//             // con
-
-//             socket.emit("direct-chat-history", { receiverUserId });
-//             socket.on("direct-chat-history", (data) => {
-//                 updateCachedData((draft) => {
-//                     const participants = data.participants;
-//                     if (participants.includes(receiverUserId)) {
-//                         // replace cached data with new data
-//                         draft.splice(0, draft.length, ...data.messages);
-//                     }
-//                 });
-//             });
-
-//             await cacheEntryRemoved;
-
-//             socket.off("connect");
-//             socket.off("direct-chat-history");
-//         } catch {
-//             // if cacheEntryRemoved resolved before cacheDataLoaded,
-//             // cacheDataLoaded throws
-//         }
-//     },
-// }),
-
-// need to convert the above to slice instead of rtk query
-
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface Message {
+export interface IMessage {
     _id: string;
     author: {
         _id: string;
@@ -59,26 +13,42 @@ export interface Message {
     type: string;
 }
 
-export interface MessageHistory {
+export interface IConversation {
+    _id: string;
     participants: string[];
-    messages: Message[];
+    messages: IMessage[];
+    isGroup?: boolean;
+    groupId?: string;
 }
 
 interface initialStateProps {
-    messageHistories: MessageHistory[];
+    conversations: IConversation[];
 }
 
 const initialState: initialStateProps = {
-    messageHistories: [],
+    conversations: [],
 };
 
 export const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
+        updateConverstation: (state, action: PayloadAction<IConversation>) => {
+            // if conversation exists in the state, replace it
+            const index = state.conversations.findIndex(
+                (conversation) => conversation._id === action.payload._id
+            );
+            if (index !== -1) {
+                state.conversations[index] = action.payload;
+                return;
+            }
+            // else add it to the state
+            state.conversations.push(action.payload);
+        },
+
         resetState: () => initialState,
     },
 });
 
-export const {} = chatSlice.actions;
+export const { updateConverstation, resetState } = chatSlice.actions;
 export default chatSlice.reducer;

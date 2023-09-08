@@ -54,21 +54,19 @@ export const toggleScreenShare = async () => {
 function replaceStreams(newStream: MediaStream) {
     let peers = getPeers();
     for (let socket_id in peers) {
-        console.log("___socket_id___", socket_id);
+        // console.log("___socket_id___", socket_id);
         // replace the track of the stream with the new stream
         for (let index in peers[socket_id].streams[0].getTracks()) {
-            console.log("index1", index);
             for (let index2 in newStream.getTracks()) {
-                console.log("index2", index2);
-                console.log(
-                    "peers[socket_id].streams",
-                    peers[socket_id].streams
-                );
-                console.log(
-                    "tracks peer",
-                    peers[socket_id].streams[0].getTracks()
-                );
-                console.log("tracks stream", newStream.getTracks());
+                // console.log(
+                //     "peers[socket_id].streams",
+                //     peers[socket_id].streams
+                // );
+                // console.log(
+                //     "tracks peer",
+                //     peers[socket_id].streams[0].getTracks()
+                // );
+                // console.log("tracks stream", newStream.getTracks());
 
                 // in remoteStream there are 2 probably 2 tracks, audio and video
                 // in screensharingStream there is only 1 track, video

@@ -1,28 +1,34 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import ChatBeginningHeader from "./ChatBeginningHeader";
 import Message from "./Message";
-import {
-    useDirectMessageMutation,
-    useGetMessageHistoryQuery,
-} from "../../../redux/features/apis/chatApi";
 import { isSameDay } from "../../../utils/dateFunctions";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import {
+    getChatHistory,
+    sendDirectMessage,
+} from "../../../realtimeCommunication/socketHandler";
 
 const ChatWindow = () => {
     const [message, setMessage] = useState("");
-    const [sendDirectMessage] = useDirectMessageMutation();
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
-    const { data: messages } = useGetMessageHistoryQuery(
-        {
-            receiverUserId: selectedFriend?._id ? selectedFriend._id : "",
-        },
-        { skip: !selectedFriend?._id }
-    );
+    const messages = useAppSelector((state) => {
+        return selectedFriend
+            ? state.chat.conversations.find(
+                  (conversation) =>
+                      conversation._id === selectedFriend.conversationId
+              )?.messages
+            : [];
+    });
+    useEffect(() => {
+        if (selectedFriend) {
+            getChatHistory(selectedFriend._id);
+        }
+    }, [selectedFriend]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,7 +37,7 @@ const ChatWindow = () => {
         setMessage("");
         sendDirectMessage({
             content: message,
-            receiverUserId: selectedFriend._id,
+            friend_id: selectedFriend._id,
         });
         const messagesContainer = messagesContainerRef.current;
         if (messagesContainer) {

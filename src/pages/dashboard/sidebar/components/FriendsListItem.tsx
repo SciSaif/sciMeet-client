@@ -13,13 +13,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     );
 
     const handleClick = () => {
-        dispatch(
-            setSelectedFriend({
-                _id: friend._id,
-                username: friend.username,
-                avatar: friend.avatar,
-            })
-        );
+        dispatch(setSelectedFriend(friend));
         // @Todo only toggle in mobile
         if (window.innerWidth < 768) dispatch(toggleSidebar());
     };
