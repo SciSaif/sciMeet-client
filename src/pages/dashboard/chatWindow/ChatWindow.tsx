@@ -12,6 +12,7 @@ import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 
 const ChatWindow = () => {
     const [message, setMessage] = useState("");
+    const [lastMessageId, setLastMessageId] = useState<string | null>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     const selectedFriend = useAppSelector(
@@ -28,7 +29,7 @@ const ChatWindow = () => {
     });
 
     useEffect(() => {
-        if (selectedFriend && messages?.length === 0) {
+        if (selectedFriend && !messages) {
             getChatHistory(selectedFriend._id);
         }
     }, [selectedFriend]);
@@ -50,6 +51,7 @@ const ChatWindow = () => {
 
     const getMoreMessages = () => {
         if (selectedFriend && messages && messages.length > 0) {
+            setLastMessageId(messages[0]._id);
             getChatHistory(selectedFriend._id, messages[0]._id);
         }
     };
@@ -61,7 +63,18 @@ const ChatWindow = () => {
     });
 
     useEffect(() => {
-        if (isIntersecting && selectedFriend) {
+        // this is to prevent fetching more messages while more messages are being fetched
+        if (
+            messages &&
+            messages.length > 0 &&
+            messages[0]._id !== lastMessageId
+        ) {
+            setLastMessageId(null);
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        if (isIntersecting && selectedFriend && !lastMessageId) {
             getMoreMessages();
         }
     }, [isIntersecting, selectedFriend]);

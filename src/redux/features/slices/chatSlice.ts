@@ -70,10 +70,6 @@ export const chatSlice = createSlice({
                 (conversation) => conversation._id === conversationId
             );
             if (!conversation) return;
-            console.log("pushing message", message);
-            // only push if message doesn't already exist
-            if (conversation.messages.find((m) => m._id === message._id))
-                return;
 
             conversation.messages.push(message);
         },
