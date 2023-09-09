@@ -27,18 +27,37 @@ export interface IConversation {
     groupId?: string;
 }
 
+export interface ITypingUsers {
+    conversationId: string;
+    typingUsers: string[];
+}
+
 interface initialStateProps {
     conversations: IConversation[];
+    typingStatus: ITypingUsers[];
 }
 
 const initialState: initialStateProps = {
     conversations: [],
+    typingStatus: [],
 };
 
 export const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
+        updateTypingStatus: (state, action: PayloadAction<ITypingUsers>) => {
+            const index = state.typingStatus.findIndex(
+                (status) =>
+                    status.conversationId === action.payload.conversationId
+            );
+            if (index !== -1) {
+                state.typingStatus[index] = action.payload;
+                return;
+            }
+            state.typingStatus.push(action.payload);
+        },
+
         updateConverstation: (
             state,
             action: PayloadAction<IConversation & { append?: boolean }>
@@ -78,6 +97,10 @@ export const chatSlice = createSlice({
     },
 });
 
-export const { updateConverstation, addNewMessage, resetState } =
-    chatSlice.actions;
+export const {
+    updateConverstation,
+    addNewMessage,
+    resetState,
+    updateTypingStatus,
+} = chatSlice.actions;
 export default chatSlice.reducer;

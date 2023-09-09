@@ -9,10 +9,11 @@ import {
     sendDirectMessage,
 } from "../../../realtimeCommunication/socketHandler";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
+import InputMessage from "./components/InputMessage";
 
 const ChatWindow = () => {
-    const [message, setMessage] = useState("");
     const [lastMessageId, setLastMessageId] = useState<string | null>(null);
+    const [typingUsers, setTypingUsers] = useState<string[]>([]);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     const selectedFriend = useAppSelector(
@@ -28,26 +29,35 @@ const ChatWindow = () => {
             : [];
     });
 
+    const typingUserIds = useAppSelector((state) => {
+        return (
+            state.chat.typingStatus.find(
+                (status) =>
+                    status.conversationId === selectedFriend?.conversationId
+            )?.typingUsers || []
+        );
+    });
+
+    const friends = useAppSelector((state) => state.friend.friends);
+
+    useEffect(() => {
+        // get the usernames of typing users using userids in friends
+        const newTypingUsers = typingUserIds.map((userId) => {
+            const friend = friends.find((f) => f._id === userId);
+            return friend?.username || userId;
+        });
+        if (typingUsers.length === 0 && newTypingUsers.length === 0) {
+            return;
+        }
+
+        setTypingUsers(newTypingUsers);
+    }, [typingUserIds, friends]);
+
     useEffect(() => {
         if (selectedFriend && !messages) {
             getChatHistory(selectedFriend._id);
         }
     }, [selectedFriend]);
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!selectedFriend) return;
-        setMessage("");
-        sendDirectMessage({
-            content: message,
-            friend_id: selectedFriend._id,
-        });
-        const messagesContainer = messagesContainerRef.current;
-        if (messagesContainer) {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-    };
 
     const getMoreMessages = () => {
         if (selectedFriend && messages && messages.length > 0) {
@@ -92,6 +102,17 @@ const ChatWindow = () => {
                         ref={messagesContainerRef}
                         className="flex flex-col-reverse   overflow-auto scrollbar px-5 "
                     >
+                        {typingUsers?.length > 0 && (
+                            <div>
+                                <p className="text-textGray text-sm py-2 px-3">
+                                    {typingUsers.join(", ") +
+                                        (typingUsers.length > 1
+                                            ? " are "
+                                            : " is ")}{" "}
+                                    {"typing"}
+                                </p>
+                            </div>
+                        )}
                         <div className=" flex flex-col pb-5">
                             {messages?.map((message, index) => {
                                 const sameAuthor =
@@ -141,29 +162,8 @@ const ChatWindow = () => {
                                 <ChatBeginningHeader friend={selectedFriend} />
                             )}
                     </div>
-                    <form
-                        onSubmit={handleSubmit}
-                        className="pb-5   w-full  px-5"
-                    >
-                        <div className="w-full  flex flex-row items-center bg-primary-700 rounded-xl">
-                            {/* <EmojiPicker /> */}
 
-                            <input
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                type="text"
-                                placeholder={`Message ${selectedFriend?.username}`}
-                                className="w-full rounded-l-xl border-0 pr-10 bg-primary-700 focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
-                            />
-
-                            <button
-                                type="submit"
-                                className="pl-2 pr-4 cursor-pointer text-textGray hover:text-textGray3 "
-                            >
-                                <PaperAirplaneIcon width={20} />
-                            </button>
-                        </div>
-                    </form>
+                    <InputMessage messagesContainerRef={messagesContainerRef} />
                 </>
             )}
         </main>

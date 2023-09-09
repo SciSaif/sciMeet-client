@@ -24,8 +24,10 @@ import {
     IConversation,
     IMessage,
     INewMessage,
+    ITypingUsers,
     addNewMessage,
     updateConverstation,
+    updateTypingStatus,
 } from "../redux/features/slices/chatSlice";
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
@@ -42,6 +44,7 @@ interface ServerToClientEvents {
     "online-users": (data: { onlineUsers: OnlineUser[] }) => void;
     "direct-chat-history": (data: IConversation & { append?: boolean }) => void;
     "direct-message": (data: INewMessage) => void;
+    "typing-status": (data: ITypingUsers) => void;
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
@@ -55,6 +58,11 @@ interface ClientToServerEvents {
     hello: () => void;
     "direct-message": (data: MessageContent) => void;
     "direct-chat-history": (data: any) => void;
+    "typing-status": (data: {
+        isTyping: boolean;
+        conversationId: string;
+        participantIds: string[];
+    }) => void;
     // -------------------------------------------------------------
     "room-create": () => void;
     "join-room": (data: { roomid: string }) => void;
@@ -195,6 +203,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
         // console.log("on direct-message", data);
         dispatch(addNewMessage(data));
     });
+
+    socket.on("typing-status", (data) => {
+        dispatch(updateTypingStatus(data));
+    });
 };
 
 export const getChatHistory = (friend_id: string, fromMessageId?: string) => {
@@ -206,6 +218,17 @@ export const sendDirectMessage = (messageContent: MessageContent) => {
     // console.log("emit direct-message");
     socket.emit("direct-message", messageContent);
 };
+
+export const sendTypingStatus = (data: {
+    isTyping: boolean;
+    conversationId: string;
+    participantIds: string[];
+}) => {
+    console.log("emit typing-status");
+    socket.emit("typing-status", data);
+};
+
+// -------------------------------------------------------------------------------------
 
 export const createRoom = () => {
     // console.log("emit room-create");
