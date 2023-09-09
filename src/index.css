@@ -55,3 +55,10 @@ input:-webkit-autofill:active {
 
 
 
+
+
+.filter {
+  filter: grayscale(100%) contrast(150%) brightness(200%);
+  mix-blend-mode: difference;
+  opacity: 20%;
+}

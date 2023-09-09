@@ -49,7 +49,9 @@ const DashboardHeader = () => {
                                 </div>
                             ) : (
                                 <div className="absolute h-3 w-3 rounded-full  bg-primary bottom-0 right-0 p-1">
-                                    <div className="rounded-full absolute bottom-1/2 left-1/2 -translate-x-1/2  translate-y-1/2 bg-gray-500 h-2 w-2 "></div>
+                                    <div className="rounded-full absolute bottom-1/2 left-1/2 -translate-x-1/2  translate-y-1/2 bg-gray-500 h-2 w-2 ">
+                                        <div className="rounded-full absolute bottom-1/2 left-1/2 -translate-x-1/2  translate-y-1/2 bg-primary h-1 w-1 "></div>
+                                    </div>
                                 </div>
                             )}
                         </div>

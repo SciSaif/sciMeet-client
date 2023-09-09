@@ -1,35 +1,33 @@
-// import { useDispatch } from "react-redux";
-// import { useState, useEffect, useRef, useCallback } from "react";
+// useIntersectionObserver.ts
+import { useEffect, useRef, useState } from "react";
 
-// interface Props {}
+const useIntersectionObserver = (
+    targetRef: React.RefObject<HTMLElement | null>,
+    options: IntersectionObserverInit = {}
+) => {
+    const [isIntersecting, setIsIntersecting] = useState(false);
 
-// export default function useIntersectionObserver({}: Props) {
-//     const dispatch = useDispatch();
-//     const observer = useRef<IntersectionObserver | null>();
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                setIsIntersecting(entry.isIntersecting);
+            },
+            { ...options }
+        );
 
-//     const lastPostObserver = useCallback(
-//         (node) => {
-//             if (isSuccess === false) {
-//                 return;
-//             }
-//             if (isFetching) {
-//                 return;
-//             }
-//             if (observer.current) observer?.current?.disconnect();
+        if (targetRef.current) {
+            observer.observe(targetRef.current);
+        }
 
-//             observer.current = new IntersectionObserver((entries) => {
-//                 if (entries[0].isIntersecting && hasMore) {
-//                     // console.log("visible, ", pageOptions.pageNumber);
-//                     dispatch(incrementPage(type));
-//                 }
-//             });
-//             if (node) {
-//                 observer?.current?.observe(node);
-//             }
-//         },
-//         [isFetching, hasMore]
-//     );
+        return () => {
+            if (targetRef.current) {
+                observer.unobserve(targetRef.current);
+            }
+        };
+    }, [options, targetRef]);
 
-//     // return ref to be used in the component
-//     return lastPostObserver;
-// }
+    return { isIntersecting };
+};
+
+export default useIntersectionObserver;

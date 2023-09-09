@@ -8,6 +8,7 @@ import {
     getChatHistory,
     sendDirectMessage,
 } from "../../../realtimeCommunication/socketHandler";
+import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 
 const ChatWindow = () => {
     const [message, setMessage] = useState("");
@@ -27,7 +28,7 @@ const ChatWindow = () => {
     });
 
     useEffect(() => {
-        if (selectedFriend) {
+        if (selectedFriend && messages?.length === 0) {
             getChatHistory(selectedFriend._id);
         }
     }, [selectedFriend]);
@@ -48,12 +49,22 @@ const ChatWindow = () => {
     };
 
     const getMoreMessages = () => {
-        if (selectedFriend && messages) {
+        if (selectedFriend && messages && messages.length > 0) {
             getChatHistory(selectedFriend._id, messages[0]._id);
         }
     };
 
-    // const lastPostObserver = useIntersectionObserver({type: "blogs", isSuccess, isFetching, hasMore: data?.hasMore});
+    const targetRef = useRef<HTMLDivElement | null>(null); // Specify the type explicitly
+
+    const { isIntersecting } = useIntersectionObserver(targetRef, {
+        threshold: 0, // Adjust this threshold as needed
+    });
+
+    useEffect(() => {
+        if (isIntersecting && selectedFriend) {
+            getMoreMessages();
+        }
+    }, [isIntersecting, selectedFriend]);
 
     return (
         <main className="max-h-[100dvh]  pt-14 h-[100dvh] flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
@@ -91,17 +102,31 @@ const ChatWindow = () => {
                                 );
                             })}
                         </div>
-                        {messages && (
-                            <div
-                                onClick={getMoreMessages}
-                                className="w-full min-h-[100px]  flex justify-center items-center text-textGray font-semibold "
-                            >
-                                Loading More...
-                            </div>
-                        )}
-                        {messages && messages[0]?.firstMessage && (
-                            <ChatBeginningHeader friend={selectedFriend} />
-                        )}
+                        {messages &&
+                            messages.length > 0 &&
+                            !messages[0]?.firstMessage && (
+                                <div
+                                    ref={targetRef}
+                                    onClick={getMoreMessages}
+                                    className="w-full min-h-[100px]  flex flex-col justify-center items-center text-textGray font-semibold "
+                                >
+                                    <div className=" rounded-full  group-hover:rotate-6 animate-spin">
+                                        <img
+                                            className="h-10 w-10 rounded-full filter"
+                                            src={"avatars/pikachu.png"}
+                                            alt="loading"
+                                        />
+                                    </div>
+                                    <div className="text-textGray/50 text-sm">
+                                        Loading more messages
+                                    </div>
+                                </div>
+                            )}
+                        {messages &&
+                            (messages.length == 0 ||
+                                messages[0]?.firstMessage) && (
+                                <ChatBeginningHeader friend={selectedFriend} />
+                            )}
                     </div>
                     <form
                         onSubmit={handleSubmit}
