@@ -11,6 +11,17 @@ const DashboardHeader = () => {
         (state) => state.other.selectedFriend
     );
 
+    const onlineUsers = useAppSelector((state) => state.friend.onlineUsers);
+
+    const isOnline = () => {
+        if (selectedFriend) {
+            return onlineUsers.find(
+                (onlineUser) => onlineUser.userId === selectedFriend._id
+            );
+        }
+        return false;
+    };
+
     return (
         <div className="fixed flex justify-between z-50 shadow-md h-14  w-full bg-primary">
             <div className="w-fit flex items-center">
@@ -21,10 +32,27 @@ const DashboardHeader = () => {
                     <Bars3Icon width={20} />
                 </div>
                 {selectedFriend !== undefined && (
-                    <div>
-                        <span className="text-textGray/25 mr-1 font-bold">
-                            @
-                        </span>
+                    <div className="flex flex-row gap-2 items-center">
+                        <div className="flex rounded-full  relative group-hover:rotate-6">
+                            <img
+                                className="h-8 w-8 rounded-full"
+                                src={
+                                    selectedFriend?.avatar
+                                        ? selectedFriend.avatar
+                                        : "avatars/pikachu.png"
+                                }
+                                alt="dp"
+                            />
+                            {isOnline() ? (
+                                <div className="absolute h-3 w-3 rounded-full  bg-primary bottom-0 right-0 ">
+                                    <div className=" absolute rounded-full bottom-1/2 right-1/2 translate-x-1/2  translate-y-1/2 bg-green-500 h-[7px] w-[7px] "></div>
+                                </div>
+                            ) : (
+                                <div className="absolute h-3 w-3 rounded-full  bg-primary bottom-0 right-0 p-1">
+                                    <div className="rounded-full absolute bottom-1/2 left-1/2 -translate-x-1/2  translate-y-1/2 bg-gray-500 h-2 w-2 "></div>
+                                </div>
+                            )}
+                        </div>
                         <span className="text-textGray font-bold">
                             {selectedFriend.username}
                         </span>

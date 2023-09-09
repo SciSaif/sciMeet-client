@@ -3,6 +3,7 @@ import AddFriendModal from "./components/AddFriendModal";
 import FriendsList from "./components/FriendsList";
 import PendingInvitations from "./components/PendingInvitationsList";
 import SidebarLeft from "./components/SidebarLeft";
+import ProfileBar from "./components/ProfileBar";
 
 const Sidebar = () => {
     const [showAddFriendModal, setShowAddFriendModal] = useState(false);
@@ -12,8 +13,8 @@ const Sidebar = () => {
             className={` h-[100dvh] w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
         >
             <SidebarLeft />
-            <div className="bg-primary h-[100dvh] w-full rounded-lg mr-2 py-4">
-                <div className=" h-full grid grid-rows-[min-content_2fr_1fr]">
+            <div className="bg-primary h-[100dvh] w-full rounded-lg mr-2 pt-4">
+                <div className=" h-full flex flex-col">
                     <div className="px-4">
                         <button
                             onClick={() => setShowAddFriendModal(true)}
@@ -24,6 +25,7 @@ const Sidebar = () => {
                     </div>
                     <FriendsList />
                     <PendingInvitations />
+                    <ProfileBar />
                 </div>
             </div>
 

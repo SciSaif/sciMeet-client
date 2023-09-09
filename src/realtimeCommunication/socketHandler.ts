@@ -22,6 +22,9 @@ import {
 import { getCurrentTimeInMilliseconds } from "../utils/other";
 import {
     IConversation,
+    IMessage,
+    INewMessage,
+    addNewMessage,
     updateConverstation,
 } from "../redux/features/slices/chatSlice";
 export type ConnUserSocketIdType = {
@@ -37,7 +40,8 @@ interface ServerToClientEvents {
     "friends-invitations": (data: { pendingInvitations: Invitation[] }) => void;
     "friends-list": (data: { friends: Friend[] }) => void;
     "online-users": (data: { onlineUsers: OnlineUser[] }) => void;
-    "direct-chat-history": (data: IConversation) => void;
+    "direct-chat-history": (data: IConversation & { append?: boolean }) => void;
+    "direct-message": (data: INewMessage) => void;
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
@@ -184,37 +188,41 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     //------------------------------------------------------------------------
     // chat
     socket.on("direct-chat-history", (data) => {
-        console.log("on direct-chat-history");
         dispatch(updateConverstation(data));
+    });
+
+    socket.on("direct-message", (data) => {
+        // console.log("on direct-message");
+        dispatch(addNewMessage(data));
     });
 };
 
-export const getChatHistory = (friend_id: string) => {
-    console.log("emit direct-chat-history");
-    socket.emit("direct-chat-history", { friend_id });
+export const getChatHistory = (friend_id: string, fromMessageId?: string) => {
+    // console.log("emit direct-chat-history");
+    socket.emit("direct-chat-history", { friend_id, fromMessageId });
 };
 
 export const sendDirectMessage = (messageContent: MessageContent) => {
-    console.log("emit direct-message");
+    // console.log("emit direct-message");
     socket.emit("direct-message", messageContent);
 };
 
 export const createRoom = () => {
-    console.log("emit room-create");
+    // console.log("emit room-create");
     socket.emit("room-create");
 };
 
 export const joinRoom = (roomid: string) => {
-    console.log(
-        "emit join-room"
-        // getCurrentTimeInMilliseconds()
-    );
+    // console.log(
+    //     "emit join-room"
+    //     // getCurrentTimeInMilliseconds()
+    // );
     socket.emit("join-room", { roomid });
 };
 
 export const leaveRoom = (roomid: string) => {
     socket.emit("leave-room", { roomid });
-    console.log("emit leaving room");
+    // console.log("emit leaving room");
 };
 
 export const signalPeerData = (data: any) => {

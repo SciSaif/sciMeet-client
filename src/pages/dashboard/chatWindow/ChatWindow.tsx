@@ -16,6 +16,7 @@ const ChatWindow = () => {
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
+
     const messages = useAppSelector((state) => {
         return selectedFriend
             ? state.chat.conversations.find(
@@ -24,6 +25,7 @@ const ChatWindow = () => {
               )?.messages
             : [];
     });
+
     useEffect(() => {
         if (selectedFriend) {
             getChatHistory(selectedFriend._id);
@@ -44,6 +46,14 @@ const ChatWindow = () => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
     };
+
+    const getMoreMessages = () => {
+        if (selectedFriend && messages) {
+            getChatHistory(selectedFriend._id, messages[0]._id);
+        }
+    };
+
+    // const lastPostObserver = useIntersectionObserver({type: "blogs", isSuccess, isFetching, hasMore: data?.hasMore});
 
     return (
         <main className="max-h-[100dvh]  pt-14 h-[100dvh] flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
@@ -81,7 +91,17 @@ const ChatWindow = () => {
                                 );
                             })}
                         </div>
-                        <ChatBeginningHeader friend={selectedFriend} />
+                        {messages && (
+                            <div
+                                onClick={getMoreMessages}
+                                className="w-full min-h-[100px]  flex justify-center items-center text-textGray font-semibold "
+                            >
+                                Loading More...
+                            </div>
+                        )}
+                        {messages && messages[0]?.firstMessage && (
+                            <ChatBeginningHeader friend={selectedFriend} />
+                        )}
                     </div>
                     <form
                         onSubmit={handleSubmit}
