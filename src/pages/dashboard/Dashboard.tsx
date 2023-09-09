@@ -4,12 +4,16 @@ import Sidebar from "./sidebar/Sidebar";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import SettingsDropdown from "./components/SettingsDropdown";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setTheme } from "../../redux/features/slices/otherSlice";
+import {
+    setTheme,
+    toggleSidebar,
+} from "../../redux/features/slices/otherSlice";
 import DashboardHeader from "./components/DashboardHeader";
 import ChatWindow from "./chatWindow/ChatWindow";
 import Room from "./room/Room";
 import { connectWithSocketServer } from "../../realtimeCommunication/socketHandler";
 import { store } from "../../redux/store";
+import { useSwipeable } from "react-swipeable";
 
 const Dashboard = () => {
     const user = useAppSelector((state) => state.auth.user);
@@ -29,9 +33,35 @@ const Dashboard = () => {
         };
     }, []);
 
+    const slide = (dir: "left" | "right") => {
+        // dispatch({ type: dir, numItems });
+        console.log("sliding ", dir);
+        if (dir === "left" && sidebarOpen) {
+            dispatch(toggleSidebar());
+        } else if (dir === "right" && !sidebarOpen) {
+            dispatch(toggleSidebar());
+        }
+        setTimeout(() => {
+            // dispatch({ type: "stopSliding" });
+            console.log("sliding stopped");
+        }, 50);
+    };
+
+    const handlers = useSwipeable({
+        onSwipedLeft: () => slide("left"),
+        onSwipedRight: () => slide("right"),
+        delta: 100,
+        swipeDuration: 500,
+        preventScrollOnSwipe: true,
+        trackMouse: true,
+    });
+
     return (
         <>
-            <div className="bg-primary-900 h-[100dvh]  w-full flex flex-row  overflow-hidden">
+            <div
+                {...handlers}
+                className="bg-primary-900 h-[100dvh]  w-full flex flex-row  overflow-hidden"
+            >
                 <Sidebar />
 
                 <div

@@ -192,7 +192,7 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     });
 
     socket.on("direct-message", (data) => {
-        console.log("on direct-message", data);
+        // console.log("on direct-message", data);
         dispatch(addNewMessage(data));
     });
 };
