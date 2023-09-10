@@ -8,6 +8,8 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { IConversation } from "../../../../redux/features/slices/chatSlice";
 import TextareaAutosize from "react-textarea-autosize";
 
+import settings from "../../../../utils/settings";
+
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
 }
@@ -19,11 +21,13 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         (state) => state.other.selectedFriend
     );
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
     useEffect(() => {
         if (selectedFriend) {
             setMessage("");
-            textareaRef.current?.focus();
+            if (windowSize.current[0] > settings.md)
+                textareaRef.current?.focus();
         }
     }, [selectedFriend]);
 
@@ -75,18 +79,6 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     };
 
     const handleSubmit = (e: any) => {
-        // e.preventDefault();
-        // if (!selectedFriend) return;
-        // setMessage("");
-        // sendDirectMessage({
-        //     content: message,
-        //     friend_id: selectedFriend._id,
-        // });
-        // const messagesContainer = messagesContainerRef.current;
-        // if (messagesContainer) {
-        //     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        // }
-
         e.preventDefault();
         if (!selectedFriend) return;
         if (e.nativeEvent.shiftKey) {
@@ -106,6 +98,27 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            handleSubmit(e);
+        } else if (e.key === "Tab") {
+            e.preventDefault(); // Prevent the default behavior of the Tab key
+            const { selectionStart, selectionEnd } = e.currentTarget;
+            const currentMessage = e.currentTarget.value;
+            const newMessage =
+                currentMessage.substring(0, selectionStart) +
+                "\t" +
+                currentMessage.substring(selectionEnd);
+            setMessage(newMessage);
+            // Adjust the cursor position after inserting the tab
+            const newSelectionStart = selectionStart + 1;
+            e.currentTarget.setSelectionRange(
+                newSelectionStart,
+                newSelectionStart
+            );
+        }
+    };
+
     return (
         <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
             <div className="w-full h-auto  flex flex-row items-center bg-primary-700  rounded-xl">
@@ -113,17 +126,18 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
                 <TextareaAutosize
                     ref={textareaRef}
-                    autoFocus
+                    // autoFocus
                     value={message}
                     onChange={(e) => {
                         setMessage(e.target.value);
                         handleTypingStart();
                     }}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                            handleSubmit(e);
-                        }
-                    }}
+                    // onKeyDown={(e) => {
+                    //     if (e.key === "Enter" && !e.shiftKey) {
+                    //         handleSubmit(e);
+                    //     }
+                    // }}
+                    onKeyDown={handleKeyDown}
                     className="w-full  resize-none rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
                     placeholder={`Message ${selectedFriend?.username}`}
                     onBlur={handleTypingStop}
