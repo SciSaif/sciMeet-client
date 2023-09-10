@@ -29,9 +29,11 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                                     <div className="text-sm flex flex-row justify-between">
                                         <span>Seen </span>
                                         <span className="text-text3">
-                                            {toReadableDate(
-                                                message.seenBy[0].date
-                                            )}
+                                            {message.seenBy.length > 0
+                                                ? toReadableDate(
+                                                      message.seenBy[0].date
+                                                  )
+                                                : "not seen"}
                                         </span>
                                     </div>
                                 </div>

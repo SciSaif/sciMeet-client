@@ -31,7 +31,7 @@ const Popover = ({ children, popup, className }: Props) => {
                     >
                         <PopoverHeadless.Panel
                             className={twMerge(
-                                "absolute -top-1/2   z-10 mt-1   -translate-x-[100%] transform ",
+                                "absolute -top-1/2   z-10    -translate-x-[100%] transform ",
                                 className && className
                             )}
                         >
