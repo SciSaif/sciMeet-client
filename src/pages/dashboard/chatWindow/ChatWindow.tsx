@@ -126,7 +126,7 @@ const ChatWindow = () => {
 
     let unreadMessages = 0;
     // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
-    if (messages && user) {
+    if (messages && user && messages.length > 0) {
         // skip if author of message is current user
         if (
             messages[messages.length - 1].author._id !== user._id &&
