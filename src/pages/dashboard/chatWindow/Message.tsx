@@ -7,6 +7,7 @@ import {
 } from "../../../redux/features/slices/chatSlice";
 import { useAppSelector } from "../../../redux/hooks";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import SeenCheckMark from "./components/SeenCheckMark";
 const defaultImg = settings.defaultImg;
 
 interface Props {
@@ -63,33 +64,14 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
                         </div>
                         <div className="flex flex-row justify-between hover:bg-black/10">
                             <div>{message.content}</div>
-                            <div>
-                                {message.author._id === user?._id && (
-                                    <div className="text-text3/50 ml-2 font-base text-xs font-bold flex items-center justify-center">
-                                        {message.seenBy.length ===
-                                        totalParticipants - 1 ? (
-                                            <div className="text-secondary translate-y-[3px]">
-                                                <CheckIcon
-                                                    width={12}
-                                                    height={12}
-                                                />
-                                                <CheckIcon
-                                                    width={12}
-                                                    height={12}
-                                                    className="-translate-y-[7px] translate-x-[1px]"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div className="text-text2 translate-y-[1px]">
-                                                <CheckIcon
-                                                    width={12}
-                                                    height={12}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                            <SeenCheckMark
+                                message={message}
+                                userId={user?._id}
+                                seenByAll={
+                                    message.seenBy.length ===
+                                    totalParticipants - 1
+                                }
+                            />
                         </div>
                     </div>
                 </div>
@@ -98,27 +80,13 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
             {mergeMessage && (
                 <div className="flex flex-row justify-between text-text1 ml-[47px]  hover:bg-black/10">
                     <div>{message.content}</div>
-                    <div>
-                        {message.author._id === user?._id && (
-                            <div className="text-text3/50 ml-2 font-base text-xs font-bold flex items-center justify-center">
-                                {message.seenBy.length ===
-                                totalParticipants - 1 ? (
-                                    <div className="text-secondary translate-y-[3px]">
-                                        <CheckIcon width={12} height={12} />
-                                        <CheckIcon
-                                            width={12}
-                                            height={12}
-                                            className="-translate-y-[7px] translate-x-[1px]"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="text-text2 translate-y-[1px]">
-                                        <CheckIcon width={12} height={12} />
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                    <SeenCheckMark
+                        message={message}
+                        userId={user?._id}
+                        seenByAll={
+                            message.seenBy.length === totalParticipants - 1
+                        }
+                    />
                 </div>
             )}
         </>
