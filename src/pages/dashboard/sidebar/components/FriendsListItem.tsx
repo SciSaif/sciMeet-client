@@ -48,7 +48,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
                         </div>
                     )}
                 </div>
-                <div className="text-textGray2">{friend.username}</div>
+                <div className="text-text2">{friend.username}</div>
             </div>
         </div>
     );

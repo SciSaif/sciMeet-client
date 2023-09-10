@@ -62,3 +62,29 @@ input:-webkit-autofill:active {
   mix-blend-mode: difference;
   opacity: 20%;
 }
+
+/* background image */
+
+
+.chat-background {
+  position: relative;
+}
+
+.chat-background:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  background-image: url('bg.png');
+  background-repeat: repeat;
+  background-position: 50% 0;
+  /* filter to make white black */
+  filter: grayscale(100%) contrast(150%) brightness(200%);
+  mix-blend-mode: difference;
+
+  z-index: -10;
+}

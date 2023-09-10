@@ -82,7 +82,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     return (
         <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
-            <div className="w-full  flex flex-row items-center bg-primary-700 rounded-xl">
+            <div className="w-full  flex flex-row items-center bg-primary-700  rounded-xl">
                 {/* <EmojiPicker /> */}
 
                 <input
@@ -94,12 +94,12 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                     onBlur={handleTypingStop}
                     type="text"
                     placeholder={`Message ${selectedFriend?.username}`}
-                    className="w-full rounded-l-xl border-0 pr-10 bg-primary-700 focus:ring-0 placeholder:text-textGray/50 outline-none  active:outline-none text-textGray"
+                    className="w-full rounded-l-xl border-0 pr-10 bg-transparent  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
                 />
 
                 <button
                     type="submit"
-                    className="pl-2 pr-4 cursor-pointer text-textGray hover:text-textGray3 "
+                    className="pl-2 pr-4 cursor-pointer text-text3 hover:text-text3 "
                 >
                     <PaperAirplaneIcon width={20} />
                 </button>

@@ -16,6 +16,10 @@ export interface IMessage {
     content: string;
     date: string;
     type: string;
+    seenBy: {
+        userId: string;
+        date: string;
+    }[];
     firstMessage?: boolean;
 }
 
@@ -93,6 +97,39 @@ export const chatSlice = createSlice({
             conversation.messages.push(message);
         },
 
+        updateSeenMessages: (
+            state,
+            action: PayloadAction<{ conversationId: string; userId: string }>
+        ) => {
+            const conversation = state.conversations.find(
+                (conversation) =>
+                    conversation._id === action.payload.conversationId
+            );
+            if (!conversation) return;
+
+            // make sure to not add userId if its already present
+            // start from last message and keep updating till we find a message where userId is already present, then break out
+            for (let i = conversation.messages.length - 1; i >= 0; i--) {
+                const seenBy = conversation.messages[i].seenBy;
+                // do no update message posted by the same user
+                if (
+                    conversation.messages[i].author._id ===
+                    action.payload.userId
+                ) {
+                    continue;
+                }
+                if (
+                    seenBy.some((user) => user.userId === action.payload.userId)
+                ) {
+                    break;
+                }
+                seenBy.push({
+                    userId: action.payload.userId,
+                    date: new Date().toISOString(),
+                });
+            }
+        },
+
         resetState: () => initialState,
     },
 });
@@ -102,5 +139,6 @@ export const {
     addNewMessage,
     resetState,
     updateTypingStatus,
+    updateSeenMessages,
 } = chatSlice.actions;
 export default chatSlice.reducer;

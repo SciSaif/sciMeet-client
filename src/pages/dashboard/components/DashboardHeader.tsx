@@ -27,7 +27,7 @@ const DashboardHeader = () => {
             <div className="w-fit flex items-center">
                 <div
                     onClick={() => dispatch(toggleSidebar())}
-                    className="ml-4  w-fit flex  items-center text-gray-300 p-2 cursor-pointer"
+                    className="ml-4  w-fit flex  items-center text-text1 p-2 cursor-pointer"
                 >
                     <Bars3Icon width={20} />
                 </div>
@@ -55,7 +55,7 @@ const DashboardHeader = () => {
                                 </div>
                             )}
                         </div>
-                        <span className="text-textGray font-bold">
+                        <span className="text-text1 font-bold">
                             {selectedFriend.username}
                         </span>
                     </div>

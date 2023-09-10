@@ -27,6 +27,7 @@ import {
     ITypingUsers,
     addNewMessage,
     updateConverstation,
+    updateSeenMessages,
     updateTypingStatus,
 } from "../redux/features/slices/chatSlice";
 export type ConnUserSocketIdType = {
@@ -45,6 +46,7 @@ interface ServerToClientEvents {
     "direct-chat-history": (data: IConversation & { append?: boolean }) => void;
     "direct-message": (data: INewMessage) => void;
     "typing-status": (data: ITypingUsers) => void;
+    "seen-messages": (data: { conversationId: string; userId: string }) => void;
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
@@ -63,6 +65,7 @@ interface ClientToServerEvents {
         conversationId: string;
         participantIds: string[];
     }) => void;
+    "seen-messages": (data: { conversationId: string }) => void;
     // -------------------------------------------------------------
     "room-create": () => void;
     "join-room": (data: { roomid: string }) => void;
@@ -207,6 +210,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
     socket.on("typing-status", (data) => {
         dispatch(updateTypingStatus(data));
     });
+
+    socket.on("seen-messages", (data) => {
+        dispatch(updateSeenMessages(data));
+    });
 };
 
 export const getChatHistory = (friend_id: string, fromMessageId?: string) => {
@@ -226,6 +233,11 @@ export const sendTypingStatus = (data: {
 }) => {
     console.log("emit typing-status");
     socket.emit("typing-status", data);
+};
+
+export const seenMessages = (data: { conversationId: string }) => {
+    console.log("emit seen-messages");
+    socket.emit("seen-messages", data);
 };
 
 // -------------------------------------------------------------------------------------

@@ -1,13 +1,14 @@
 // useIntersectionObserver.ts
 import { useEffect, useRef, useState } from "react";
 
-const useIntersectionObserver = (
-    targetRef: React.RefObject<HTMLElement | null>,
-    options: IntersectionObserverInit = {}
-) => {
+const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
+    const targetRef = useRef<HTMLDivElement | null>(null); // Specify the type explicitly
+    const [refChanged, setRefChanged] = useState(false);
+
     const [isIntersecting, setIsIntersecting] = useState(false);
 
     useEffect(() => {
+        // console.log("target", targetRef.current);
         const observer = new IntersectionObserver(
             (entries) => {
                 const [entry] = entries;
@@ -23,11 +24,17 @@ const useIntersectionObserver = (
         return () => {
             if (targetRef.current) {
                 observer.unobserve(targetRef.current);
+                observer.disconnect();
             }
         };
-    }, [options, targetRef]);
+    }, [options, targetRef, refChanged]);
 
-    return { isIntersecting };
+    const setTargetRef = (ref: HTMLDivElement | null) => {
+        targetRef.current = ref;
+        setRefChanged(!refChanged);
+    };
+
+    return { targetRef, isIntersecting, setTargetRef };
 };
 
 export default useIntersectionObserver;

@@ -25,20 +25,18 @@ const PendingInvitationListItem = ({
                         alt=""
                     />
                 </div>
-                <div className="text-textGray2">
-                    {invitation.senderId.username}
-                </div>
+                <div className="text-text2">{invitation.senderId.username}</div>
             </div>
             <div className="flex flex-row">
                 <button
                     onClick={() => acceptInvitation({ _id: invitation._id })}
-                    className="text-textGray2 rounded-full p-1 mr-2 hover:bg-black/25"
+                    className="text-text2 rounded-full p-1 mr-2 hover:bg-black/25"
                 >
                     <CheckIcon width={24} height={24} />
                 </button>
                 <button
                     onClick={() => rejectInvitation({ _id: invitation._id })}
-                    className="text-textGray2 rounded-full p-1 mr-2 hover:bg-black/25"
+                    className="text-text2 rounded-full p-1 mr-2 hover:bg-black/25"
                 >
                     <XMarkIcon width={24} height={24} />
                 </button>

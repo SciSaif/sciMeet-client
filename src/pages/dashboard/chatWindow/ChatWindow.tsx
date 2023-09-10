@@ -6,19 +6,23 @@ import { isSameDay } from "../../../utils/dateFunctions";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import {
     getChatHistory,
+    seenMessages,
     sendDirectMessage,
 } from "../../../realtimeCommunication/socketHandler";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import InputMessage from "./components/InputMessage";
+import TypingUsers from "./components/TypingUsers";
 
 const ChatWindow = () => {
     const [lastMessageId, setLastMessageId] = useState<string | null>(null);
-    const [typingUsers, setTypingUsers] = useState<string[]>([]);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const messagesRef = useRef<HTMLDivElement>(null);
 
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
+
+    const user = useAppSelector((state) => state.auth.user);
 
     const messages = useAppSelector((state) => {
         return selectedFriend
@@ -28,30 +32,14 @@ const ChatWindow = () => {
               )?.messages
             : [];
     });
-
-    const typingUserIds = useAppSelector((state) => {
-        return (
-            state.chat.typingStatus.find(
-                (status) =>
-                    status.conversationId === selectedFriend?.conversationId
-            )?.typingUsers || []
-        );
+    const conversation = useAppSelector((state) => {
+        return selectedFriend
+            ? state.chat.conversations.find(
+                  (conversation) =>
+                      conversation._id === selectedFriend.conversationId
+              )
+            : null;
     });
-
-    const friends = useAppSelector((state) => state.friend.friends);
-
-    useEffect(() => {
-        // get the usernames of typing users using userids in friends
-        const newTypingUsers = typingUserIds.map((userId) => {
-            const friend = friends.find((f) => f._id === userId);
-            return friend?.username || userId;
-        });
-        if (typingUsers.length === 0 && newTypingUsers.length === 0) {
-            return;
-        }
-
-        setTypingUsers(newTypingUsers);
-    }, [typingUserIds, friends]);
 
     useEffect(() => {
         if (selectedFriend && !messages) {
@@ -66,9 +54,14 @@ const ChatWindow = () => {
         }
     };
 
-    const targetRef = useRef<HTMLDivElement | null>(null); // Specify the type explicitly
-
-    const { isIntersecting } = useIntersectionObserver(targetRef, {
+    const { targetRef, isIntersecting } = useIntersectionObserver({
+        threshold: 0, // Adjust this threshold as needed
+    });
+    const {
+        targetRef: latestMessageRef,
+        isIntersecting: lastMessageIntersecting,
+        setTargetRef,
+    } = useIntersectionObserver({
         threshold: 0, // Adjust this threshold as needed
     });
 
@@ -81,6 +74,12 @@ const ChatWindow = () => {
         ) {
             setLastMessageId(null);
         }
+
+        // for detecting latest message and changing the latestMessageRef
+        if (messages && messages.length > 0) {
+            // change ref to the last message
+            setTargetRef(messagesRef.current?.lastChild as HTMLDivElement);
+        }
     }, [messages]);
 
     useEffect(() => {
@@ -89,10 +88,32 @@ const ChatWindow = () => {
         }
     }, [isIntersecting, selectedFriend]);
 
+    useEffect(() => {
+        if (!messages || messages.length === 0 || !user || !conversation) {
+            return;
+        }
+        let lastMessage = messages[messages.length - 1];
+        if (lastMessage.author._id === user._id) {
+            return;
+        }
+        // check if last message is seen already or not
+        let isSeen = false;
+        for (let seenBy of lastMessage.seenBy) {
+            if (seenBy.userId === user._id) {
+                isSeen = true;
+                break;
+            }
+        }
+        if (lastMessageIntersecting && !isSeen) {
+            console.log("read all messages");
+            seenMessages({ conversationId: conversation?._id });
+        }
+    }, [lastMessageIntersecting, latestMessageRef.current]);
+
     return (
-        <main className="max-h-[100dvh]  pt-14 h-[100dvh] flex flex-col  justify-end   overflow-auto  scrollbar w-full    ">
+        <main className="max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ">
             {selectedFriend === undefined && (
-                <div className="flex w-full items-center justify-center h-full text-textGray font-semibold">
+                <div className="flex w-full items-center justify-center h-full text-text1 font-semibold">
                     To start chatting, select a friend from the sidebar
                 </div>
             )}
@@ -102,18 +123,8 @@ const ChatWindow = () => {
                         ref={messagesContainerRef}
                         className="flex flex-col-reverse   overflow-auto scrollbar px-5 "
                     >
-                        {typingUsers?.length > 0 && (
-                            <div>
-                                <p className="text-textGray text-sm py-2 px-3">
-                                    {typingUsers.join(", ") +
-                                        (typingUsers.length > 1
-                                            ? " are "
-                                            : " is ")}{" "}
-                                    {"typing"}
-                                </p>
-                            </div>
-                        )}
-                        <div className=" flex flex-col pb-5">
+                        <TypingUsers />
+                        <div ref={messagesRef} className=" flex flex-col pb-5">
                             {messages?.map((message, index) => {
                                 const sameAuthor =
                                     index > 0 &&
@@ -132,6 +143,10 @@ const ChatWindow = () => {
                                         key={message._id}
                                         message={message}
                                         mergeMessage={sameAuthor && sameDay}
+                                        totalParticipants={
+                                            conversation?.participants.length ||
+                                            0
+                                        }
                                     />
                                 );
                             })}
@@ -142,7 +157,7 @@ const ChatWindow = () => {
                                 <div
                                     ref={targetRef}
                                     onClick={getMoreMessages}
-                                    className="w-full min-h-[100px]  flex flex-col justify-center items-center text-textGray font-semibold "
+                                    className="w-full min-h-[100px]  flex flex-col justify-center items-center text-text1 font-semibold "
                                 >
                                     <div className=" rounded-full  group-hover:rotate-6 animate-spin">
                                         <img
@@ -151,7 +166,7 @@ const ChatWindow = () => {
                                             alt="loading"
                                         />
                                     </div>
-                                    <div className="text-textGray/50 text-sm">
+                                    <div className="text-text1/50 text-sm">
                                         Loading more messages
                                     </div>
                                 </div>

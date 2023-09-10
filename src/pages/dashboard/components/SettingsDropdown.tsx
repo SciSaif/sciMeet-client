@@ -11,7 +11,7 @@ const SettingsDropdown = () => {
     return (
         <Menu as="div" className="relative inline-block text-left h-full">
             <div className="flex items-center h-full">
-                <Menu.Button className="inline-flex w-full justify-center rounded-full  bg-opacity-20 p-3 text-sm font-medium hover:bg-black/10 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button className="inline-flex w-full justify-center rounded-full  bg-opacity-20 p-3 text-sm font-medium hover:bg-black/10 text-text1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                     <EllipsisVerticalIcon width={20} />
                 </Menu.Button>
             </div>

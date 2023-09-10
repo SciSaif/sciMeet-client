@@ -10,7 +10,7 @@ interface Props {
 
 const ChatBeginningHeader = ({ friend }: Props) => {
     return (
-        <div className="py-5 text-textGray">
+        <div className="py-5 text-text1">
             <div className="flex rounded-full w-fit">
                 <img
                     className="h-24 w-24 rounded-full"
@@ -18,7 +18,7 @@ const ChatBeginningHeader = ({ friend }: Props) => {
                     alt=""
                 />
             </div>
-            <div className=" text-textGray font-bold text-3xl">
+            <div className=" text-text1 font-bold text-3xl">
                 {friend.username}
             </div>
             <p>

@@ -98,7 +98,7 @@ const PendingInvitationsList = () => {
             {" "}
             {invitations && invitations.length > 0 && (
                 <div className="overflow-auto scrollbar mb-5">
-                    <h4 className="text-textGray2 text-sm text-center w-full mt-3 font-semibold">
+                    <h4 className="text-text2 text-sm text-center w-full mt-3 font-semibold">
                         INVITATIONS
                     </h4>
 
