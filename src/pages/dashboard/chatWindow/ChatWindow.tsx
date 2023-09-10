@@ -62,7 +62,7 @@ const ChatWindow = () => {
         isIntersecting: lastMessageIntersecting,
         setTargetRef,
     } = useIntersectionObserver({
-        threshold: 0, // Adjust this threshold as needed
+        threshold: 1, // Adjust this threshold as needed
     });
 
     useEffect(() => {
@@ -77,8 +77,18 @@ const ChatWindow = () => {
 
         // for detecting latest message and changing the latestMessageRef
         if (messages && messages.length > 0) {
-            // change ref to the last message
-            setTargetRef(messagesRef.current?.lastChild as HTMLDivElement);
+            // change ref to the last message ( set it to a div with classname '_checkMarkId' inside the last child of messages)
+            // we do this because we need to trigger it only if the whole message is visible horizontally
+            let lastChild = messagesRef.current?.lastChild;
+            if (lastChild) {
+                // @ts-ignore
+                let checkMarkId = lastChild.querySelector(
+                    "._checkMarkId"
+                ) as HTMLDivElement;
+                if (checkMarkId) {
+                    setTargetRef(checkMarkId);
+                }
+            }
         }
     }, [messages]);
 
