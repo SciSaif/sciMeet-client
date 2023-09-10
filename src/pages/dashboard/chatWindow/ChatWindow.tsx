@@ -12,6 +12,7 @@ import {
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import InputMessage from "./components/InputMessage";
 import TypingUsers from "./components/TypingUsers";
+import useHasFocus from "../../../hooks/useHasFocus";
 
 const ChatWindow = () => {
     const [lastMessageId, setLastMessageId] = useState<string | null>(null);
@@ -92,6 +93,8 @@ const ChatWindow = () => {
         }
     }, [messages]);
 
+    const windowInFocus = useHasFocus();
+
     useEffect(() => {
         if (isIntersecting && selectedFriend && !lastMessageId) {
             getMoreMessages();
@@ -114,11 +117,12 @@ const ChatWindow = () => {
                 break;
             }
         }
-        if (lastMessageIntersecting && !isSeen) {
+        if (lastMessageIntersecting && !isSeen && windowInFocus) {
             console.log("read all messages");
+
             seenMessages({ conversationId: conversation?._id });
         }
-    }, [lastMessageIntersecting, latestMessageRef.current]);
+    }, [lastMessageIntersecting, latestMessageRef.current, windowInFocus]);
 
     return (
         <main className="max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ">
