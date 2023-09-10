@@ -22,7 +22,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
     return (
         <>
             {!mergeMessage && (
-                <div className="text-text1 flex flex-row gap-x-3 mt-5">
+                <div className="text-text1 flex flex-row gap-x-3 mt-5 overflow-hidden">
                     <div className="flex rounded-full h-fit min-w-[35px] ">
                         <img
                             className="h-8 w-8 rounded-full"
@@ -43,7 +43,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
                                 {toReadableDate(message.date)}
                             </span>
                         </div>
-                        <div className="flex flex-row justify-between hover:bg-black/10">
+                        <div className="flex flex-row overflow-hidden justify-between hover:bg-black/10">
                             <p className=" overflow-hidden whitespace-pre-wrap">
                                 {message.content}
                             </p>
@@ -61,7 +61,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
             )}
 
             {mergeMessage && (
-                <div className="flex flex-row justify-between text-text1 ml-[47px]  hover:bg-black/10">
+                <div className="flex flex-row justify-between overflow-hidden text-text1 ml-[47px]  hover:bg-black/10">
                     <p className="w-full overflow-hidden whitespace-pre-wrap">
                         {message.content}
                     </p>
