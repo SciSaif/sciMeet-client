@@ -11,24 +11,9 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
     );
+
     const user = useAppSelector((state) => state.auth.user);
 
-    // export interface IMessage {
-    //     _id: string;
-    //     author: {
-    //         _id: string;
-    //         username: string;
-    //         avatar: string;
-    //     };
-    //     content: string;
-    //     date: string;
-    //     type: string;
-    //     seenBy: {
-    //         userId: string;
-    //         date: string;
-    //     }[];
-    //     firstMessage?: boolean;
-    // }
     const messages = useAppSelector((state) => {
         return selectedFriend
             ? state.chat.conversations.find(
@@ -38,26 +23,19 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     });
 
     let unreadMessages = 0;
-    // useEffect(() => {
-    if (messages) {
-        console.log("m");
-        // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
-        if (messages && user) {
-            for (let i = messages.length - 1; i >= 0; i--) {
-                // skip if author of message is current user
-                if (messages[i].author._id === user._id) {
-                    continue;
-                }
-                if (messages[i].seenBy.find((u) => u.userId === user._id)) {
-                    break;
-                }
-                unreadMessages++;
+    // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
+    if (messages && user) {
+        for (let i = messages.length - 1; i >= 0; i--) {
+            // skip if author of message is current user
+            if (messages[i].author._id === user._id) {
+                continue;
             }
+            if (messages[i].seenBy.find((u) => u.userId === user._id)) {
+                break;
+            }
+            unreadMessages++;
         }
-
-        console.log(unreadMessages);
     }
-    // }, [messages]);
 
     const handleClick = () => {
         dispatch(setSelectedFriend(friend));
@@ -102,7 +80,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
             </div>
             {unreadMessages > 0 && (
                 <div className="pr-5">
-                    <div className="rounded-full min-w-[30px] text-center text-white bg-primary-700 p-1">
+                    <div className="rounded-full min-w-[24px] text-center text-xs text-white bg-primary-700 p-1">
                         {unreadMessages}
                     </div>
                 </div>

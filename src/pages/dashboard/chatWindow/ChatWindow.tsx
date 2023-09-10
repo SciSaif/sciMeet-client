@@ -124,6 +124,20 @@ const ChatWindow = () => {
         }
     }, [lastMessageIntersecting, latestMessageRef.current, windowInFocus]);
 
+    let unreadMessages = 0;
+    // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
+    if (messages && user) {
+        // skip if author of message is current user
+        if (
+            messages[messages.length - 1].author._id !== user._id &&
+            !messages[messages.length - 1].seenBy.find(
+                (u) => u.userId === user._id
+            )
+        ) {
+            unreadMessages = 1;
+        }
+    }
+
     return (
         <main className="max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ">
             {selectedFriend === undefined && (
@@ -134,9 +148,23 @@ const ChatWindow = () => {
             {selectedFriend !== undefined && (
                 <>
                     <div
+                        onClick={() => {
+                            // scroll to bottom
+                            const messagesContainer =
+                                messagesContainerRef.current;
+                            if (messagesContainer) {
+                                messagesContainer.scrollTop =
+                                    messagesContainer.scrollHeight;
+                            }
+                        }}
                         ref={messagesContainerRef}
-                        className="flex flex-col-reverse   overflow-auto scrollbar px-5 "
+                        className="flex flex-col-reverse  relative  overflow-auto scrollbar px-5 "
                     >
+                        {unreadMessages > 0 && (
+                            <div className="fixed top-20 text-sm cursor-pointer left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-text1 bg-primary-700">
+                                You have new messages!
+                            </div>
+                        )}
                         <TypingUsers />
                         <div ref={messagesRef} className=" flex flex-col pb-5">
                             {messages?.map((message, index) => {
