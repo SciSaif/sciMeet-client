@@ -62,6 +62,10 @@ export const chatSlice = createSlice({
             state.typingStatus.push(action.payload);
         },
 
+        setConversations: (state, action: PayloadAction<IConversation[]>) => {
+            state.conversations = action.payload;
+        },
+
         updateConverstation: (
             state,
             action: PayloadAction<IConversation & { append?: boolean }>
@@ -140,5 +144,6 @@ export const {
     resetState,
     updateTypingStatus,
     updateSeenMessages,
+    setConversations,
 } = chatSlice.actions;
 export default chatSlice.reducer;

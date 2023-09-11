@@ -26,6 +26,7 @@ import {
     INewMessage,
     ITypingUsers,
     addNewMessage,
+    setConversations,
     updateConverstation,
     updateSeenMessages,
     updateTypingStatus,
@@ -47,6 +48,7 @@ interface ServerToClientEvents {
     "direct-message": (data: INewMessage) => void;
     "typing-status": (data: ITypingUsers) => void;
     "seen-messages": (data: { conversationId: string; userId: string }) => void;
+    conversations: (data: IConversation[]) => void;
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
@@ -213,6 +215,10 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
 
     socket.on("seen-messages", (data) => {
         dispatch(updateSeenMessages(data));
+    });
+
+    socket.on("conversations", (data) => {
+        dispatch(setConversations(data));
     });
 };
 

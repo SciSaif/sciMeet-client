@@ -5,6 +5,7 @@ import {
     toggleSidebar,
 } from "../../../../redux/features/slices/otherSlice";
 import { Friend } from "../../../../redux/features/slices/friendSlice";
+import { countUnreadMessages } from "../../../../utils/unreadMessages";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const dispatch = useAppDispatch();
@@ -15,27 +16,16 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const user = useAppSelector((state) => state.auth.user);
 
     const messages = useAppSelector((state) => {
-        return selectedFriend
+        return friend
             ? state.chat.conversations.find(
                   (conversation) => conversation._id === friend.conversationId
               )?.messages
             : [];
     });
 
-    let unreadMessages = 0;
-    // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
-    if (messages && user) {
-        for (let i = messages.length - 1; i >= 0; i--) {
-            // skip if author of message is current user
-            if (messages[i].author._id === user._id) {
-                continue;
-            }
-            if (messages[i].seenBy.find((u) => u.userId === user._id)) {
-                break;
-            }
-            unreadMessages++;
-        }
-    }
+    console.log("m", friend.username, messages);
+
+    let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
         dispatch(setSelectedFriend(friend));

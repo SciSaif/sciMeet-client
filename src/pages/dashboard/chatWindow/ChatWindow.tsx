@@ -13,9 +13,12 @@ import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import InputMessage from "./components/InputMessage";
 import TypingUsers from "./components/TypingUsers";
 import useHasFocus from "../../../hooks/useHasFocus";
+import { countUnreadMessages } from "../../../utils/unreadMessages";
+import { markMessagesAsSeen } from "./utils";
+import LoadMoreMessages from "./components/LoadMoreMessages";
+import { IMessage } from "../../../redux/features/slices/chatSlice";
 
 const ChatWindow = () => {
-    const [lastMessageId, setLastMessageId] = useState<string | null>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<HTMLDivElement>(null);
 
@@ -23,16 +26,6 @@ const ChatWindow = () => {
         (state) => state.other.selectedFriend
     );
 
-    const user = useAppSelector((state) => state.auth.user);
-
-    const messages = useAppSelector((state) => {
-        return selectedFriend
-            ? state.chat.conversations.find(
-                  (conversation) =>
-                      conversation._id === selectedFriend.conversationId
-              )?.messages
-            : [];
-    });
     const conversation = useAppSelector((state) => {
         return selectedFriend
             ? state.chat.conversations.find(
@@ -42,22 +35,17 @@ const ChatWindow = () => {
             : null;
     });
 
+    let messages: IMessage[] = [];
+    if (conversation) {
+        messages = conversation.messages;
+    }
+
     useEffect(() => {
-        if (selectedFriend && !messages) {
+        if (selectedFriend && messages && messages.length === 0) {
             getChatHistory(selectedFriend._id);
         }
     }, [selectedFriend]);
 
-    const getMoreMessages = () => {
-        if (selectedFriend && messages && messages.length > 0) {
-            setLastMessageId(messages[0]._id);
-            getChatHistory(selectedFriend._id, messages[0]._id);
-        }
-    };
-
-    const { targetRef, isIntersecting } = useIntersectionObserver({
-        threshold: 0, // Adjust this threshold as needed
-    });
     const {
         targetRef: latestMessageRef,
         isIntersecting: lastMessageIntersecting,
@@ -67,15 +55,6 @@ const ChatWindow = () => {
     });
 
     useEffect(() => {
-        // this is to prevent fetching more messages while more messages are being fetched
-        if (
-            messages &&
-            messages.length > 0 &&
-            messages[0]._id !== lastMessageId
-        ) {
-            setLastMessageId(null);
-        }
-
         // for detecting latest message and changing the latestMessageRef
         if (messages && messages.length > 0) {
             // change ref to the last message ( set it to a div with classname '_checkMarkId' inside the last child of messages)
@@ -96,47 +75,19 @@ const ChatWindow = () => {
     const windowInFocus = useHasFocus();
 
     useEffect(() => {
-        if (isIntersecting && selectedFriend && !lastMessageId) {
-            getMoreMessages();
-        }
-    }, [isIntersecting, selectedFriend]);
+        markMessagesAsSeen(
+            lastMessageIntersecting,
+            windowInFocus,
+            conversation
+        );
+    }, [
+        lastMessageIntersecting,
+        conversation,
+        latestMessageRef.current, // needed , dont remove
+        windowInFocus,
+    ]);
 
-    useEffect(() => {
-        if (!messages || messages.length === 0 || !user || !conversation) {
-            return;
-        }
-        let lastMessage = messages[messages.length - 1];
-        if (lastMessage.author._id === user._id) {
-            return;
-        }
-        // check if last message is seen already or not
-        let isSeen = false;
-        for (let seenBy of lastMessage.seenBy) {
-            if (seenBy.userId === user._id) {
-                isSeen = true;
-                break;
-            }
-        }
-        if (lastMessageIntersecting && !isSeen && windowInFocus) {
-            console.log("read all messages");
-
-            seenMessages({ conversationId: conversation?._id });
-        }
-    }, [lastMessageIntersecting, latestMessageRef.current, windowInFocus]);
-
-    let unreadMessages = 0;
-    // loop through messaegs from the end until we find a message which has been read by user, count all the unread messages
-    if (messages && user && messages.length > 0) {
-        // skip if author of message is current user
-        if (
-            messages[messages.length - 1].author._id !== user._id &&
-            !messages[messages.length - 1].seenBy.find(
-                (u) => u.userId === user._id
-            )
-        ) {
-            unreadMessages = 1;
-        }
-    }
+    let unreadMessages = countUnreadMessages(messages, true);
 
     return (
         <main className="max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ">
@@ -148,20 +99,22 @@ const ChatWindow = () => {
             {selectedFriend !== undefined && (
                 <>
                     <div
-                        onClick={() => {
-                            // scroll to bottom
-                            const messagesContainer =
-                                messagesContainerRef.current;
-                            if (messagesContainer) {
-                                messagesContainer.scrollTop =
-                                    messagesContainer.scrollHeight;
-                            }
-                        }}
                         ref={messagesContainerRef}
                         className="flex flex-col-reverse  relative  overflow-auto scrollbar px-5 "
                     >
                         {unreadMessages > 0 && (
-                            <div className="fixed top-20 text-sm cursor-pointer left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-text1 bg-primary-700">
+                            <div
+                                onClick={() => {
+                                    // scroll to bottom
+                                    const messagesContainer =
+                                        messagesContainerRef.current;
+                                    if (messagesContainer) {
+                                        messagesContainer.scrollTop =
+                                            messagesContainer.scrollHeight;
+                                    }
+                                }}
+                                className="fixed top-20 text-sm cursor-pointer left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-text1 bg-primary-700"
+                            >
                                 You have new messages!
                             </div>
                         )}
@@ -193,26 +146,8 @@ const ChatWindow = () => {
                                 );
                             })}
                         </div>
-                        {messages &&
-                            messages.length > 0 &&
-                            !messages[0]?.firstMessage && (
-                                <div
-                                    ref={targetRef}
-                                    onClick={getMoreMessages}
-                                    className="w-full min-h-[100px]  flex flex-col justify-center items-center text-text1 font-semibold "
-                                >
-                                    <div className=" rounded-full  group-hover:rotate-6 animate-spin">
-                                        <img
-                                            className="h-10 w-10 rounded-full filter"
-                                            src={"avatars/pikachu.png"}
-                                            alt="loading"
-                                        />
-                                    </div>
-                                    <div className="text-text1/50 text-sm">
-                                        Loading more messages
-                                    </div>
-                                </div>
-                            )}
+
+                        <LoadMoreMessages messages={messages} />
                         {messages &&
                             (messages.length == 0 ||
                                 messages[0]?.firstMessage) && (
