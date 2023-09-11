@@ -18,7 +18,7 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                 <Popover
                     popup={
                         <>
-                            <div className="bg-primary-700 w-[200px] p-2 rounded-lg ">
+                            <div className="bg-primary-700 w-[250px] p-2 rounded-lg ">
                                 <div className="text-sm flex flex-row justify-between">
                                     <span>Delivered </span>
                                     <span className="text-text3">
