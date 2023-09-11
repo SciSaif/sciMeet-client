@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logoFilled.png"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
@@ -18,7 +19,6 @@
     "firebase": "^9.19.1",
     "framer-motion": "^9.0.1",
     "notistack": "^3.0.1",
-    "pwa-asset-generator": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@vite-pwa/assets-generator": "^0.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "events": "^3.3.0",
