@@ -62,6 +62,25 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
 export default defineConfig({
     plugins: [
         react(),
+        VitePWA({
+            manifest: {
+                icons: [
+                    {
+                        src: "/assets/manifest-icon-512.maskable.png",
+                        sizes: "512x512",
+                        type: "image/png",
+                        purpose: "any maskable",
+                    },
+                ],
+            },
+        }),
+        // VitePWA({
+        //     registerType: "autoUpdate",
+        //     devOptions: {
+        //         enabled: true,
+        //     },
+        // }),
+        // VitePWA(manifestForPlugin),
         nodePolyfills({
             // To exclude specific polyfills, add them to this list.
             exclude: [
@@ -76,6 +95,5 @@ export default defineConfig({
             // Whether to polyfill `node:` protocol imports.
             protocolImports: true,
         }),
-        VitePWA(manifestForPlugin),
     ],
 });
