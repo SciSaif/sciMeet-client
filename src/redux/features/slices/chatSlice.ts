@@ -97,6 +97,10 @@ export const chatSlice = createSlice({
                 (conversation) => conversation._id === conversationId
             );
             if (!conversation) return;
+            // check last message id should not be same as the message id
+            const n = conversation.messages.length;
+            if (n > 0 && conversation.messages[n - 1]._id === message._id)
+                return;
 
             conversation.messages.push(message);
         },
