@@ -28,10 +28,11 @@ img {
 @layer utilities {
     .scrollbar::-webkit-scrollbar {
       width: 5px;
-      height: 20px;
+      height: 5px;
     }
   
     .scrollbar::-webkit-scrollbar-track {
+
       border-radius: 100vh;
       background: rgba(17,17,17, 0.16) ;
     }

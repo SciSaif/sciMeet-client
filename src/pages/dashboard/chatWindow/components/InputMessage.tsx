@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../../redux/hooks";
 import {
     sendDirectMessage,
     sendTypingStatus,
 } from "../../../../realtimeCommunication/socketHandler";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { IConversation } from "../../../../redux/features/slices/chatSlice";
+import { PaperAirplaneIcon, PaperClipIcon } from "@heroicons/react/24/outline";
 import TextareaAutosize from "react-textarea-autosize";
 
 import settings from "../../../../utils/settings";
+import { afterTabPress } from "./chatFunctions";
+import FilesUpload from "./FilesUpload";
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
@@ -43,17 +44,19 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     // Use an effect to detect input changes and start/stop typing accordingly
     useEffect(() => {
         const typingTimeout = setTimeout(() => {
-            handleTypingStop();
+            if (isTyping) {
+                handleTypingStop();
+            }
         }, 2000); // Adjust the timeout as needed
 
         return () => {
             clearTimeout(typingTimeout);
         };
     }, [message]);
+
     // Function to notify the server when the user starts typing
     const handleTypingStart = () => {
         if (!isTyping && selectedFriend && participants) {
-            // startTyping(selectedFriend?._id); // You should define this function
             console.log("typing");
             sendTypingStatus({
                 isTyping: true,
@@ -65,9 +68,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     };
 
     // Function to notify the server when the user stops typing
-    const handleTypingStop = (e?: any) => {
+    const handleTypingStop = () => {
         if (isTyping && selectedFriend && participants) {
-            // stopTyping(selectedFriend?._id); // You should define this function
             console.log("stopped typing");
             sendTypingStatus({
                 isTyping: false,
@@ -91,6 +93,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                 friend_id: selectedFriend._id,
             });
             setMessage("");
+            setIsTyping(false);
+            handleTypingStop();
             const messagesContainer = messagesContainerRef.current;
             if (messagesContainer) {
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -102,27 +106,49 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         if (e.key === "Enter" && !e.shiftKey) {
             handleSubmit(e);
         } else if (e.key === "Tab") {
-            e.preventDefault(); // Prevent the default behavior of the Tab key
-            const { selectionStart, selectionEnd } = e.currentTarget;
-            const currentMessage = e.currentTarget.value;
-            const newMessage =
-                currentMessage.substring(0, selectionStart) +
-                "\t" +
-                currentMessage.substring(selectionEnd);
-            setMessage(newMessage);
-            // Adjust the cursor position after inserting the tab
-            const newSelectionStart = selectionStart + 1;
-            e.currentTarget.setSelectionRange(
-                newSelectionStart,
-                newSelectionStart
-            );
+            setMessage(afterTabPress(e));
+        }
+    };
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [files, setFiles] = useState<File[] | null>(null);
+
+    const handleIconClick = () => {
+        fileInputRef.current?.click(); // Trigger the file input click event
+    };
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!selectedFriend) return;
+        if (event.target.files && event.target.files.length > 0) {
+            // convert Filelist to file[]
+
+            const files = Array.from(event.target.files);
+            setFiles(files);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
-            <div className="w-full h-auto  flex flex-row items-center bg-primary-700  rounded-xl">
+            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
                 {/* <EmojiPicker /> */}
+                <div>
+                    {/* Hidden file input */}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange}
+                        multiple
+                    />
+
+                    {/* Icon that triggers the file input */}
+                    <div
+                        className="text-text1 hover:text-text2 p-2 cursor-pointer"
+                        onClick={handleIconClick}
+                    >
+                        <PaperClipIcon width={20} height={20} />
+                    </div>
+                </div>
 
                 <TextareaAutosize
                     ref={textareaRef}
@@ -132,13 +158,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                         setMessage(e.target.value);
                         handleTypingStart();
                     }}
-                    // onKeyDown={(e) => {
-                    //     if (e.key === "Enter" && !e.shiftKey) {
-                    //         handleSubmit(e);
-                    //     }
-                    // }}
                     onKeyDown={handleKeyDown}
-                    className="w-full  resize-none rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
+                    className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
                     placeholder={`Message ${selectedFriend?.username}`}
                     onBlur={handleTypingStop}
                     rows={1}
@@ -151,6 +172,15 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                     <PaperAirplaneIcon width={20} />
                 </button>
             </div>
+
+            {files && files.length > 0 && (
+                <FilesUpload
+                    files={files}
+                    close={() => {
+                        setFiles(null);
+                    }}
+                />
+            )}
         </form>
     );
 };
