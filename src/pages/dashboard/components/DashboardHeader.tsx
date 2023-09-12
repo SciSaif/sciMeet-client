@@ -33,7 +33,7 @@ const DashboardHeader = () => {
                 </div>
                 {selectedFriend !== undefined && (
                     <div className="flex flex-row gap-2 items-center">
-                        <div className="flex rounded-full  relative group-hover:rotate-6">
+                        <div className="flex rounded-full  relative group-hover:rotate-6 select-none">
                             <img
                                 className="h-8 w-8 rounded-full"
                                 src={

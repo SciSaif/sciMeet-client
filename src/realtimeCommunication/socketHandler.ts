@@ -121,6 +121,22 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
         console.log("active-rooms", activeRooms);
         const friends = getState().friend.friends;
         const rooms = <ActiveRoom[]>[];
+
+        // export interface ActiveRoom {
+        //     roomCreator: {
+        //         userId: string;
+        //         socketId: string;
+        //         username?: string;
+        //     };
+        //     participants: {
+        //         userId: string;
+        //         socketId: string;
+        //     }[];
+        //     roomid: string;
+        // }
+
+        // make deep copy of activeRooms
+
         // only add rooms that is created by friends
         activeRooms.forEach((room) => {
             friends.forEach((f: Friend) => {
@@ -145,6 +161,7 @@ export const connectWithSocketServer = (getState: () => any, dispatch: any) => {
 
         dispatch(setActiveRooms(rooms));
     });
+
     socket.on("room-create", (data) => {
         dispatch(setRoomDetails(data.roomDetails));
     });

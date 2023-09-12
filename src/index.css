@@ -7,7 +7,9 @@
     
 }
 
-
+img { 
+  user-select: none;
+}
 
 @layer components {
     .darkHeroGradient {
@@ -19,6 +21,7 @@
     .blueShadow{
         box-shadow: rgba(23, 92, 230, 0.15) 0px 4px 24px;
     }
+
 
 }
 

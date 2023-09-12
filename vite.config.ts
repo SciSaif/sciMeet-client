@@ -30,7 +30,13 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
                 src: "maskable-icon-512x512.png",
                 sizes: "512x512",
                 type: "image/png",
-                purpose: "any maskable",
+                purpose: "maskable",
+            },
+            {
+                src: "maskable-icon-512x512.png",
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "any",
             },
             {
                 src: "apple-touch-icon-180x180.png",
@@ -48,24 +54,7 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
 export default defineConfig({
     plugins: [
         react(),
-        // VitePWA({
-        //     manifest: {
-        //         icons: [
-        //             {
-        //                 src: "maskable-icon-512x512.png",
-        //                 sizes: "512x512",
-        //                 type: "image/png",
-        //                 purpose: "any maskable",
-        //             },
-        //         ],
-        //     },
-        // }),
-        // VitePWA({
-        //     registerType: "autoUpdate",
-        //     devOptions: {
-        //         enabled: true,
-        //     },
-        // }),
+
         VitePWA(manifestForPlugin),
         nodePolyfills({
             // To exclude specific polyfills, add them to this list.

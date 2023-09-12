@@ -23,8 +23,6 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
             : [];
     });
 
-    console.log("m", friend.username, messages);
-
     let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
@@ -36,7 +34,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     return (
         <div
             onClick={handleClick}
-            className={`w-full cursor-pointer items-center hover:bg-black/25 active:bg-black/50 ${
+            className={`w-full cursor-pointer items-center hover:bg-black/25 active:bg-black/50 select-none ${
                 selectedFriend?._id === friend._id && "bg-black/25"
             } rounded-l-full  flex justify-between h-10`}
         >
