@@ -9,9 +9,10 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
     // registerType: "prompt",
     // includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
     manifest: {
-        name: "SciMeet: Your Ultimate Chat, Video, and Group Calling App",
+        name: "SciMeet ",
         short_name: "SciMeet",
-        description: "SciMeet: Bridging the Distance with Every Message.",
+        description:
+            "SciMeet: Bridging the Distance with Every Message. Your Ultimate Chat, Video, and Group Calling App",
         icons: [
             {
                 src: "pwa-192x192.png",
