@@ -184,7 +184,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                     files={files}
                     close={() => {
                         setFiles(null);
-                        // clear files from input
+                        // clear files from input 2
                         if (fileInputRef.current)
                             fileInputRef.current.value = "";
                     }}
