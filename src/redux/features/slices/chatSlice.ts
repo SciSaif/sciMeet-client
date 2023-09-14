@@ -14,6 +14,7 @@ export interface IMessage {
         avatar: string;
     };
     content: string;
+    file: string;
     date: string;
     type: string;
     seenBy: {

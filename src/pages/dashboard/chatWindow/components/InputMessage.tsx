@@ -82,7 +82,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!selectedFriend) return;
+        if (!selectedFriend || !message || message.length === 0) return;
         if (e.nativeEvent.shiftKey) {
             // Shift + Enter: Create a new line
             setMessage((prevMessage) => prevMessage + "\n");
@@ -173,8 +173,9 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                 </button>
             </div>
 
-            {files && files.length > 0 && (
+            {files && files.length > 0 && selectedFriend && (
                 <FilesUpload
+                    friend_id={selectedFriend?._id}
                     files={files}
                     close={() => {
                         setFiles(null);

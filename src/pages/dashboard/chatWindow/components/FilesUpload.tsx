@@ -3,9 +3,11 @@ import {
     PaperAirplaneIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
-import React from "react";
+import React, { useEffect } from "react";
+import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandler";
 
 interface Props {
+    friend_id: string;
     files: File[];
     close: () => void;
 }
@@ -18,9 +20,35 @@ function isPdfFile(file: File) {
     return file.type === "application/pdf";
 }
 
-const FilesUpload = ({ files, close }: Props) => {
+const FilesUpload = ({ files, close, friend_id }: Props) => {
     const [captions, setCaptions] = React.useState<string[]>([]);
+    const [currentCaption, setCurrentCaption] = React.useState("");
     const [selectedFileIndex, setSelectedFileIndex] = React.useState(0);
+
+    useEffect(() => {
+        setCurrentCaption(captions[selectedFileIndex] || "");
+    }, [selectedFileIndex]);
+
+    const handleSubmit = () => {
+        if (files.length === 0) return;
+
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const arrayBuffer = reader.result;
+                sendDirectMessage({
+                    friend_id,
+                    content: captions[index] || "",
+                    file: arrayBuffer,
+                    fileName: file.name,
+                });
+            };
+
+            reader.readAsArrayBuffer(file); // Read the file as binary data
+        });
+        close();
+    };
 
     return (
         <div className="absolute flex flex-col top-0 pt-14 left-0 h-full w-full bg-primary text-white">
@@ -92,9 +120,9 @@ const FilesUpload = ({ files, close }: Props) => {
             <footer className="py-2 pb-5 px-2 flex flex-col gap-2">
                 <input
                     type="text"
-                    autoFocus
-                    value={captions[selectedFileIndex]}
+                    value={currentCaption}
                     onChange={(e) => {
+                        setCurrentCaption(e.target.value);
                         setCaptions((prev) => {
                             const newCaptions = [...prev];
                             newCaptions[selectedFileIndex] = e.target.value;
@@ -110,7 +138,7 @@ const FilesUpload = ({ files, close }: Props) => {
                     </div>
                     <div>
                         <button
-                            type="submit"
+                            onClick={handleSubmit}
                             className="pl-2 pr-4 hover:bg-secondary-600 bg-secondary p-3 rounded-full cursor-pointer text-white "
                         >
                             <PaperAirplaneIcon

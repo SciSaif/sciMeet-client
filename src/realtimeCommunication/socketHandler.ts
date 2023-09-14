@@ -38,6 +38,8 @@ export type ConnUserSocketIdType = {
 export interface MessageContent {
     friend_id: string;
     content: string;
+    file?: string | ArrayBuffer | null;
+    fileName?: string;
 }
 
 interface ServerToClientEvents {
