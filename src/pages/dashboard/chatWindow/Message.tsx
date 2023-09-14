@@ -8,6 +8,8 @@ import {
 import { useAppSelector } from "../../../redux/hooks";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import SeenCheckMark from "./components/SeenCheckMark";
+import { twMerge } from "tailwind-merge";
+import MessageContent from "./components/MessageContent";
 const defaultImg = settings.defaultImg;
 
 interface Props {
@@ -44,24 +46,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
                             </span>
                         </div>
                         <div className="flex flex-row  justify-between hover:bg-black/10">
-                            {message.file && message.file.length > 0 ? (
-                                <div className=" rounded-lg my-2 overflow-hidden w-[250px]">
-                                    <img
-                                        className="w-full border-2 border-primary-700 "
-                                        src={message.file}
-                                        alt="file"
-                                    />
-                                    {message.content.length > 0 && (
-                                        <p className=" bg-primary-700 py-1 rounded-b-lg px-2 whitespace-pre-wrap">
-                                            {message.content}
-                                        </p>
-                                    )}
-                                </div>
-                            ) : (
-                                <p className="  whitespace-pre-wrap">
-                                    {message.content}
-                                </p>
-                            )}
+                            <MessageContent message={message} />
 
                             <SeenCheckMark
                                 message={message}
@@ -78,24 +63,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
 
             {mergeMessage && (
                 <div className="flex flex-row justify-between  text-text1 ml-[47px]  hover:bg-black/10">
-                    {message.file && message.file.length > 0 ? (
-                        <div className=" rounded-lg my-2 overflow-hidden w-[250px]">
-                            <img
-                                className="w-full border-2 border-primary-700 "
-                                src={message.file}
-                                alt="file"
-                            />
-                            {message.content.length > 0 && (
-                                <p className=" bg-primary-700 py-1 rounded-b-lg px-2 whitespace-pre-wrap">
-                                    {message.content}
-                                </p>
-                            )}
-                        </div>
-                    ) : (
-                        <p className="  whitespace-pre-wrap">
-                            {message.content}
-                        </p>
-                    )}
+                    <MessageContent message={message} />
                     <SeenCheckMark
                         message={message}
                         userId={user?._id}

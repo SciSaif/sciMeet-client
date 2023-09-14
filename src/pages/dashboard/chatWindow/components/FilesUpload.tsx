@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
 import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandler";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
     friend_id: string;
@@ -12,12 +13,17 @@ interface Props {
     close: () => void;
 }
 
-function isImageFile(file: File) {
-    return file.type.startsWith("image/");
-}
-
-function isPdfFile(file: File) {
-    return file.type === "application/pdf";
+// Define a function to determine the file type
+function getFileType(file: File): string {
+    if (file.type.startsWith("image/")) {
+        return "image";
+    } else if (file.type === "application/pdf") {
+        return "pdf";
+    } else if (file.name.endsWith(".docx")) {
+        return "docx";
+    } else {
+        return "other";
+    }
 }
 
 const FilesUpload = ({ files, close, friend_id }: Props) => {
@@ -62,65 +68,91 @@ const FilesUpload = ({ files, close, friend_id }: Props) => {
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
             </header>
-            <main className="flex-grow flex flex-col px-2 items-center ">
-                <div className="flex-grow w-full   flex justify-center items-center ">
-                    {/* main image */}
-                    {isImageFile(files[selectedFileIndex]) ? (
+            <main className="flex-grow flex flex-col px-2 items-center">
+                <div className="flex-grow flex flex-col w-full  justify-center items-center">
+                    {/* Render content based on file type */}
+                    {getFileType(files[selectedFileIndex]) === "image" ? (
                         <img
                             src={URL.createObjectURL(files[selectedFileIndex])}
                             alt={`Image ${selectedFileIndex}`}
-                            className=" max-h-[300px] max-w-screen"
+                            className="max-h-[300px] max-w-screen"
                         />
-                    ) : isPdfFile(files[selectedFileIndex]) ? (
+                    ) : getFileType(files[selectedFileIndex]) === "pdf" ? (
                         <img
-                            src={"pdf2.png"}
-                            alt={`Image ${selectedFileIndex}`}
-                            className=" max-h-[300px] max-w-screen"
+                            src={"pdf.png"} // Replace with your PDF icon
+                            alt={`PDF ${selectedFileIndex}`}
+                            className="max-h-[300px] max-w-screen"
+                        />
+                    ) : getFileType(files[selectedFileIndex]) === "docx" ? (
+                        <img
+                            src={"docx.png"} // Replace with your DOCX icon
+                            alt={`DOCX ${selectedFileIndex}`}
+                            className="max-h-[300px] max-w-screen"
                         />
                     ) : (
-                        <DocumentIcon
-                            width={20}
-                            height={20}
-                            className=" max-h-[300px] max-w-screen"
+                        <img
+                            src={"file.png"} // Replace with your DOCX icon
+                            alt={`file `}
+                            className="max-h-[300px] max-w-screen"
                         />
+                    )}
+                    {getFileType(files[selectedFileIndex]) !== "image" && (
+                        <p className="line-clamp-2">
+                            {files[selectedFileIndex].name}
+                        </p>
                     )}
                 </div>
                 {files.length > 0 && (
-                    <div className="  py-2 pt-4 px-2 max-w-full flex  gap-[2px] overflow-x-auto scrollbar overflow-y-hidden">
+                    <div className="py-2 pt-4 px-2 max-w-full flex gap-[2px] overflow-x-auto scrollbar overflow-y-hidden">
                         {files.map((file, index) => (
                             <div
                                 key={index}
-                                className={`mb-4 cursor-pointer  min-w-[50px] max-w-[50px] h-[50px] ${
+                                className={`mb-4 cursor-pointer min-w-[50px] max-w-[50px] h-[50px] ${
                                     selectedFileIndex === index
-                                        ? "border-2 border-secondary "
+                                        ? "border-2 border-secondary"
                                         : ""
                                 }`}
                                 onClick={() => setSelectedFileIndex(index)}
                             >
-                                {isImageFile(file) ? (
+                                {/* Render content based on file type */}
+                                {getFileType(file) === "image" ? (
                                     <img
                                         src={URL.createObjectURL(file)}
                                         alt={`Image ${index}`}
-                                        className="w-full h-full "
+                                        className="w-full h-full"
                                     />
-                                ) : isPdfFile(file) ? (
+                                ) : getFileType(file) === "pdf" ? (
                                     <img
-                                        src={"pdf2.png"}
-                                        alt={`Image ${selectedFileIndex}`}
-                                        className=" max-h-[300px] max-w-screen"
+                                        src={"pdf.png"} // Replace with your PDF icon
+                                        alt={`PDF ${index}`}
+                                        className="max-h-[300px] max-w-screen"
+                                    />
+                                ) : getFileType(file) === "docx" ? (
+                                    <img
+                                        src={"docx.png"} // Replace with your DOCX icon
+                                        alt={`DOCX ${index}`}
+                                        className="max-h-[300px] max-w-screen"
                                     />
                                 ) : (
-                                    <div>Unsupported file type</div>
+                                    <img
+                                        src={"file.png"} // Replace with your DOCX icon
+                                        alt={`file ${index}`}
+                                        className="max-h-[300px] max-w-screen"
+                                    />
                                 )}
                             </div>
                         ))}
                     </div>
                 )}
             </main>
-            <footer className="py-2 pb-5 px-2 flex flex-col gap-2">
+            <form
+                onSubmit={handleSubmit}
+                className="py-2 pb-5 px-2 flex flex-col gap-2"
+            >
                 <input
                     type="text"
                     value={currentCaption}
+                    disabled={getFileType(files[selectedFileIndex]) !== "image"}
                     onChange={(e) => {
                         setCurrentCaption(e.target.value);
                         setCaptions((prev) => {
@@ -129,7 +161,11 @@ const FilesUpload = ({ files, close, friend_id }: Props) => {
                             return newCaptions;
                         });
                     }}
-                    className="w-full  resize-none rounded-xl border-0 pr-10 bg-primary-700 overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
+                    className={twMerge(
+                        "w-full resize-none rounded-xl border-0 pr-10 bg-primary-700 overflow-y-auto overflow-x-hidden scrollbar max-h-[200px] focus:ring-0 placeholder:text-text2/50 outline-none active:outline-none text-text2",
+                        getFileType(files[selectedFileIndex]) !== "image" &&
+                            "opacity-50"
+                    )}
                     placeholder={`Add a caption...`}
                 />
                 <div className="flex justify-between items-center">
@@ -138,8 +174,8 @@ const FilesUpload = ({ files, close, friend_id }: Props) => {
                     </div>
                     <div>
                         <button
-                            onClick={handleSubmit}
-                            className="pl-2 pr-4 hover:bg-secondary-600 bg-secondary p-3 rounded-full cursor-pointer text-white "
+                            type="submit"
+                            className="pl-2 pr-4 hover:bg-secondary-600 bg-secondary p-3 rounded-full cursor-pointer text-white"
                         >
                             <PaperAirplaneIcon
                                 width={20}
@@ -148,7 +184,7 @@ const FilesUpload = ({ files, close, friend_id }: Props) => {
                         </button>
                     </div>
                 </div>
-            </footer>
+            </form>
         </div>
     );
 };

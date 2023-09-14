@@ -119,6 +119,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!selectedFriend) return;
+        console.log(event.target.files);
         if (event.target.files && event.target.files.length > 0) {
             // convert Filelist to file[]
 
@@ -128,7 +129,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="pb-5   w-full  px-5">
+        <div className="pb-5   w-full  px-5">
             <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
                 {/* <EmojiPicker /> */}
                 <div>
@@ -149,28 +150,32 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                         <PaperClipIcon width={20} height={20} />
                     </div>
                 </div>
-
-                <TextareaAutosize
-                    ref={textareaRef}
-                    // autoFocus
-                    value={message}
-                    onChange={(e) => {
-                        setMessage(e.target.value);
-                        handleTypingStart();
-                    }}
-                    onKeyDown={handleKeyDown}
-                    className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
-                    placeholder={`Message ${selectedFriend?.username}`}
-                    onBlur={handleTypingStop}
-                    rows={1}
-                />
-
-                <button
-                    type="submit"
-                    className="pl-2 pr-4 cursor-pointer text-text3 hover:text-text3 "
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-row  items-center w-full"
                 >
-                    <PaperAirplaneIcon width={20} />
-                </button>
+                    <TextareaAutosize
+                        ref={textareaRef}
+                        // autoFocus
+                        value={message}
+                        onChange={(e) => {
+                            setMessage(e.target.value);
+                            handleTypingStart();
+                        }}
+                        onKeyDown={handleKeyDown}
+                        className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
+                        placeholder={`Message ${selectedFriend?.username}`}
+                        onBlur={handleTypingStop}
+                        rows={1}
+                    />
+
+                    <button
+                        type="submit"
+                        className="pl-2 pr-4 cursor-pointer text-text3 hover:text-text3 "
+                    >
+                        <PaperAirplaneIcon width={20} />
+                    </button>
+                </form>
             </div>
 
             {files && files.length > 0 && selectedFriend && (
@@ -179,10 +184,13 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                     files={files}
                     close={() => {
                         setFiles(null);
+                        // clear files from input
+                        if (fileInputRef.current)
+                            fileInputRef.current.value = "";
                     }}
                 />
             )}
-        </form>
+        </div>
     );
 };
 
