@@ -1,19 +1,23 @@
+"use client";
 import React from "react";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { twMerge } from "tailwind-merge";
 
 interface props {
     children: JSX.Element | JSX.Element[];
     close: () => void;
     closeIcon?: boolean;
     closeOnBackdropClick?: boolean;
+    className?: string;
 }
 
 const Modal = ({
     children,
     close,
     closeIcon,
+    className,
     closeOnBackdropClick = true,
 }: props) => {
     return (
@@ -21,7 +25,7 @@ const Modal = ({
             <Transition.Root show={true} as={Fragment}>
                 <Dialog
                     as="div"
-                    className="relative z-10"
+                    className="relative z-50 bg-red-500"
                     onClose={() => closeOnBackdropClick && close()}
                 >
                     {/* backdrop  */}
@@ -35,11 +39,11 @@ const Modal = ({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black bg-opacity-30 transition-opacity" />
+                        <div className="fixed inset-0 transition-opacity bg-black bg-opacity-30" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 z-10 overflow-y-auto">
-                        <div className="flex min-h-full  justify-center p-0 text-center items-center ">
+                        <div className="flex items-center justify-center min-h-full p-0 text-center ">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -49,19 +53,30 @@ const Modal = ({
                                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
-                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full  w-full sm:max-w-lg sm:p-6">
+                                <Dialog.Panel
+                                    className={twMerge(
+                                        "relative w-full  overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl  ",
+                                        className ? className : ""
+                                    )}
+                                >
                                     {closeIcon && (
-                                        <div className="absolute top-0 right-0  pt-4 pr-4 block">
+                                        <div
+                                            className={`absolute
+                                         top-0  z-10 block  pt-4 
+
+                                       
+                                       `}
+                                        >
                                             <button
                                                 type="button"
-                                                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                                                className="text-gray-400 bg-white rounded-md hover:text-gray-500 focus:outline-none "
                                                 onClick={() => close()}
                                             >
                                                 <span className="sr-only">
                                                     Close
                                                 </span>
                                                 <XMarkIcon
-                                                    className="h-6 w-6"
+                                                    className="w-6 h-6"
                                                     aria-hidden="true"
                                                 />
                                             </button>
