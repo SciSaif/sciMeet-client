@@ -30,7 +30,7 @@ const ImagePreview = ({ close, img, caption }: Props) => {
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
             </header>
-            <main className="p-4 flex flex-col bg-green-400 flex-grow items-center justify-center">
+            <main className="p-4 flex flex-col  flex-grow items-center justify-center">
                 <img
                     src={img}
                     alt="preview"
