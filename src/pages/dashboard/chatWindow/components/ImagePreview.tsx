@@ -31,7 +31,11 @@ const ImagePreview = ({ close, img, caption }: Props) => {
                 </button>
             </header>
             <main className="p-4 flex flex-col bg-green-400 flex-grow items-center justify-center">
-                <img src={img} alt="preview" className="object-scale-down  " />
+                <img
+                    src={img}
+                    alt="preview"
+                    className="object-scale-down  max-h-[80vh]"
+                />
                 {caption && <p className="text-text1 mt-2">{caption}</p>}
             </main>
             <div className="h-1 bg-blue-500 w-full"></div>
