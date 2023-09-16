@@ -38,7 +38,6 @@ const ImagePreview = ({ close, img, caption }: Props) => {
                 />
                 {caption && <p className="text-text1 mt-2">{caption}</p>}
             </main>
-            <div className="h-1 bg-blue-500 w-full"></div>
         </Modal>
     );
 };
