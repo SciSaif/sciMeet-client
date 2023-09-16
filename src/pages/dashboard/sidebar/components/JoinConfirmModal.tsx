@@ -64,7 +64,11 @@ const JoinConfirmModal = ({ close, participants, room }: Props) => {
         }
     };
     return (
-        <Modal close={close} closeIcon>
+        <Modal
+            close={close}
+            closeIcon
+            className="p-4 w-full sm:w-fit sm:min-w-[300px]"
+        >
             <div className="flex flex-col gap-y-4">
                 <div className="flex flex-row justify-between items-center">
                     <div>

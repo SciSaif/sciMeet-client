@@ -19,8 +19,8 @@ const AddFriendModal = ({ close }: Props) => {
     };
 
     return (
-        <Modal close={close} closeIcon>
-            <form onSubmit={handlePostInvite} className="text-black mt-4">
+        <Modal close={close} closeIcon className=" p-4">
+            <form onSubmit={handlePostInvite} className="text-black mt-4  ">
                 <h2 className="font-bold text-textGray3">Invite a Friend</h2>
                 <p className="my-2">
                     Enter e-mail address of friend which you would like to

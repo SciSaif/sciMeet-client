@@ -55,14 +55,14 @@ const Modal = ({
                             >
                                 <Dialog.Panel
                                     className={twMerge(
-                                        "relative w-full  overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl  ",
+                                        "relative   overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl  ",
                                         className ? className : ""
                                     )}
                                 >
                                     {closeIcon && (
                                         <div
                                             className={`absolute
-                                         top-0  z-10 block  pt-4 
+                                         top-0 right-3 z-10 block  pt-4 
 
                                        
                                        `}
