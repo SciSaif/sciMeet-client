@@ -25,21 +25,23 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
     });
 
     return (
-        <div
-            onMouseDown={() => {
-                wasIconClickedRef.current = true;
-            }}
-            onMouseUp={() => {
-                if (emojiPickerOpen && wasIconClickedRef.current) {
-                    setEmojiPickerOpen(false);
-                } else if (!emojiPickerOpen) {
-                    setEmojiPickerOpen(true);
-                }
-                wasIconClickedRef.current = false;
-            }}
-            className="text-white pl-1 p-2 relative cursor-pointer hover:text-text2"
-        >
-            <FaceSmileIcon width={20} height={20} />
+        <div className="relative">
+            <div
+                onMouseDown={() => {
+                    wasIconClickedRef.current = true;
+                }}
+                onMouseUp={() => {
+                    if (emojiPickerOpen && wasIconClickedRef.current) {
+                        setEmojiPickerOpen(false);
+                    } else if (!emojiPickerOpen) {
+                        setEmojiPickerOpen(true);
+                    }
+                    wasIconClickedRef.current = false;
+                }}
+                className="text-text1 hover:text-text2 pl-1 p-2 relative cursor-pointer "
+            >
+                <FaceSmileIcon width={20} height={20} />
+            </div>
             {emojiPickerOpen && (
                 <div
                     ref={emojiPickerRef}

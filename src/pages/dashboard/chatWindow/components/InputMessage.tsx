@@ -93,11 +93,15 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
     const handleEmojiSelect = (emoji: any) => {
+        console.log("en");
+
         if (textareaRef.current) {
+            console.log("en2");
             const start = textareaRef.current.selectionStart;
             const end = textareaRef.current.selectionEnd;
             const textBefore = message.substring(0, start);
             const textAfter = message.substring(end, message.length);
+            console.log(textBefore + emoji.native + textAfter);
 
             setMessage(textBefore + emoji.native + textAfter);
 
@@ -106,12 +110,12 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                 textareaRef.current!.selectionStart =
                     start + emoji.native.length;
                 textareaRef.current!.selectionEnd = start + emoji.native.length;
-            }, 0);
+            }, 100);
         }
     };
 
     return (
-        <div className="pb-5   w-full  px-2 md:px-5">
+        <div className="pb-5   w-full  px-1 md:px-5">
             <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
                 {/* Use the FileInput component */}
                 <FileInput handleFileChange={handleFileChange} />
