@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../../redux/hooks";
-import {
-    sendDirectMessage,
-    sendTypingStatus,
-} from "../../../../realtimeCommunication/socketHandler";
-import { PaperAirplaneIcon, PaperClipIcon } from "@heroicons/react/24/outline";
+import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandler";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import TextareaAutosize from "react-textarea-autosize";
 
 import settings from "../../../../utils/settings";
 import { afterTabPress } from "./chatFunctions";
 import FilesUpload from "./FilesUpload";
 import { useTypingStatus } from "../../../../hooks/useTypingStatus";
+
+import FileInput from "./FileInput";
+import EmojiPicker from "./EmojiPicker";
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
@@ -81,10 +81,6 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [files, setFiles] = useState<File[] | null>(null);
 
-    const handleIconClick = () => {
-        fileInputRef.current?.click(); // Trigger the file input click event
-    };
-
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!selectedFriend) return;
         console.log(event.target.files);
@@ -94,28 +90,39 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         }
     };
 
-    return (
-        <div className="pb-5   w-full  px-5">
-            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
-                {/* <EmojiPicker /> */}
-                <div>
-                    {/* Hidden file input */}
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                        onChange={handleFileChange}
-                        multiple
-                    />
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
-                    {/* Icon that triggers the file input */}
-                    <div
-                        className="text-text1 hover:text-text2 p-2 cursor-pointer"
-                        onClick={handleIconClick}
-                    >
-                        <PaperClipIcon width={20} height={20} />
-                    </div>
-                </div>
+    const handleEmojiSelect = (emoji: any) => {
+        if (textareaRef.current) {
+            const start = textareaRef.current.selectionStart;
+            const end = textareaRef.current.selectionEnd;
+            const textBefore = message.substring(0, start);
+            const textAfter = message.substring(end, message.length);
+
+            setMessage(textBefore + emoji.native + textAfter);
+
+            // Move the cursor after the inserted emoji
+            setTimeout(() => {
+                textareaRef.current!.selectionStart =
+                    start + emoji.native.length;
+                textareaRef.current!.selectionEnd = start + emoji.native.length;
+            }, 0);
+        }
+    };
+
+    return (
+        <div className="pb-5   w-full  px-2 md:px-5">
+            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
+                {/* Use the FileInput component */}
+                <FileInput handleFileChange={handleFileChange} />
+
+                {/* Use the EmojiPicker component */}
+                <EmojiPicker
+                    emojiPickerOpen={emojiPickerOpen}
+                    setEmojiPickerOpen={setEmojiPickerOpen}
+                    handleEmojiSelect={handleEmojiSelect}
+                />
+
                 <form
                     onSubmit={handleSubmit}
                     className="flex flex-row  items-center w-full"

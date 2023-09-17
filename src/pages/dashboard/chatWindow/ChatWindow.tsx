@@ -124,7 +124,7 @@ const ChatWindow = () => {
                 <>
                     <div
                         ref={messagesContainerRef}
-                        className="flex flex-col-reverse  relative  overflow-auto scrollbar px-5 "
+                        className="flex flex-col-reverse  relative  overflow-auto scrollbar px-2 md:px-5 "
                     >
                         {unreadMessages > 0 && (
                             <div
