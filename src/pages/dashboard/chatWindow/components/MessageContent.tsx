@@ -65,7 +65,6 @@ const MessageContent = ({ message }: Props) => {
                 {imagePreview === true && message.file && (
                     <ImagePreview
                         close={() => {
-                            console.log("s");
                             setImagePreview(false);
                         }}
                         img={message.file || ""}

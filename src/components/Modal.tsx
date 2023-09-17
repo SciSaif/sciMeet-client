@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -11,6 +11,7 @@ interface props {
     closeIcon?: boolean;
     closeOnBackdropClick?: boolean;
     className?: string;
+    closeOnBackPress?: boolean;
 }
 
 const Modal = ({
@@ -19,7 +20,27 @@ const Modal = ({
     closeIcon,
     className,
     closeOnBackdropClick = true,
+    closeOnBackPress = true,
 }: props) => {
+    useEffect(() => {
+        if (closeOnBackPress) {
+            // Push a new state when the modal is opened
+            window.history.pushState(null, "");
+
+            // Event listener for the popstate event
+            const handleBackButton = (event: PopStateEvent) => {
+                close();
+            };
+
+            window.addEventListener("popstate", handleBackButton);
+
+            // Clean up the event listener when the component is unmounted
+            return () => {
+                window.removeEventListener("popstate", handleBackButton);
+            };
+        }
+    }, [close, closeOnBackPress]);
+
     return (
         <>
             <Transition.Root show={true} as={Fragment}>
