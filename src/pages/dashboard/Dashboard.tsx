@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "./sidebar/Sidebar";
 
 import { Bars3Icon } from "@heroicons/react/20/solid";
@@ -14,8 +14,10 @@ import Room from "./room/Room";
 import { connectWithSocketServer } from "../../realtimeCommunication/socketHandler";
 import { store } from "../../redux/store";
 import { useSwipeable } from "react-swipeable";
+import settings from "../../utils/settings";
 
 const Dashboard = () => {
+    const windowWidth = useRef(window.innerWidth);
     const user = useAppSelector((state) => state.auth.user);
     const sidebarOpen = useAppSelector((state) => state.other.sidebarOpen);
     const dispatch = useAppDispatch();
@@ -55,6 +57,31 @@ const Dashboard = () => {
         preventScrollOnSwipe: true,
         trackMouse: true,
     });
+
+    useEffect(() => {
+        window.history.pushState(null, "");
+
+        // Event listener for the popstate event
+        const handleBackButton = (event: PopStateEvent) => {
+            console.log("back", windowWidth.current);
+
+            // if sidebar is closed in mobile then open it
+            if (windowWidth.current < settings.md && !sidebarOpen) {
+                console.log("toggle");
+                dispatch(toggleSidebar());
+            } else {
+                // go back to previous page
+                window.history.back();
+            }
+        };
+
+        window.addEventListener("popstate", handleBackButton);
+
+        // Clean up the event listener when the component is unmounted
+        return () => {
+            window.removeEventListener("popstate", handleBackButton);
+        };
+    }, [windowWidth, sidebarOpen]);
 
     return (
         <>

@@ -2,10 +2,12 @@ import React from "react";
 import ButtonArrow from "../../components/ButtonArrow";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useAppSelector } from "../../redux/hooks";
+import ButtonPop from "../../components/ButtonPop";
 
 const Home = () => {
     return (
-        <div className="w-full md:w-3/4 lg:w-2/3 flex pt-[75px]  items-center mx-auto h-screen text-black dark:text-white">
+        <div className="w-full md:w-3/4 lg:w-2/3 flex pt-[75px] flex-col justify-center  items-center mx-auto h-screen text-black dark:text-white">
             <div className="flex flex-col mx-4">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug">
                     Instantly Chat and Video Call with Friends

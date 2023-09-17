@@ -30,7 +30,7 @@ const Navbar = () => {
                 <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">
                     {user?.token ? (
                         <>
-                            <li className=" hidden sm:flex items-center mr-2 gap-x-2 dark:text-white/80 cursor-pointer hover:text-blue-400 dark:hover:text-blue-400">
+                            <li className="  sm:flex items-center mr-2 gap-x-2 dark:text-white/80 cursor-pointer hover:text-blue-400 dark:hover:text-blue-400">
                                 <Link to="/dashboard">Dashboard</Link>
                             </li>
                             <li className="flex items-center mr-2 gap-x-2 dark:text-white/80">
