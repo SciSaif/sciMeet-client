@@ -11,6 +11,7 @@ interface Props {
     friend_id: string;
     files: File[];
     close: () => void;
+    messagesContainerRef: React.RefObject<HTMLDivElement>;
 }
 
 // Define a function to determine the file type
@@ -26,7 +27,12 @@ function getFileType(file: File): string {
     }
 }
 
-const FilesUpload = ({ files, close, friend_id }: Props) => {
+const FilesUpload = ({
+    files,
+    close,
+    friend_id,
+    messagesContainerRef,
+}: Props) => {
     const [captions, setCaptions] = React.useState<string[]>([]);
     const [currentCaption, setCurrentCaption] = React.useState("");
     const [selectedFileIndex, setSelectedFileIndex] = React.useState(0);
@@ -53,6 +59,10 @@ const FilesUpload = ({ files, close, friend_id }: Props) => {
 
             reader.readAsArrayBuffer(file); // Read the file as binary data
         });
+        const messagesContainer = messagesContainerRef.current;
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
         close();
     };
 

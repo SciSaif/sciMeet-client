@@ -180,6 +180,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
             {files && files.length > 0 && selectedFriend && (
                 <FilesUpload
+                    messagesContainerRef={messagesContainerRef}
                     friend_id={selectedFriend?._id}
                     files={files}
                     close={() => {
