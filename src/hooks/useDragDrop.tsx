@@ -63,6 +63,21 @@ const useDragAndDrop = () => {
         };
     }, []);
 
+    const handlePaste = (e: React.ClipboardEvent) => {
+        const items = e.clipboardData.items;
+        const files = [];
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].kind === "file") {
+                const file = items[i].getAsFile();
+                if (file) {
+                    files.push(file);
+                }
+            }
+        }
+        if (files.length) {
+            setFiles(files);
+        }
+    };
     return {
         dragging,
         files,
@@ -70,6 +85,7 @@ const useDragAndDrop = () => {
         handleDrop,
         mainRef,
         setFiles,
+        handlePaste,
     };
 };
 

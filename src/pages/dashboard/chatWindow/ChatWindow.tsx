@@ -92,13 +92,21 @@ const ChatWindow = () => {
 
     let unreadMessages = countUnreadMessages(messages, true);
 
-    const { dragging, files, handleDragOver, handleDrop, mainRef, setFiles } =
-        useDragAndDrop();
+    const {
+        dragging,
+        files,
+        handleDragOver,
+        handleDrop,
+        mainRef,
+        setFiles,
+        handlePaste,
+    } = useDragAndDrop();
 
     return (
         <main
             onDragOver={handleDragOver}
             onDrop={handleDrop}
+            onPaste={handlePaste}
             ref={mainRef}
             className={twMerge(
                 "max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    "
