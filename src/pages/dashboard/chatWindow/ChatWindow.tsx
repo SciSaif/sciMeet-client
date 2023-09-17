@@ -14,9 +14,12 @@ import InputMessage from "./components/InputMessage";
 import TypingUsers from "./components/TypingUsers";
 import useHasFocus from "../../../hooks/useHasFocus";
 import { countUnreadMessages } from "../../../utils/unreadMessages";
-import { markMessagesAsSeen } from "./utils";
+import { markMessagesAsSeen, shouldMergeMessages } from "./utils";
 import LoadMoreMessages from "./components/LoadMoreMessages";
 import { IMessage } from "../../../redux/features/slices/chatSlice";
+import { twMerge } from "tailwind-merge";
+import FilesUpload from "./components/FilesUpload";
+import useDragAndDrop from "../../../hooks/useDragDrop";
 
 const ChatWindow = () => {
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -89,12 +92,25 @@ const ChatWindow = () => {
 
     let unreadMessages = countUnreadMessages(messages, true);
 
+    const { dragging, files, handleDragOver, handleDrop, mainRef, setFiles } =
+        useDragAndDrop();
+
     return (
-        <main className="max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ">
+        <main
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            ref={mainRef}
+            className={twMerge(
+                "max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    "
+            )}
+        >
             {selectedFriend === undefined && (
                 <div className="flex w-full items-center justify-center h-full text-text1 font-semibold">
                     To start chatting, select a friend from the sidebar
                 </div>
+            )}
+            {dragging && selectedFriend !== undefined && (
+                <div className="w-full h-full absolute z-40 border-2 dashed border-secondary bg-black/10"></div>
             )}
             {selectedFriend !== undefined && (
                 <>
@@ -113,7 +129,7 @@ const ChatWindow = () => {
                                             messagesContainer.scrollHeight;
                                     }
                                 }}
-                                className="fixed top-20 text-sm cursor-pointer left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-text1 bg-primary-700"
+                                className="fixed top-20 text-sm cursor-pointer left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-black bg-secondary"
                             >
                                 You have new messages!
                             </div>
@@ -121,23 +137,14 @@ const ChatWindow = () => {
                         <TypingUsers />
                         <div ref={messagesRef} className=" flex flex-col pb-5">
                             {messages?.map((message, index) => {
-                                const sameAuthor =
-                                    index > 0 &&
-                                    messages[index].author._id ===
-                                        messages[index - 1].author._id;
-
-                                const sameDay =
-                                    index > 0 &&
-                                    isSameDay(
-                                        messages[index].date,
-                                        messages[index - 1].date
-                                    );
-
                                 return (
                                     <Message
                                         key={message._id}
                                         message={message}
-                                        mergeMessage={sameAuthor && sameDay}
+                                        mergeMessage={shouldMergeMessages(
+                                            index,
+                                            messages
+                                        )}
                                         totalParticipants={
                                             conversation?.participants.length ||
                                             0
@@ -157,6 +164,16 @@ const ChatWindow = () => {
 
                     <InputMessage messagesContainerRef={messagesContainerRef} />
                 </>
+            )}
+            {files && files.length > 0 && selectedFriend && (
+                <FilesUpload
+                    messagesContainerRef={messagesContainerRef}
+                    friend_id={selectedFriend?._id}
+                    files={files}
+                    close={() => {
+                        setFiles(null);
+                    }}
+                />
             )}
         </main>
     );

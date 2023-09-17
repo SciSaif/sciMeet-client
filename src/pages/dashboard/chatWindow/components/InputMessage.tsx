@@ -10,13 +10,13 @@ import TextareaAutosize from "react-textarea-autosize";
 import settings from "../../../../utils/settings";
 import { afterTabPress } from "./chatFunctions";
 import FilesUpload from "./FilesUpload";
+import { useTypingStatus } from "../../../../hooks/useTypingStatus";
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
 }
 
 const InputMessage = ({ messagesContainerRef }: Props) => {
-    const [isTyping, setIsTyping] = useState(false);
     const [message, setMessage] = useState("");
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
@@ -32,14 +32,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         }
     }, [selectedFriend]);
 
-    const participants = useAppSelector((state) => {
-        return selectedFriend
-            ? state.chat.conversations.find(
-                  (conversation) =>
-                      conversation._id === selectedFriend.conversationId
-              )?.participants
-            : [];
-    });
+    const { isTyping, setIsTyping, handleTypingStop, handleTypingStart } =
+        useTypingStatus(message);
 
     // Use an effect to detect input changes and start/stop typing accordingly
     useEffect(() => {
@@ -53,32 +47,6 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
             clearTimeout(typingTimeout);
         };
     }, [message]);
-
-    // Function to notify the server when the user starts typing
-    const handleTypingStart = () => {
-        if (!isTyping && selectedFriend && participants) {
-            console.log("typing");
-            sendTypingStatus({
-                isTyping: true,
-                conversationId: selectedFriend?.conversationId,
-                participantIds: participants,
-            });
-            setIsTyping(true);
-        }
-    };
-
-    // Function to notify the server when the user stops typing
-    const handleTypingStop = () => {
-        if (isTyping && selectedFriend && participants) {
-            console.log("stopped typing");
-            sendTypingStatus({
-                isTyping: false,
-                conversationId: selectedFriend?.conversationId,
-                participantIds: participants,
-            });
-            setIsTyping(false);
-        }
-    };
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -121,8 +89,6 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         if (!selectedFriend) return;
         console.log(event.target.files);
         if (event.target.files && event.target.files.length > 0) {
-            // convert Filelist to file[]
-
             const files = Array.from(event.target.files);
             setFiles(files);
         }

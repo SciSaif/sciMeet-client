@@ -5,6 +5,7 @@ import {
     IMessage,
 } from "../../../redux/features/slices/chatSlice";
 import { store } from "../../../redux/store";
+import { isSameDay } from "../../../utils/dateFunctions";
 
 export const markMessagesAsSeen = (
     lastMessageIntersecting: boolean,
@@ -34,4 +35,13 @@ export const markMessagesAsSeen = (
         console.log("read all messages");
         seenMessages({ conversationId: conversation._id });
     }
+};
+
+// function to check if we should merge messages
+export const shouldMergeMessages = (index: number, messages: IMessage[]) => {
+    return (
+        index > 0 &&
+        messages[index].author._id === messages[index - 1].author._id &&
+        isSameDay(messages[index].date, messages[index - 1].date)
+    );
 };
