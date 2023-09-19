@@ -36,3 +36,10 @@ export function isSameDay(date1: string, date2: string): boolean {
         d1.getDate() === d2.getDate()
     );
 }
+
+// convert duration in seconds to the format MM:SS seconds should be only 2 digits at most
+export function toMMSS(duration: number): string {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
