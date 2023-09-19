@@ -40,6 +40,7 @@ export interface MessageContent {
     content: string;
     file?: string | ArrayBuffer | null;
     fileName?: string;
+    fileType?: string;
 }
 
 interface ServerToClientEvents {

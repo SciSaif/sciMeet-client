@@ -6,6 +6,7 @@ import {
 import React, { useEffect } from "react";
 import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandler";
 import { twMerge } from "tailwind-merge";
+import { getFileType } from "../../../../utils/fileTypes";
 
 interface Props {
     friend_id: string;
@@ -14,18 +15,18 @@ interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
 }
 
-// Define a function to determine the file type
-function getFileType(file: File): string {
-    if (file.type.startsWith("image/")) {
-        return "image";
-    } else if (file.type === "application/pdf") {
-        return "pdf";
-    } else if (file.name.endsWith(".docx")) {
-        return "docx";
-    } else {
-        return "other";
-    }
-}
+// // Define a function to determine the file type
+// function getFileType(file: File): string {
+//     if (file.type.startsWith("image/")) {
+//         return "image";
+//     } else if (file.type === "application/pdf") {
+//         return "pdf";
+//     } else if (file.name.endsWith(".docx")) {
+//         return "docx";
+//     } else {
+//         return "other";
+//     }
+// }
 
 const FilesUpload = ({
     files,
@@ -54,6 +55,7 @@ const FilesUpload = ({
                     content: captions[index] || "",
                     file: arrayBuffer,
                     fileName: file.name,
+                    fileType: getFileType(file).identifier,
                 });
             };
 
@@ -65,6 +67,8 @@ const FilesUpload = ({
         }
         close();
     };
+
+    const currentFileType = getFileType(files[selectedFileIndex]);
 
     return (
         <div className="absolute flex flex-col top-0 pt-14 left-0 h-full w-full bg-primary text-white">
@@ -81,35 +85,18 @@ const FilesUpload = ({
             <main className="flex-grow flex flex-col px-2 items-center">
                 <div className="flex-grow flex flex-col w-full  justify-center items-center">
                     {/* Render content based on file type */}
-                    {getFileType(files[selectedFileIndex]) === "image" ? (
+                    {currentFileType.identifier === "image" ? (
                         <img
                             src={URL.createObjectURL(files[selectedFileIndex])}
                             alt={`Image ${selectedFileIndex}`}
                             className="max-h-[300px] max-w-screen"
                         />
-                    ) : getFileType(files[selectedFileIndex]) === "pdf" ? (
-                        <img
-                            src={"pdf.png"} // Replace with your PDF icon
-                            alt={`PDF ${selectedFileIndex}`}
-                            className="max-h-[300px] max-w-screen"
-                        />
-                    ) : getFileType(files[selectedFileIndex]) === "docx" ? (
-                        <img
-                            src={"docx.png"} // Replace with your DOCX icon
-                            alt={`DOCX ${selectedFileIndex}`}
-                            className="max-h-[300px] max-w-screen"
-                        />
                     ) : (
                         <img
-                            src={"file.png"} // Replace with your DOCX icon
-                            alt={`file `}
+                            src={currentFileType.icon}
+                            alt={`${currentFileType.identifier} ${selectedFileIndex}`}
                             className="max-h-[300px] max-w-screen"
                         />
-                    )}
-                    {getFileType(files[selectedFileIndex]) !== "image" && (
-                        <p className="line-clamp-2">
-                            {files[selectedFileIndex].name}
-                        </p>
                     )}
                 </div>
                 {files.length > 0 && (
@@ -125,28 +112,19 @@ const FilesUpload = ({
                                 onClick={() => setSelectedFileIndex(index)}
                             >
                                 {/* Render content based on file type */}
-                                {getFileType(file) === "image" ? (
+
+                                {getFileType(file).identifier === "image" ? (
                                     <img
                                         src={URL.createObjectURL(file)}
                                         alt={`Image ${index}`}
                                         className="w-full h-full"
                                     />
-                                ) : getFileType(file) === "pdf" ? (
-                                    <img
-                                        src={"pdf.png"} // Replace with your PDF icon
-                                        alt={`PDF ${index}`}
-                                        className="max-h-[300px] max-w-screen"
-                                    />
-                                ) : getFileType(file) === "docx" ? (
-                                    <img
-                                        src={"docx.png"} // Replace with your DOCX icon
-                                        alt={`DOCX ${index}`}
-                                        className="max-h-[300px] max-w-screen"
-                                    />
                                 ) : (
                                     <img
-                                        src={"file.png"} // Replace with your DOCX icon
-                                        alt={`file ${index}`}
+                                        src={getFileType(file).icon}
+                                        alt={`${
+                                            getFileType(file).identifier
+                                        } ${index}`}
                                         className="max-h-[300px] max-w-screen"
                                     />
                                 )}
@@ -162,7 +140,10 @@ const FilesUpload = ({
                 <input
                     type="text"
                     value={currentCaption}
-                    disabled={getFileType(files[selectedFileIndex]) !== "image"}
+                    disabled={
+                        getFileType(files[selectedFileIndex]).identifier !==
+                        "image"
+                    }
                     onChange={(e) => {
                         setCurrentCaption(e.target.value);
                         setCaptions((prev) => {
@@ -173,8 +154,8 @@ const FilesUpload = ({
                     }}
                     className={twMerge(
                         "w-full resize-none rounded-xl border-0 pr-10 bg-primary-700 overflow-y-auto overflow-x-hidden scrollbar max-h-[200px] focus:ring-0 placeholder:text-text2/50 outline-none active:outline-none text-text2",
-                        getFileType(files[selectedFileIndex]) !== "image" &&
-                            "opacity-50"
+                        getFileType(files[selectedFileIndex]).identifier !==
+                            "image" && "opacity-50"
                     )}
                     placeholder={`Add a caption...`}
                 />

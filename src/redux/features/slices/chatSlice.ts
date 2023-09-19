@@ -16,6 +16,7 @@ export interface IMessage {
     content: string;
     file?: string;
     fileName?: string;
+    fileType?: string;
     date: string;
     type: string;
     seenBy: {
