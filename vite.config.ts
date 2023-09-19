@@ -27,18 +27,18 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
                 type: "image/png",
                 purpose: "any",
             },
-            {
-                src: "maskable-icon-512x512.png",
-                sizes: "512x512",
-                type: "image/png",
-                purpose: "maskable",
-            },
             // {
             //     src: "maskable-icon-512x512.png",
             //     sizes: "512x512",
             //     type: "image/png",
-            //     purpose: "any",
+            //     purpose: "maskable",
             // },
+            {
+                src: "maskable-icon-512x512.png",
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "any",
+            },
             {
                 src: "apple-touch-icon-180x180.png",
                 sizes: "180x180",
