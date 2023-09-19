@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { IMessage } from "../../../../redux/features/slices/chatSlice";
-import { downloadFile } from "../../../../utils/other";
-import fileTypes from "../../../../utils/fileTypes";
-import ImageMessage from "./ImageMessage";
-import FileMessage from "./FileMessage";
+import ImageMessage from "./Message/ImageMessage";
+import FileMessage from "./Message/FileMessage";
+import AudioMessage from "./Message/AudioMessage";
 
 interface Props {
     message: IMessage;
@@ -16,6 +14,10 @@ const MessageContent = ({ message }: Props) => {
 
     if (message.fileType === "image") {
         return <ImageMessage message={message} />;
+    }
+
+    if (message.fileType === "audio") {
+        return <AudioMessage message={message} />;
     }
 
     return <FileMessage message={message} />;

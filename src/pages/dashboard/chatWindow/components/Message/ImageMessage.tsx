@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ImagePreview from "./ImagePreview";
+import ImagePreview from "../ImagePreview";
 import { twMerge } from "tailwind-merge";
-import { IMessage } from "../../../../redux/features/slices/chatSlice";
+import { IMessage } from "../../../../../redux/features/slices/chatSlice";
 
 interface Props {
     message: IMessage;
