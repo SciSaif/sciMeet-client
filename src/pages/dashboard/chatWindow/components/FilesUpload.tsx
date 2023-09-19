@@ -185,6 +185,7 @@ const FilesUpload = ({
                     <div>
                         <button
                             type="submit"
+                            autoFocus
                             className="pl-2 pr-4 hover:bg-secondary-600 bg-secondary p-3 rounded-full cursor-pointer text-white"
                         >
                             <PaperAirplaneIcon

@@ -71,9 +71,17 @@ const ChatWindow = () => {
                 if (checkMarkId) {
                     setTargetRef(checkMarkId);
                 }
+                if (lastMessageIntersecting) {
+                    // scroll to bottom
+                    const messagesContainer = messagesContainerRef.current;
+                    if (messagesContainer) {
+                        messagesContainer.scrollTop =
+                            messagesContainer.scrollHeight;
+                    }
+                }
             }
         }
-    }, [messages]);
+    }, [messages, lastMessageIntersecting, messagesContainerRef]);
 
     const windowInFocus = useHasFocus();
 
@@ -126,7 +134,7 @@ const ChatWindow = () => {
                         ref={messagesContainerRef}
                         className="flex flex-col-reverse  relative  overflow-auto scrollbar px-1 md:px-5 "
                     >
-                        {unreadMessages > 0 && (
+                        {unreadMessages > 0 && !lastMessageIntersecting && (
                             <div
                                 onClick={() => {
                                     // scroll to bottom
