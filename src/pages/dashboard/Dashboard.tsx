@@ -20,8 +20,10 @@ const Dashboard = () => {
     const windowWidth = useRef(window.innerWidth);
     const user = useAppSelector((state) => state.auth.user);
     const sidebarOpen = useAppSelector((state) => state.other.sidebarOpen);
+    const isModalOpen = useAppSelector((state) => state.other.modalOpen);
     const dispatch = useAppDispatch();
     const isRoomOpen = useAppSelector((state) => state.room.isUserInRoom);
+
     let flag = true;
     // remove dark mode on load
     useEffect(() => {
@@ -62,12 +64,14 @@ const Dashboard = () => {
         window.history.pushState(null, "");
 
         // Event listener for the popstate event
-        const handleBackButton = (event: PopStateEvent) => {
-            console.log("back", windowWidth.current);
-
+        const handleBackButton = () => {
             // if sidebar is closed in mobile then open it
-            if (windowWidth.current < settings.md && !sidebarOpen) {
-                console.log("toggle");
+            if (
+                windowWidth.current < settings.md &&
+                !sidebarOpen &&
+                !isModalOpen
+            ) {
+                // console.log("toggle");
                 dispatch(toggleSidebar());
             } else {
                 // go back to previous page
@@ -81,7 +85,7 @@ const Dashboard = () => {
         return () => {
             window.removeEventListener("popstate", handleBackButton);
         };
-    }, [windowWidth, sidebarOpen]);
+    }, [windowWidth, sidebarOpen, isModalOpen]);
 
     return (
         <>

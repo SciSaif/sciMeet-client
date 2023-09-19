@@ -1,9 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
-import { Fragment, useRef, useState } from "react";
+import { useEffect } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
+import { useAppDispatch } from "../redux/hooks";
+import { isModalOpen } from "../redux/features/slices/otherSlice";
 
 interface props {
     children: JSX.Element | JSX.Element[];
@@ -22,13 +24,24 @@ const Modal = ({
     closeOnBackdropClick = true,
     closeOnBackPress = true,
 }: props) => {
+    const dispatch = useAppDispatch();
+
+    // if modal is open then dispatch toggleModalOpen(true) and before closing the modal dispatch toggleModalOpen(false)
+    useEffect(() => {
+        dispatch(isModalOpen(true));
+
+        return () => {
+            dispatch(isModalOpen(false));
+        };
+    }, []);
+
     useEffect(() => {
         if (closeOnBackPress) {
             // Push a new state when the modal is opened
             window.history.pushState(null, "");
 
             // Event listener for the popstate event
-            const handleBackButton = (event: PopStateEvent) => {
+            const handleBackButton = () => {
                 close();
             };
 
