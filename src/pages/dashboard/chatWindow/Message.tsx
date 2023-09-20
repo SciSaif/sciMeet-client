@@ -24,7 +24,10 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
     return (
         <>
             {!mergeMessage && (
-                <div className="text-text1 flex flex-row gap-x-2 md:gap-x-3 mt-5 ">
+                <div
+                    draggable={false}
+                    className="text-text1 flex flex-row gap-x-2 md:gap-x-3 mt-5 "
+                >
                     <div className="flex rounded-full h-fit min-w-[35px] ">
                         <img
                             className="h-8 w-8 rounded-full"

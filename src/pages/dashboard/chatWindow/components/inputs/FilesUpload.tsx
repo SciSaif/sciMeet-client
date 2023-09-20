@@ -71,7 +71,7 @@ const FilesUpload = ({
     const currentFileType = getFileType(files[selectedFileIndex]);
 
     return (
-        <div className="absolute flex flex-col top-0 pt-14 left-0 h-full w-full bg-primary text-white">
+        <div className="absolute flex flex-col top-0 pt-14 z-10 left-0 h-full w-full bg-primary text-white">
             <header className="px-4 py-2">
                 <button
                     type="button"

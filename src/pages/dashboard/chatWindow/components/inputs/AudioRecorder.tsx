@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { toMMSS } from "../../../../../utils/dateFunctions";
+import AudioWave from "../../../../../assets/AudioWave";
 
 interface Props {
     close: () => void;
@@ -124,6 +125,7 @@ const AudioRecorder = ({ close }: Props) => {
                     <div className="flex items-center gap-2 px-2 ">
                         <span>{toMMSS(elapsedTime)}</span>
                     </div>
+                    <AudioWave />
                     <button
                         className="p-2  rounded-lg hover:bg-black/10 cursor-pointer"
                         onClick={pauseRecording}

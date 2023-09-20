@@ -6,10 +6,16 @@ const useDragAndDrop = () => {
     const [files, setFiles] = useState<File[] | null>(null);
     const mainRef = useRef<HTMLDivElement>(null);
 
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-    };
+    // const handleDragOver = (e: React.DragEvent) => {
+    //     e.preventDefault();
+    // };
 
+    const handleDragOver = (e: React.DragEvent) => {
+        // Check if the drag event contains files
+        if (e.dataTransfer.types.includes("Files")) {
+            e.preventDefault(); // Prevent the default behavior (e.g., open file in the browser)
+        }
+    };
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setDragging(false);
