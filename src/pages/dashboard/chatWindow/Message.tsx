@@ -24,7 +24,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
     return (
         <>
             {!mergeMessage && (
-                <div className="text-text1 flex flex-row gap-x-3 mt-5 ">
+                <div className="text-text1 flex flex-row gap-x-2 md:gap-x-3 mt-5 ">
                     <div className="flex rounded-full h-fit min-w-[35px] ">
                         <img
                             className="h-8 w-8 rounded-full"
@@ -62,7 +62,7 @@ const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
             )}
 
             {mergeMessage && (
-                <div className="flex flex-row justify-between  text-text1 ml-[47px]  hover:bg-black/10">
+                <div className="flex flex-row justify-between  text-text1 ml-[43px] md:ml-[47px]  hover:bg-black/10">
                     <MessageContent message={message} />
                     <SeenCheckMark
                         message={message}
