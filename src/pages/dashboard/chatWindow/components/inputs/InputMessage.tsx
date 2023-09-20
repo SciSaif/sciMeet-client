@@ -1,16 +1,17 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../../../redux/hooks";
-import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandler";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import TextareaAutosize from "react-textarea-autosize";
 
-import settings from "../../../../utils/settings";
-import { afterTabPress } from "./chatFunctions";
+import settings from "../../../../../utils/settings";
+import { afterTabPress } from "../chatFunctions";
 import FilesUpload from "./FilesUpload";
-import { useTypingStatus } from "../../../../hooks/useTypingStatus";
+import { useTypingStatus } from "../../../../../hooks/useTypingStatus";
 
 import FileInput from "./FileInput";
 import EmojiPicker from "./EmojiPicker";
+import AudioRecorder from "./AudioInput";
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
@@ -115,8 +116,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     };
 
     return (
-        <div className="pb-5   w-full  px-1 md:px-5">
-            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700  rounded-xl">
+        <div className="pb-5    w-full  px-1 md:px-5">
+            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700 relative overflow-hidden rounded-xl">
                 {/* Use the FileInput component */}
                 <FileInput handleFileChange={handleFileChange} />
 
@@ -145,6 +146,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                         onBlur={handleTypingStop}
                         rows={1}
                     />
+                    <AudioRecorder />
 
                     <button
                         type="submit"

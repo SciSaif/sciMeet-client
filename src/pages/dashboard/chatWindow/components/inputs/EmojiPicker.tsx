@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { FaceSmileIcon } from "@heroicons/react/24/outline";
-import useOutsideClick from "../../../../hooks/useOutsideClick";
+import useOutsideClick from "../../../../../hooks/useOutsideClick";
 
 interface EmojiPickerProps {
     emojiPickerOpen: boolean;

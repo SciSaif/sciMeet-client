@@ -32,8 +32,6 @@ const AudioMessage = ({ message }: Props) => {
                 barGap: 3,
             });
 
-            console.log("src", message.file);
-
             ws.load(message.file);
 
             ws.on("finish", () => setIsPlaying(false));
@@ -67,9 +65,9 @@ const AudioMessage = ({ message }: Props) => {
                     className="px-2 h-full flex items-center"
                 >
                     {isPlaying ? (
-                        <PlayIcon width={20} height={20} />
-                    ) : (
                         <PauseIcon width={20} height={20} />
+                    ) : (
+                        <PlayIcon width={20} height={20} />
                     )}
                 </div>
                 <div className="w-full">

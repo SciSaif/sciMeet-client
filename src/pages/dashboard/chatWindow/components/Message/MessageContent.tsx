@@ -1,7 +1,7 @@
-import { IMessage } from "../../../../redux/features/slices/chatSlice";
-import ImageMessage from "./Message/ImageMessage";
-import FileMessage from "./Message/FileMessage";
-import AudioMessage from "./Message/AudioMessage";
+import { IMessage } from "../../../../../redux/features/slices/chatSlice";
+import ImageMessage from "./ImageMessage";
+import FileMessage from "./FileMessage";
+import AudioMessage from "./AudioMessage";
 
 interface Props {
     message: IMessage;

@@ -10,7 +10,7 @@ import {
     sendDirectMessage,
 } from "../../../realtimeCommunication/socketHandler";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
-import InputMessage from "./components/InputMessage";
+import InputMessage from "./components/inputs/InputMessage";
 import TypingUsers from "./components/TypingUsers";
 import useHasFocus from "../../../hooks/useHasFocus";
 import { countUnreadMessages } from "../../../utils/unreadMessages";
@@ -18,7 +18,7 @@ import { markMessagesAsSeen, shouldMergeMessages } from "./utils";
 import LoadMoreMessages from "./components/LoadMoreMessages";
 import { IMessage } from "../../../redux/features/slices/chatSlice";
 import { twMerge } from "tailwind-merge";
-import FilesUpload from "./components/FilesUpload";
+import FilesUpload from "./components/inputs/FilesUpload";
 import useDragAndDrop from "../../../hooks/useDragDrop";
 
 const ChatWindow = () => {

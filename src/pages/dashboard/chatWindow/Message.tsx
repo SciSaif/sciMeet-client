@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../redux/hooks";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import SeenCheckMark from "./components/SeenCheckMark";
 import { twMerge } from "tailwind-merge";
-import MessageContent from "./components/MessageContent";
+import MessageContent from "./components/Message/MessageContent";
 const defaultImg = settings.defaultImg;
 
 interface Props {

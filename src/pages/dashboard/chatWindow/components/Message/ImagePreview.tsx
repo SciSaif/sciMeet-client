@@ -4,7 +4,7 @@ import {
     XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
-import Modal from "../../../../components/Modal";
+import Modal from "../../../../../components/Modal";
 
 interface Props {
     close: () => void;
