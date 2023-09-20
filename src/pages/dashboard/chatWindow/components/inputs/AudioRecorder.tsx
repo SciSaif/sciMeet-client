@@ -40,9 +40,9 @@ const AudioRecorder = ({ close }: Props) => {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
             });
+            console.log("ss");
             const options = { mimeType: "audio/webm" };
             const recorder = new MediaRecorder(stream, options);
-            console.log(recorder.mimeType);
             const chunks: Array<Blob> = [];
 
             recorder.ondataavailable = (e) => {
@@ -91,6 +91,14 @@ const AudioRecorder = ({ close }: Props) => {
     const stopRecording = () => {
         if (mediaRecorder) {
             mediaRecorder.stop();
+            if (mediaRecorder.stream) {
+                const tracks = mediaRecorder.stream.getTracks();
+                tracks.forEach((track) => track.stop());
+                // Alternatively, you can close the entire MediaStream:
+                mediaRecorder.stream
+                    .getTracks()
+                    .forEach((track) => track.stop());
+            }
         }
     };
 
@@ -108,7 +116,10 @@ const AudioRecorder = ({ close }: Props) => {
     return (
         <div className="absolute text-text1 py-1 top-0 gap-3 left-0 w-full h-full flex items-center flex-row justify-center bg-primary-700">
             <div
-                onClick={() => close()}
+                onClick={() => {
+                    stopRecording();
+                    close();
+                }}
                 className="p-2 rounded-lg hover:bg-black/10 cursor-pointer"
             >
                 <TrashIcon width={20} height={20} />
@@ -119,13 +130,18 @@ const AudioRecorder = ({ close }: Props) => {
                         className={`dot ${
                             isRecording && !isPaused
                                 ? "h-2 w-2 bg-red-500 rounded-full  animate-[ping_0.5s_linear_infinite]"
-                                : ""
+                                : "h-2 w-2"
                         }`}
                     ></span>
                     <div className="flex items-center gap-2 px-2 ">
                         <span>{toMMSS(elapsedTime)}</span>
                     </div>
-                    <AudioWave />
+                    {isRecording && !isPaused && <AudioWave />}
+                    {isRecording && isPaused && (
+                        <div className="">
+                            <div className="h-[2px] w-[62px]  bg-text"></div>
+                        </div>
+                    )}
                     <button
                         className="p-2  rounded-lg hover:bg-black/10 cursor-pointer"
                         onClick={pauseRecording}
