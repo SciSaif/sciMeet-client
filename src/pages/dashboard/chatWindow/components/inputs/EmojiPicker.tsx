@@ -25,7 +25,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
     });
 
     return (
-        <div className="relative">
+        <div className="relative ">
             <div
                 onMouseDown={() => {
                     wasIconClickedRef.current = true;
@@ -45,7 +45,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
             {emojiPickerOpen && (
                 <div
                     ref={emojiPickerRef}
-                    className="absolute -top-3 -left-10 -translate-y-[100%]"
+                    className="absolute -top-3 -left-10 -translate-y-[100%] "
                 >
                     <Picker
                         data={data}

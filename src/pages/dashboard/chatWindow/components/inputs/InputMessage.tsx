@@ -117,7 +117,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     return (
         <div className="pb-5    w-full  px-1 md:px-5">
-            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700 relative overflow-hidden rounded-xl">
+            <div className="w-full h-auto  flex flex-row  items-center bg-primary-700 relative  rounded-xl">
                 {/* Use the FileInput component */}
                 <FileInput handleFileChange={handleFileChange} />
 

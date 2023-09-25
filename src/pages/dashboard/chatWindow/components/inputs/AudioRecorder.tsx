@@ -4,7 +4,7 @@ import {
     PlayIcon,
     TrashIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { toMMSS } from "../../../../../utils/dateFunctions";
@@ -21,6 +21,7 @@ const AudioRecorder = ({ close }: Props) => {
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
         null
     );
+    const isCancelledRef = useRef(false); // Using useRef instead of useState
 
     const selectedFriend = useAppSelector(
         (state) => state.other.selectedFriend
@@ -40,7 +41,6 @@ const AudioRecorder = ({ close }: Props) => {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
             });
-            console.log("ss");
             const options = { mimeType: "audio/webm" };
             const recorder = new MediaRecorder(stream, options);
             const chunks: Array<Blob> = [];
@@ -54,6 +54,12 @@ const AudioRecorder = ({ close }: Props) => {
             recorder.onstop = () => {
                 setIsRecording(false);
                 setElapsedTime(0);
+
+                if (isCancelledRef.current) {
+                    // If it was cancelled, reset isCancelledRef and just return without uploading
+                    isCancelledRef.current = false;
+                    return;
+                }
 
                 // Handle the recorded data, e.g., send it to a server
                 const audioBlob = new Blob(chunks, { type: "audio/webm" });
@@ -113,13 +119,16 @@ const AudioRecorder = ({ close }: Props) => {
         }
     };
 
+    const cancelRecording = () => {
+        isCancelledRef.current = true; // Set isCancelledRef.current to true when cancelling
+        stopRecording(); // Stop the recording after setting isCancelledRef.current
+        close(); // Close the recorder
+    };
+
     return (
-        <div className="absolute text-text1 py-1 top-0 gap-3 left-0 w-full h-full flex items-center flex-row justify-center bg-primary-700">
+        <div className="absolute text-text1 py-1 top-0 gap-3 left-0 w-full h-full flex items-center flex-row justify-center rounded-xl bg-primary-700">
             <div
-                onClick={() => {
-                    stopRecording();
-                    close();
-                }}
+                onClick={cancelRecording}
                 className="p-2 rounded-lg hover:bg-black/10 cursor-pointer"
             >
                 <TrashIcon width={20} height={20} />
