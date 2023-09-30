@@ -15,7 +15,7 @@ const Sidebar = () => {
                 <div className=" h-full flex flex-col ">
                     <div className="w-full flex flex-row items-center justify-center gap-3 text-center py-2 text-secondary font-bold text-2xl border-b border-slate-100/25">
                         <img
-                            src="src/assets/logoTransparent.png"
+                            src="logoTransparent.png"
                             alt="logo"
                             className="h-6 "
                         />
