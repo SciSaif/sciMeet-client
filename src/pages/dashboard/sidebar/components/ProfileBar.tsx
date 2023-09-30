@@ -64,10 +64,10 @@ const ProfileBar = () => {
                 )}
             </div>
             {isProfileOpen && (
-                <div className="w-full  pt-10">
+                <div className="w-full h-full flex flex-col pt-10">
                     <div className="w-full flex justify-center flex-col items-center">
                         <img
-                            className="h-44 w-44 rounded-full"
+                            className="h-44 w-44 "
                             src={
                                 user?.avatar
                                     ? user.avatar
@@ -88,7 +88,7 @@ const ProfileBar = () => {
                             Add Friend
                         </button>
                     </div>
-                    <div className="">
+                    <div className="flex-grow ">
                         <PendingInvitationsList />
                     </div>
                 </div>

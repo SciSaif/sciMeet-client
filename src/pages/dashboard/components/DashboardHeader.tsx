@@ -62,9 +62,9 @@ const DashboardHeader = () => {
                 )}
             </div>
 
-            <div className="">
+            {/* <div className="">
                 <SettingsDropdown />
-            </div>
+            </div> */}
         </div>
     );
 };
