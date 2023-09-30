@@ -14,7 +14,7 @@ const FileMessage = ({ message }: Props) => {
     return (
         <div
             onClick={() => downloadFile(message.file, message.fileName)}
-            className={`rounded-xl my-2 items-center cursor-pointer bg-primary-700 flex flex-row gap-2 py-2 px-2 overflow-hidden max-w-[350px] ${
+            className={`rounded-xl my-2 w-full  items-center cursor-pointer bg-primary-700 flex flex-row gap-2 py-2 px-2 overflow-hidden max-w-[350px] ${
                 message.content.length === 0 && "rounded-b-xl"
             }`}
         >

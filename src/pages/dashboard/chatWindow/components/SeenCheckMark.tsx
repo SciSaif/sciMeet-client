@@ -13,7 +13,7 @@ interface Props {
 
 const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
     return (
-        <div className="_checkMarkId">
+        <div className="_checkMarkId min-w-[30px] w-[30px]  flex items-end ">
             {message.author._id === userId && (
                 <Popover
                     popup={
@@ -39,7 +39,7 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                         </>
                     }
                 >
-                    <div className="text-text3/50 rounded-full hover:bg-black/20   px-2 font-base text-xs font-bold flex items-center justify-center">
+                    <div className="text-text3/50 rounded-full  hover:bg-black/20   px-2 font-base text-xs font-bold flex items-center justify-center">
                         {seenByAll ? (
                             <div className="text-secondary translate-y-[3px]">
                                 <CheckIcon width={12} height={12} />

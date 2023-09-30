@@ -11,6 +11,7 @@ interface initialStateProps {
     selectedFriend?: Friend;
     sidebarOpen: boolean;
     modalOpen: boolean;
+    profileOpen: boolean;
 }
 
 const initialState: initialStateProps = {
@@ -19,6 +20,7 @@ const initialState: initialStateProps = {
     selectedFriend: undefined,
     sidebarOpen: true,
     modalOpen: false,
+    profileOpen: false,
 };
 
 export const otherSlice = createSlice({
@@ -40,7 +42,9 @@ export const otherSlice = createSlice({
         toggleSidebar: (state) => {
             state.sidebarOpen = !state.sidebarOpen;
         },
-
+        toggleProfile: (state) => {
+            state.profileOpen = !state.profileOpen;
+        },
         isModalOpen: (state, action: PayloadAction<boolean>) => {
             state.modalOpen = action.payload;
         },
@@ -54,6 +58,7 @@ export const {
     setSelectedFriend,
     resetState,
     toggleSidebar,
+    toggleProfile,
     isModalOpen,
 } = otherSlice.actions;
 export default otherSlice.reducer;

@@ -94,14 +94,12 @@ import PendingInvitationListItem from "./PendingInvitationListItem";
 const PendingInvitationsList = () => {
     const invitations = useAppSelector((state) => state.friend.invitations);
     return (
-        <>
-            {" "}
+        <div className="border-t border-slate-100/25 mt-5">
+            <h4 className="text-text2 pb-2  text-center w-full mt-3 font-semibold">
+                Friend Invitations
+            </h4>
             {invitations && invitations.length > 0 && (
-                <div className="overflow-auto scrollbar mb-5">
-                    <h4 className="text-text2 text-sm text-center w-full mt-3 font-semibold">
-                        INVITATIONS
-                    </h4>
-
+                <div className=" mb-5 max-h-[200px] overflow-auto scrollbar">
                     <div className="mt-4 pl-4 grid gap-y-2">
                         {invitations?.map((invitation) => (
                             <PendingInvitationListItem
@@ -109,10 +107,18 @@ const PendingInvitationsList = () => {
                                 invitation={invitation}
                             />
                         ))}
+
+                        {}
                     </div>
                 </div>
             )}
-        </>
+
+            {invitations?.length === 0 && (
+                <div className="text-text text-sm w-full text-center">
+                    No friend requests
+                </div>
+            )}
+        </div>
     );
 };
 
