@@ -5,6 +5,7 @@ import otherReducer from "./features/slices/otherSlice";
 import roomReducer from "./features/slices/roomSlice";
 import friendReducer from "./features/slices/friendSlice";
 import chatReducer from "./features/slices/chatSlice";
+import groupReducer from "./features/slices/groupSlice";
 
 // Create the middleware instance and methods
 const listenerMiddleware = createListenerMiddleware();
@@ -16,6 +17,7 @@ export const store = configureStore({
         room: roomReducer,
         friend: friendReducer,
         chat: chatReducer,
+        group: groupReducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

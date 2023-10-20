@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Friend } from "./friendSlice";
+import { Group } from "./groupSlice";
 
 // get theme from local storage
 const theme = localStorage.getItem("theme");
@@ -9,6 +10,7 @@ interface initialStateProps {
     theme: "light" | "dark";
     pendingInvitations: any;
     selectedFriend?: Friend;
+    selectedGroup?: Group;
     sidebarOpen: boolean;
     modalOpen: boolean;
     profileOpen: boolean;
@@ -18,6 +20,7 @@ const initialState: initialStateProps = {
     theme: theme === "light" ? "light" : "dark",
     pendingInvitations: [],
     selectedFriend: undefined,
+    selectedGroup: undefined,
     sidebarOpen: true,
     modalOpen: false,
     profileOpen: false,
@@ -37,6 +40,12 @@ export const otherSlice = createSlice({
 
         setSelectedFriend: (state, action: PayloadAction<Friend>) => {
             state.selectedFriend = action.payload;
+            state.selectedGroup = undefined;
+        },
+
+        setSelectedGroup: (state, action: PayloadAction<Group>) => {
+            state.selectedGroup = action.payload;
+            state.selectedFriend = undefined;
         },
 
         toggleSidebar: (state) => {
@@ -56,6 +65,7 @@ export const {
     setTheme,
     setPendingInvitations,
     setSelectedFriend,
+    setSelectedGroup,
     resetState,
     toggleSidebar,
     toggleProfile,

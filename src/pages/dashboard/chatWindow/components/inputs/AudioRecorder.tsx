@@ -5,10 +5,10 @@ import {
     TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { toMMSS } from "../../../../../utils/dateFunctions";
 import AudioWave from "../../../../../assets/AudioWave";
+import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandlers/chat";
 
 interface Props {
     close: () => void;

@@ -1,12 +1,12 @@
 import { store } from "../redux/store";
 import Peer from "simple-peer";
-import { signalPeerData } from "./socketHandler";
 import {
     toggleLocalStreamChanged,
     toggleRemoteStreamsChanged,
 } from "../redux/features/slices/roomSlice";
 import { getCurrentTimeInMilliseconds } from "../utils/other";
 import { shareScreenWithNewRemoteStream } from "./screenShareHandler";
+import { signalPeerData } from "./socketHandlers/webRTC";
 
 const onlyAudioConstraints = {
     video: false,

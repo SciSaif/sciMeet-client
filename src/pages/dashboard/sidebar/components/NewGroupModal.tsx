@@ -29,7 +29,7 @@ const NewGroupModal = ({ close }: Props) => {
         }
 
         createGroup({
-            groupName,
+            group_name: groupName,
             participants,
         });
         close();

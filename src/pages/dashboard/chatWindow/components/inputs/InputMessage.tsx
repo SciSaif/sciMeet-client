@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -12,6 +11,7 @@ import { useTypingStatus } from "../../../../../hooks/useTypingStatus";
 import FileInput from "./FileInput";
 import EmojiPicker from "./EmojiPicker";
 import AudioRecorder from "./AudioInput";
+import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandlers/chat";
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;

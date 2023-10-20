@@ -11,10 +11,10 @@ import {
 import DashboardHeader from "./components/DashboardHeader";
 import ChatWindow from "./chatWindow/ChatWindow";
 import Room from "./room/Room";
-import { connectWithSocketServer } from "../../realtimeCommunication/socketHandler";
 import { store } from "../../redux/store";
 import { useSwipeable } from "react-swipeable";
 import settings from "../../utils/settings";
+import { connectAllSocketHandlers } from "../../realtimeCommunication/socketHandlers";
 
 const Dashboard = () => {
     const windowWidth = useRef(window.innerWidth);
@@ -29,7 +29,7 @@ const Dashboard = () => {
     useEffect(() => {
         dispatch(setTheme("light"));
         if (flag) {
-            connectWithSocketServer(store.getState, dispatch);
+            connectAllSocketHandlers();
         }
 
         return () => {

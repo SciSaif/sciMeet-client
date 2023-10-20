@@ -5,6 +5,7 @@ import PendingInvitationsList from "./components/PendingInvitationsList";
 import SidebarLeft from "./components/SidebarLeft";
 import ProfileBar from "./components/ProfileBar";
 import SettingsDropdown from "../components/SettingsDropdown";
+import GroupsLists from "./components/GroupsList";
 
 const Sidebar = () => {
     return (
@@ -26,6 +27,7 @@ const Sidebar = () => {
                         <SettingsDropdown />
                     </div>
                     <FriendsList />
+                    <GroupsLists />
                     <ProfileBar />
                 </div>
             </div>

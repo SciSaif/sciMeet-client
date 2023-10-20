@@ -4,7 +4,17 @@ export const groupApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         createGroup: build.mutation<
             { toast: string },
-            { groupName: string; participants: string[] }
+            { group_name: string; participants: string[] }
+        >({
+            query: (data) => ({
+                url: `groups`,
+                method: "POST",
+                body: data,
+            }),
+        }),
+        getGroups: build.mutation<
+            { toast: string },
+            { group_name: string; participants: string[] }
         >({
             query: (data) => ({
                 url: `groups`,

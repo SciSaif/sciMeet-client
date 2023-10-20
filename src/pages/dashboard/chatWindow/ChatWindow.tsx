@@ -4,11 +4,7 @@ import ChatBeginningHeader from "./ChatBeginningHeader";
 import Message from "./Message";
 import { isSameDay } from "../../../utils/dateFunctions";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import {
-    getChatHistory,
-    seenMessages,
-    sendDirectMessage,
-} from "../../../realtimeCommunication/socketHandler";
+
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import InputMessage from "./components/inputs/InputMessage";
 import TypingUsers from "./components/TypingUsers";
@@ -20,6 +16,7 @@ import { IMessage } from "../../../redux/features/slices/chatSlice";
 import { twMerge } from "tailwind-merge";
 import FilesUpload from "./components/inputs/FilesUpload";
 import useDragAndDrop from "../../../hooks/useDragDrop";
+import { getChatHistory } from "../../../realtimeCommunication/socketHandlers/chat";
 
 const ChatWindow = () => {
     const messagesContainerRef = useRef<HTMLDivElement>(null);

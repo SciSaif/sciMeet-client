@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IMessage } from "../../../../redux/features/slices/chatSlice";
 import { useAppSelector } from "../../../../redux/hooks";
-import { getChatHistory } from "../../../../realtimeCommunication/socketHandler";
 import useIntersectionObserver from "../../../../hooks/useIntersectionObserver";
+import { getChatHistory } from "../../../../realtimeCommunication/socketHandlers/chat";
 interface Props {
     messages?: IMessage[];
 }

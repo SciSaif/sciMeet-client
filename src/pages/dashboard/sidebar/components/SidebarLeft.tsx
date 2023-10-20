@@ -14,7 +14,7 @@ import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCH
 import { useSnackbar } from "notistack";
 
 import settings from "../../../../utils/settings";
-import { createRoom } from "../../../../realtimeCommunication/socketHandler";
+import { createRoom } from "../../../../realtimeCommunication/socketHandlers/rooms";
 const md = settings.md;
 
 const SidebarLeft = () => {

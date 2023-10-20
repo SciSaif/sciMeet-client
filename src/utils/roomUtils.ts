@@ -11,9 +11,9 @@ import {
 } from "../redux/features/slices/roomSlice";
 import { store } from "../redux/store";
 import settings from "./settings";
-import { leaveRoom } from "../realtimeCommunication/socketHandler";
 import { getCurrentTimeInMilliseconds } from "./other";
 import { stopScreenSharing } from "../realtimeCommunication/screenShareHandler";
+import { leaveRoom } from "../realtimeCommunication/socketHandlers/rooms";
 const md = settings.md;
 
 export const leaveRoomHandler = (windowWidth?: number) => {

@@ -8,11 +8,11 @@ import {
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
 import { leaveRoomHandler } from "../../../../utils/roomUtils";
-import { joinRoom } from "../../../../realtimeCommunication/socketHandler";
 import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
 import { getLocalStreamPreview } from "../../../../realtimeCommunication/webRTCHandler";
 
 import settings from "../../../../utils/settings";
+import { joinRoom } from "../../../../realtimeCommunication/socketHandlers/rooms";
 const md = settings.md;
 
 interface Props {

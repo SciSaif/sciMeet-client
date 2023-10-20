@@ -4,9 +4,9 @@ import {
     XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
-import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandler";
 import { twMerge } from "tailwind-merge";
 import { getFileType } from "../../../../../utils/fileTypes";
+import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandlers/chat";
 
 interface Props {
     friend_id: string;

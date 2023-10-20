@@ -7,7 +7,6 @@ import {
 import React, { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toggleLocalStreamChanged } from "../../../redux/features/slices/roomSlice";
-import { leaveRoom } from "../../../realtimeCommunication/socketHandler";
 import { getLocalStream } from "../../../realtimeCommunication/webRTCHandler";
 import { leaveRoomHandler } from "../../../utils/roomUtils";
 import { toggleScreenShare } from "../../../realtimeCommunication/screenShareHandler";

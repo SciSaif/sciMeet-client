@@ -1,5 +1,5 @@
 import useHasFocus from "../../../hooks/useHasFocus";
-import { seenMessages } from "../../../realtimeCommunication/socketHandler";
+import { seenMessages } from "../../../realtimeCommunication/socketHandlers/chat";
 import {
     IConversation,
     IMessage,

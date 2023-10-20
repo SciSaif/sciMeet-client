@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IMessage } from "../redux/features/slices/chatSlice";
 import { Friend } from "../redux/features/slices/friendSlice";
 import { useAppSelector } from "../redux/hooks";
-import { sendTypingStatus } from "../realtimeCommunication/socketHandler";
+import { sendTypingStatus } from "../realtimeCommunication/socketHandlers/chat";
 
 // useTypingStatus.js
 export const useTypingStatus = (message: string) => {
