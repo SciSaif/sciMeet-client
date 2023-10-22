@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
-    setSelectedGroup,
+    setSelectedChat,
     toggleSidebar,
 } from "../../../../redux/features/slices/otherSlice";
 import { Friend } from "../../../../redux/features/slices/friendSlice";
@@ -10,22 +10,23 @@ import { Group } from "../../../../redux/features/slices/groupSlice";
 
 const GroupListItem = ({ group }: { group: Group }) => {
     const dispatch = useAppDispatch();
-    const selectedGroup = useAppSelector((state) => state.other.selectedGroup);
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const user = useAppSelector((state) => state.auth.user);
 
-    // const messages = useAppSelector((state) => {
-    //     return friend
-    //         ? state.chat.conversations.find(
-    //               (conversation) => conversation._id === friend.conversationId
-    //           )?.messages
-    //         : [];
-    // });
+    const messages = useAppSelector((state) => {
+        return selectedChat
+            ? state.chat.conversations.find(
+                  (conversation) =>
+                      conversation._id === selectedChat.conversation_id
+              )?.messages
+            : [];
+    });
 
-    // let unreadMessages = countUnreadMessages(messages);
+    let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
-        dispatch(setSelectedGroup(group));
+        dispatch(setSelectedChat(group));
         // @Todo only toggle in mobile
         if (window.innerWidth < 768) dispatch(toggleSidebar());
     };
@@ -34,7 +35,7 @@ const GroupListItem = ({ group }: { group: Group }) => {
         <div
             onClick={handleClick}
             className={`w-full cursor-pointer items-center hover:bg-black/25 active:bg-black/50 select-none ${
-                selectedGroup?._id === group._id && "bg-black/25"
+                selectedChat?._id === group._id && "bg-black/25"
             } rounded-l-full  flex justify-between h-10`}
         >
             <div className="flex flex-row items-center gap-x-2">
@@ -57,17 +58,14 @@ const GroupListItem = ({ group }: { group: Group }) => {
                     )} */}
                 </div>
                 <div className="text-text2">{group.group_name} </div>
-                {/* {messages &&
-                    messages.length > 0 &&
-                    messages[messages.length - 1].content} */}
             </div>
-            {/* {unreadMessages > 0 && (
+            {unreadMessages > 0 && (
                 <div className="pr-5">
                     <div className="rounded-full min-w-[24px] text-center text-xs text-white bg-primary-700 p-1">
                         {unreadMessages}
                     </div>
                 </div>
-            )} */}
+            )}
         </div>
     );
 };

@@ -23,7 +23,7 @@ export type ConnUserSocketIdType = {
 };
 
 export interface MessageContent {
-    friend_id: string;
+    conversation_id: string;
     content: string;
     file?: string | ArrayBuffer | Blob | null;
     fileName?: string;
@@ -37,7 +37,10 @@ interface ServerToClientEvents {
     "direct-chat-history": (data: IConversation & { append?: boolean }) => void;
     "direct-message": (data: INewMessage) => void;
     "typing-status": (data: ITypingUsers) => void;
-    "seen-messages": (data: { conversationId: string; userId: string }) => void;
+    "seen-messages": (data: {
+        conversation_id: string;
+        userId: string;
+    }) => void;
     conversations: (data: IConversation[]) => void;
     "groups-list": (data: Group[]) => void;
     // ------------------------------------------------------------
@@ -55,10 +58,10 @@ interface ClientToServerEvents {
     "direct-chat-history": (data: any) => void;
     "typing-status": (data: {
         isTyping: boolean;
-        conversationId: string;
+        conversation_id: string;
         participantIds: string[];
     }) => void;
-    "seen-messages": (data: { conversationId: string }) => void;
+    "seen-messages": (data: { conversation_id: string }) => void;
     // -------------------------------------------------------------
     "room-create": () => void;
     "join-room": (data: { roomid: string }) => void;

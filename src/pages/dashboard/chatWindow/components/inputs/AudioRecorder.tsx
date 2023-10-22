@@ -23,9 +23,7 @@ const AudioRecorder = ({ close }: Props) => {
     );
     const isCancelledRef = useRef(false); // Using useRef instead of useState
 
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     useEffect(() => {
         if (isRecording && !isPaused) {
@@ -65,10 +63,10 @@ const AudioRecorder = ({ close }: Props) => {
                 const audioBlob = new Blob(chunks, { type: "audio/webm" });
                 const url = URL.createObjectURL(audioBlob);
 
-                if (selectedFriend) {
+                if (selectedChat) {
                     console.log("size of file", audioBlob.size);
                     sendDirectMessage({
-                        friend_id: selectedFriend._id,
+                        conversation_id: selectedChat.conversation_id,
                         content: "",
                         file: audioBlob,
                         fileType: "audio",

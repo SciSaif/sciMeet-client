@@ -33,7 +33,7 @@ export const markMessagesAsSeen = (
     }
     if (lastMessageIntersecting && !isSeen && windowInFocus) {
         console.log("read all messages");
-        seenMessages({ conversationId: conversation._id });
+        seenMessages({ conversation_id: conversation._id });
     }
 };
 

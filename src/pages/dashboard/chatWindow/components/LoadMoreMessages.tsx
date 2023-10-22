@@ -10,9 +10,7 @@ interface Props {
 const LoadMoreMessages = ({ messages }: Props) => {
     const [lastMessageId, setLastMessageId] = useState<string | null>(null);
 
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
     useEffect(() => {
         // this is to prevent fetching more messages while more messages are being fetched
         if (
@@ -28,15 +26,15 @@ const LoadMoreMessages = ({ messages }: Props) => {
     });
 
     useEffect(() => {
-        if (isIntersecting && selectedFriend && !lastMessageId) {
+        if (isIntersecting && selectedChat && !lastMessageId) {
             getMoreMessages();
         }
-    }, [isIntersecting, selectedFriend]);
+    }, [isIntersecting, selectedChat]);
 
     const getMoreMessages = () => {
-        if (selectedFriend && messages && messages.length > 0) {
+        if (selectedChat && messages && messages.length > 0) {
             setLastMessageId(messages[0]._id);
-            getChatHistory(selectedFriend._id, messages[0]._id);
+            getChatHistory(selectedChat.conversation_id, messages[0]._id);
         }
     };
 

@@ -19,19 +19,17 @@ interface Props {
 
 const InputMessage = ({ messagesContainerRef }: Props) => {
     const [message, setMessage] = useState("");
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
 
     useEffect(() => {
-        if (selectedFriend) {
+        if (selectedChat) {
             setMessage("");
             if (windowSize.current[0] > settings.md)
                 textareaRef.current?.focus();
         }
-    }, [selectedFriend]);
+    }, [selectedChat]);
 
     const { isTyping, setIsTyping, handleTypingStop, handleTypingStart } =
         useTypingStatus(message);
@@ -51,7 +49,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!selectedFriend || !message || message.length === 0) return;
+        if (!selectedChat || !message || message.length === 0) return;
         if (e.nativeEvent.shiftKey) {
             // Shift + Enter: Create a new line
             setMessage((prevMessage) => prevMessage + "\n");
@@ -59,7 +57,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
             // Enter: Submit the form
             sendDirectMessage({
                 content: message,
-                friend_id: selectedFriend._id,
+                conversation_id: selectedChat.conversation_id,
             });
             setMessage("");
             setIsTyping(false);
@@ -83,7 +81,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
     const [files, setFiles] = useState<File[] | null>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedFriend) return;
+        if (!selectedChat) return;
         console.log(event.target.files);
         if (event.target.files && event.target.files.length > 0) {
             const files = Array.from(event.target.files);
@@ -142,7 +140,12 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                         }}
                         onKeyDown={handleKeyDown}
                         className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
-                        placeholder={`Message ${selectedFriend?.username}`}
+                        placeholder={`Message ${
+                            selectedChat &&
+                            ("username" in selectedChat
+                                ? selectedChat.username
+                                : selectedChat.group_name)
+                        }`}
                         onBlur={handleTypingStop}
                         rows={1}
                     />
@@ -157,10 +160,10 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                 </form>
             </div>
 
-            {files && files.length > 0 && selectedFriend && (
+            {files && files.length > 0 && selectedChat && (
                 <FilesUpload
                     messagesContainerRef={messagesContainerRef}
-                    friend_id={selectedFriend?._id}
+                    conversation_id={selectedChat.conversation_id}
                     files={files}
                     close={() => {
                         setFiles(null);

@@ -9,17 +9,7 @@ export const groupApi = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `groups`,
                 method: "POST",
-                body: data,
-            }),
-        }),
-        getGroups: build.mutation<
-            { toast: string },
-            { group_name: string; participants: string[] }
-        >({
-            query: (data) => ({
-                url: `groups`,
-                method: "POST",
-                body: data,
+                body: { ...data, avatar: "group.png" },
             }),
         }),
     }),

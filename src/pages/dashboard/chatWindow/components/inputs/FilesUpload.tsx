@@ -9,7 +9,7 @@ import { getFileType } from "../../../../../utils/fileTypes";
 import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHandlers/chat";
 
 interface Props {
-    friend_id: string;
+    conversation_id: string;
     files: File[];
     close: () => void;
     messagesContainerRef: React.RefObject<HTMLDivElement>;
@@ -31,7 +31,7 @@ interface Props {
 const FilesUpload = ({
     files,
     close,
-    friend_id,
+    conversation_id,
     messagesContainerRef,
 }: Props) => {
     const [captions, setCaptions] = React.useState<string[]>([]);
@@ -51,7 +51,7 @@ const FilesUpload = ({
             reader.onload = () => {
                 const arrayBuffer = reader.result;
                 sendDirectMessage({
-                    friend_id,
+                    conversation_id,
                     content: captions[index] || "",
                     file: arrayBuffer,
                     fileName: file.name,

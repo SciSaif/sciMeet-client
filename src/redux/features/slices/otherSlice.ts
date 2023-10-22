@@ -9,8 +9,7 @@ const theme = localStorage.getItem("theme");
 interface initialStateProps {
     theme: "light" | "dark";
     pendingInvitations: any;
-    selectedFriend?: Friend;
-    selectedGroup?: Group;
+    selectedChat?: Friend | Group;
     sidebarOpen: boolean;
     modalOpen: boolean;
     profileOpen: boolean;
@@ -19,8 +18,7 @@ interface initialStateProps {
 const initialState: initialStateProps = {
     theme: theme === "light" ? "light" : "dark",
     pendingInvitations: [],
-    selectedFriend: undefined,
-    selectedGroup: undefined,
+    selectedChat: undefined,
     sidebarOpen: true,
     modalOpen: false,
     profileOpen: false,
@@ -38,14 +36,8 @@ export const otherSlice = createSlice({
             state.pendingInvitations = action.payload;
         },
 
-        setSelectedFriend: (state, action: PayloadAction<Friend>) => {
-            state.selectedFriend = action.payload;
-            state.selectedGroup = undefined;
-        },
-
-        setSelectedGroup: (state, action: PayloadAction<Group>) => {
-            state.selectedGroup = action.payload;
-            state.selectedFriend = undefined;
+        setSelectedChat: (state, action: PayloadAction<Friend | Group>) => {
+            state.selectedChat = action.payload;
         },
 
         toggleSidebar: (state) => {
@@ -64,8 +56,7 @@ export const otherSlice = createSlice({
 export const {
     setTheme,
     setPendingInvitations,
-    setSelectedFriend,
-    setSelectedGroup,
+    setSelectedChat,
     resetState,
     toggleSidebar,
     toggleProfile,

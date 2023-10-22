@@ -7,15 +7,13 @@ import { sendTypingStatus } from "../realtimeCommunication/socketHandlers/chat";
 // useTypingStatus.js
 export const useTypingStatus = (message: string) => {
     const [isTyping, setIsTyping] = useState(false);
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const participants = useAppSelector((state) => {
-        return selectedFriend
+        return selectedChat
             ? state.chat.conversations.find(
                   (conversation) =>
-                      conversation._id === selectedFriend.conversationId
+                      conversation._id === selectedChat.conversation_id
               )?.participants
             : [];
     });
@@ -32,10 +30,10 @@ export const useTypingStatus = (message: string) => {
     }, [message]);
 
     const handleTypingStart = () => {
-        if (!isTyping && selectedFriend && participants) {
+        if (!isTyping && selectedChat && participants) {
             sendTypingStatus({
                 isTyping: true,
-                conversationId: selectedFriend?.conversationId,
+                conversation_id: selectedChat?.conversation_id,
                 participantIds: participants,
             });
             setIsTyping(true);
@@ -43,10 +41,10 @@ export const useTypingStatus = (message: string) => {
     };
 
     const handleTypingStop = () => {
-        if (isTyping && selectedFriend && participants) {
+        if (isTyping && selectedChat && participants) {
             sendTypingStatus({
                 isTyping: false,
-                conversationId: selectedFriend?.conversationId,
+                conversation_id: selectedChat?.conversation_id,
                 participantIds: participants,
             });
             setIsTyping(false);

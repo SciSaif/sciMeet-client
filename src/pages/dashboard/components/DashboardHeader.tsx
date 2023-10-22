@@ -3,20 +3,20 @@ import React from "react";
 import SettingsDropdown from "./SettingsDropdown";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
+import { Friend } from "../../../redux/features/slices/friendSlice";
+import { isGroup } from "../../../utils/other";
 
 const DashboardHeader = () => {
     const dispatch = useAppDispatch();
 
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const onlineUsers = useAppSelector((state) => state.friend.onlineUsers);
 
     const isOnline = () => {
-        if (selectedFriend) {
+        if (selectedChat) {
             return onlineUsers.find(
-                (onlineUser) => onlineUser.userId === selectedFriend._id
+                (onlineUser) => onlineUser.userId === selectedChat._id
             );
         }
         return false;
@@ -31,15 +31,14 @@ const DashboardHeader = () => {
                 >
                     <Bars3Icon width={20} />
                 </div>
-                {selectedFriend !== undefined && (
+                {selectedChat !== undefined && (
                     <div className="flex flex-row gap-2 items-center">
                         <div className="flex rounded-full  relative group-hover:rotate-6 select-none">
                             <img
                                 className="h-8 w-8 rounded-full"
                                 src={
-                                    selectedFriend?.avatar
-                                        ? selectedFriend.avatar
-                                        : "avatars/pikachu.png"
+                                    selectedChat?.avatar ||
+                                    "avatars/pikachu.png"
                                 }
                                 alt="dp"
                             />
@@ -56,7 +55,9 @@ const DashboardHeader = () => {
                             )}
                         </div>
                         <span className="text-text1 font-bold">
-                            {selectedFriend.username}
+                            {isGroup(selectedChat)
+                                ? selectedChat.group_name
+                                : selectedChat.username}
                         </span>
                     </div>
                 )}

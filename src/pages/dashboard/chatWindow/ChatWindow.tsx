@@ -17,20 +17,19 @@ import { twMerge } from "tailwind-merge";
 import FilesUpload from "./components/inputs/FilesUpload";
 import useDragAndDrop from "../../../hooks/useDragDrop";
 import { getChatHistory } from "../../../realtimeCommunication/socketHandlers/chat";
+import { isGroup } from "../../../utils/other";
 
 const ChatWindow = () => {
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<HTMLDivElement>(null);
 
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const conversation = useAppSelector((state) => {
-        return selectedFriend
+        return selectedChat
             ? state.chat.conversations.find(
                   (conversation) =>
-                      conversation._id === selectedFriend.conversationId
+                      conversation._id === selectedChat.conversation_id
               )
             : null;
     });
@@ -41,10 +40,10 @@ const ChatWindow = () => {
     }
 
     useEffect(() => {
-        if (selectedFriend && messages && messages.length === 0) {
-            getChatHistory(selectedFriend._id);
+        if (selectedChat && messages && messages.length === 0) {
+            getChatHistory(selectedChat?.conversation_id);
         }
-    }, [selectedFriend]);
+    }, [selectedChat]);
 
     const {
         targetRef: latestMessageRef,
@@ -117,15 +116,15 @@ const ChatWindow = () => {
                 "max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    "
             )}
         >
-            {selectedFriend === undefined && (
+            {selectedChat === undefined && (
                 <div className="flex w-full items-center justify-center h-full text-text1 font-semibold">
                     To start chatting, select a friend from the sidebar
                 </div>
             )}
-            {dragging && selectedFriend !== undefined && (
+            {dragging && selectedChat !== undefined && (
                 <div className="w-full h-full absolute z-40 border-2 dashed border-secondary bg-black/10"></div>
             )}
-            {selectedFriend !== undefined && (
+            {selectedChat !== undefined && (
                 <>
                     <div
                         ref={messagesContainerRef}
@@ -171,17 +170,25 @@ const ChatWindow = () => {
                         {messages &&
                             (messages.length == 0 ||
                                 messages[0]?.firstMessage) && (
-                                <ChatBeginningHeader friend={selectedFriend} />
+                                <ChatBeginningHeader
+                                    name={
+                                        isGroup(selectedChat)
+                                            ? selectedChat.group_name
+                                            : selectedChat.username
+                                    }
+                                    avatar={selectedChat.avatar}
+                                    isGroup={isGroup(selectedChat)}
+                                />
                             )}
                     </div>
 
                     <InputMessage messagesContainerRef={messagesContainerRef} />
                 </>
             )}
-            {files && files.length > 0 && selectedFriend && (
+            {files && files.length > 0 && selectedChat && (
                 <FilesUpload
                     messagesContainerRef={messagesContainerRef}
-                    friend_id={selectedFriend?._id}
+                    conversation_id={selectedChat.conversation_id}
                     files={files}
                     close={() => {
                         setFiles(null);

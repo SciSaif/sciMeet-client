@@ -6,6 +6,7 @@ export interface Group {
     creator_id: string;
     conversation_id: string;
     group_name: string;
+    avatar?: string;
 }
 
 interface initialStateProps {

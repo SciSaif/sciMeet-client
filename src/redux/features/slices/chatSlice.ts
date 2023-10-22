@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface INewMessage {
-    conversationId: string;
+    conversation_id: string;
     message: IMessage;
 }
 
@@ -35,7 +35,7 @@ export interface IConversation {
 }
 
 export interface ITypingUsers {
-    conversationId: string;
+    conversation_id: string;
     typingUsers: string[];
 }
 
@@ -56,7 +56,7 @@ export const chatSlice = createSlice({
         updateTypingStatus: (state, action: PayloadAction<ITypingUsers>) => {
             const index = state.typingStatus.findIndex(
                 (status) =>
-                    status.conversationId === action.payload.conversationId
+                    status.conversation_id === action.payload.conversation_id
             );
             if (index !== -1) {
                 state.typingStatus[index] = action.payload;
@@ -95,9 +95,9 @@ export const chatSlice = createSlice({
         },
 
         addNewMessage: (state, action: PayloadAction<INewMessage>) => {
-            const { conversationId, message } = action.payload;
+            const { conversation_id, message } = action.payload;
             const conversation = state.conversations.find(
-                (conversation) => conversation._id === conversationId
+                (conversation) => conversation._id === conversation_id
             );
             if (!conversation) return;
             // check last message id should not be same as the message id
@@ -110,11 +110,11 @@ export const chatSlice = createSlice({
 
         updateSeenMessages: (
             state,
-            action: PayloadAction<{ conversationId: string; userId: string }>
+            action: PayloadAction<{ conversation_id: string; userId: string }>
         ) => {
             const conversation = state.conversations.find(
                 (conversation) =>
-                    conversation._id === action.payload.conversationId
+                    conversation._id === action.payload.conversation_id
             );
             if (!conversation) return;
 

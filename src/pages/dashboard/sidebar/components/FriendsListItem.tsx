@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
-    setSelectedFriend,
+    setSelectedChat,
     toggleSidebar,
 } from "../../../../redux/features/slices/otherSlice";
 import { Friend } from "../../../../redux/features/slices/friendSlice";
@@ -9,16 +9,12 @@ import { countUnreadMessages } from "../../../../utils/unreadMessages";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const dispatch = useAppDispatch();
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
-
-    const user = useAppSelector((state) => state.auth.user);
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const messages = useAppSelector((state) => {
         return friend
             ? state.chat.conversations.find(
-                  (conversation) => conversation._id === friend.conversationId
+                  (conversation) => conversation._id === friend.conversation_id
               )?.messages
             : [];
     });
@@ -26,7 +22,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
     let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
-        dispatch(setSelectedFriend(friend));
+        dispatch(setSelectedChat(friend));
         // @Todo only toggle in mobile
         if (window.innerWidth < 768) dispatch(toggleSidebar());
     };
@@ -35,7 +31,7 @@ const FriendsListItem = ({ friend }: { friend: Friend }) => {
         <div
             onClick={handleClick}
             className={`w-full cursor-pointer items-center hover:bg-black/25 active:bg-black/50 select-none ${
-                selectedFriend?._id === friend._id && "bg-black/25"
+                selectedChat?._id === friend._id && "bg-black/25"
             } rounded-l-full  flex justify-between h-10`}
         >
             <div className="flex flex-row items-center gap-x-2">

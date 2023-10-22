@@ -5,7 +5,7 @@ export interface Friend {
     _id: string;
     username: string;
     isOnline: boolean;
-    conversationId: string;
+    conversation_id: string;
     avatar?: string;
 }
 

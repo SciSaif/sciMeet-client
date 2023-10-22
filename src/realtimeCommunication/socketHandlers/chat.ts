@@ -51,10 +51,13 @@ export const connectWithSocketServer = () => {
     });
 };
 
-export const getChatHistory = (friend_id: string, fromMessageId?: string) => {
+export const getChatHistory = (
+    conversation_id: string,
+    fromMessageId?: string
+) => {
     const socket = getSocket();
     if (!socket) return;
-    socket.emit("direct-chat-history", { friend_id, fromMessageId });
+    socket.emit("direct-chat-history", { conversation_id, fromMessageId });
 };
 
 export const sendDirectMessage = (messageContent: MessageContent) => {
@@ -65,7 +68,7 @@ export const sendDirectMessage = (messageContent: MessageContent) => {
 
 export const sendTypingStatus = (data: {
     isTyping: boolean;
-    conversationId: string;
+    conversation_id: string;
     participantIds: string[];
 }) => {
     const socket = getSocket();
@@ -73,7 +76,7 @@ export const sendTypingStatus = (data: {
     socket.emit("typing-status", data);
 };
 
-export const seenMessages = (data: { conversationId: string }) => {
+export const seenMessages = (data: { conversation_id: string }) => {
     const socket = getSocket();
     if (!socket) return;
     socket.emit("seen-messages", data);

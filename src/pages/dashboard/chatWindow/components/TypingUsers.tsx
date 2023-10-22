@@ -4,15 +4,13 @@ import { useAppSelector } from "../../../../redux/hooks";
 const TypingUsers = () => {
     const [typingUsers, setTypingUsers] = useState<string[]>([]);
 
-    const selectedFriend = useAppSelector(
-        (state) => state.other.selectedFriend
-    );
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
     const typingUserIds = useAppSelector((state) => {
         return (
             state.chat.typingStatus.find(
                 (status) =>
-                    status.conversationId === selectedFriend?.conversationId
+                    status.conversation_id === selectedChat?.conversation_id
             )?.typingUsers || []
         );
     });
