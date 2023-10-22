@@ -41,7 +41,7 @@ const GroupListItem = ({ group }: { group: Group }) => {
                 <div className="flex rounded-full relative">
                     <img
                         className="h-10 w-10 rounded-full"
-                        src={"avatars/pikachu.png"}
+                        src={"group.png"}
                         alt="dp"
                     />
                     {/* {friend.isOnline ? (
