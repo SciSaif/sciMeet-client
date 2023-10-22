@@ -5,6 +5,13 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import Popover from "../../../../components/Popover";
 import { toReadableDate } from "../../../../utils/dateFunctions";
+import { store } from "../../../../redux/store";
+
+export const getFriendById = (id: string) => {
+    const friends = store.getState().friend.friends;
+    return friends.find((friend) => friend._id === id);
+};
+
 interface Props {
     message: IMessage;
     userId?: string;
@@ -18,23 +25,127 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                 <Popover
                     popup={
                         <>
-                            <div className="bg-primary-700 w-[250px] p-2 rounded-lg ">
-                                <div className="text-sm flex flex-row justify-between">
+                            <div className="bg-primary-700  w-[250px] p-2 rounded-lg max-h-[150px] overflow-auto scrollbar">
+                                <div className="text-sm border-b border-text/20 pb-1 flex flex-row justify-between">
                                     <span>Delivered </span>
-                                    <span className="text-text3">
+                                    <span className="text-text3 text-xs">
                                         {toReadableDate(message.date)}
                                     </span>
                                 </div>
-                                <div className="text-sm flex flex-row justify-between">
-                                    <span>Seen </span>
-                                    <span className="text-text3">
-                                        {message.seenBy.length > 0
-                                            ? toReadableDate(
-                                                  message.seenBy[0].date
-                                              )
-                                            : "not seen"}
-                                    </span>
-                                </div>
+                                {message.seenBy.length === 1 && (
+                                    <div className="text-sm mt-1 flex flex-row justify-between">
+                                        <span>Seen </span>
+                                        <span className="text-text3 text-xs">
+                                            {message.seenBy.length === 1
+                                                ? toReadableDate(
+                                                      message.seenBy[0].date
+                                                  )
+                                                : "not seen"}
+                                        </span>
+                                    </div>
+                                )}
+                                {message.seenBy.length > 1 && (
+                                    <div className="text-sm flex mt-1 flex-col justify-between">
+                                        <div className="text-text1">
+                                            Seen By
+                                        </div>
+                                        <div className="flex flex-col gap-1 pt-1">
+                                            {message.seenBy.map((seenBy) => (
+                                                <div
+                                                    key={seenBy.userId}
+                                                    className="flex flex-row items-center justify-between"
+                                                >
+                                                    <div className="flex flex-row items-center gap-x-2">
+                                                        <img
+                                                            src={
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.avatar ||
+                                                                "avatars/pikachu.png"
+                                                            }
+                                                            alt="avatar"
+                                                            className="w-6 h-6 rounded-full"
+                                                        />
+                                                        <span className="text-text3 text-xs">
+                                                            {
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.username
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-text3 text-xs">
+                                                        {toReadableDate(
+                                                            seenBy.date
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                            {message.seenBy.map((seenBy) => (
+                                                <div
+                                                    key={seenBy.userId}
+                                                    className="flex flex-row items-center justify-between"
+                                                >
+                                                    <div className="flex flex-row items-center gap-x-2">
+                                                        <img
+                                                            src={
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.avatar ||
+                                                                "avatars/pikachu.png"
+                                                            }
+                                                            alt="avatar"
+                                                            className="w-6 h-6 rounded-full"
+                                                        />
+                                                        <span className="text-text3 text-xs">
+                                                            {
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.username
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-text3 text-xs">
+                                                        {toReadableDate(
+                                                            seenBy.date
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                            {message.seenBy.map((seenBy) => (
+                                                <div
+                                                    key={seenBy.userId}
+                                                    className="flex flex-row items-center justify-between"
+                                                >
+                                                    <div className="flex flex-row items-center gap-x-2">
+                                                        <img
+                                                            src={
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.avatar ||
+                                                                "avatars/pikachu.png"
+                                                            }
+                                                            alt="avatar"
+                                                            className="w-6 h-6 rounded-full"
+                                                        />
+                                                        <span className="text-text3 text-xs">
+                                                            {
+                                                                getFriendById(
+                                                                    seenBy.userId
+                                                                )?.username
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-text3 text-xs">
+                                                        {toReadableDate(
+                                                            seenBy.date
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </>
                     }

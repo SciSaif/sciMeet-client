@@ -42,10 +42,10 @@ const GroupProfile = () => {
 
     const isGroupAdmin = group.creator_id === user?._id;
 
-    const [newGroupName, setNewGroupName] = useState(group.group_name);
+    const [newGroupName, setNewGroupName] = useState(group.group_name || "");
     const [editNameMode, setEditNameMode] = useState(false);
     const [newGroupDescription, setNewGroupDescription] = useState(
-        group.description
+        group.description || ""
     );
     const [editDescriptionMode, setEditDescriptionMode] = useState(false);
 
@@ -60,7 +60,8 @@ const GroupProfile = () => {
                     src={group?.avatar ? group.avatar : "group.png"}
                     alt="dp"
                 />
-                <div className="text-white/80 flex flex-row gap-x-2 items-center">
+
+                <div className="text-white/80 flex flex-row gap-x-2 items-center mt-2">
                     {editNameMode ? (
                         <div className="flex flex-row gap-x-2 items-center">
                             <input
@@ -99,6 +100,7 @@ const GroupProfile = () => {
                         </>
                     )}
                 </div>
+                <p className="text-sm text-text">Group</p>
             </div>
             <div className="bg-black/10 mt-3 px-5 py-2">
                 <div className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">

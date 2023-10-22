@@ -1,4 +1,8 @@
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import {
+    Bars3Icon,
+    PhoneIcon,
+    VideoCameraIcon,
+} from "@heroicons/react/24/outline";
 import React from "react";
 import SettingsDropdown from "./SettingsDropdown";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -72,13 +76,27 @@ const DashboardHeader = () => {
                                 </div>
                             )}
                         </div>
-                        <span className="text-text1 font-bold">
-                            {isGroup(selectedChat)
-                                ? selectedChat.group_name
-                                : selectedChat.username}
-                        </span>
+                        <div>
+                            <div className="text-text1 font-bold">
+                                {isGroup(selectedChat)
+                                    ? selectedChat.group_name
+                                    : selectedChat.username}
+                            </div>
+                            <div className="text-xs text-text -mt-1">
+                                Click to open details
+                            </div>
+                        </div>
                     </div>
                 )}
+            </div>
+
+            <div className="h-full gap-x-2 pr-5 px-2 flex flex-row items-center text-text1">
+                <div className="hover:text-text-200 p-2 py-3 cursor-pointer">
+                    <PhoneIcon width={20} />
+                </div>
+                <div className="hover:text-text-200 p-2 py-3 cursor-pointer">
+                    <VideoCameraIcon width={20} />
+                </div>
             </div>
 
             {/* <div className="">

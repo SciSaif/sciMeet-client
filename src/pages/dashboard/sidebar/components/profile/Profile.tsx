@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import PersonalProfile from "./PersonalProfile";
 import GroupProfile from "./GroupProfile";
 import { setProfile } from "../../../../../redux/features/slices/otherSlice";
+import FriendProfile from "./FriendProfile";
 
 const Profile = () => {
     const profile = useAppSelector((state) => state.other.profile);
@@ -17,10 +18,11 @@ const Profile = () => {
                 onClick={() => dispatch(setProfile({ type: "closed" }))}
                 className="text-text h-10 items-center justify-center text-center w-full flex py-6 cursor-pointer hover:bg-black/20 bg-black/10"
             >
-                <div>Close profile</div>
+                <div>Close</div>
             </div>
             {profileType === "personal" && <PersonalProfile />}
             {profileType === "group" && <GroupProfile />}
+            {profileType === "friend" && <FriendProfile />}
         </div>
     );
 };

@@ -18,10 +18,7 @@ const ChatBeginningHeader = ({ name, isGroup, avatar }: Props) => {
             </div>
             <div className=" text-text1 font-bold text-3xl">{name}</div>
             {isGroup ? (
-                <p>
-                    This is the beginning! Go ahead and claim the honor of being
-                    the first to message.
-                </p>
+                <p>This is the beginning of the group</p>
             ) : (
                 <p>This is the beginning of your converasation with {name}</p>
             )}

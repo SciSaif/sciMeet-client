@@ -21,6 +21,8 @@ interface Props {
 const Message = ({ message, mergeMessage, totalParticipants }: Props) => {
     const user = useAppSelector((state) => state.auth.user);
 
+    console.log(message.seenBy.length, totalParticipants - 1);
+
     return (
         <>
             {!mergeMessage && (
