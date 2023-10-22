@@ -7,6 +7,7 @@ export interface Group {
     conversation_id: string;
     group_name: string;
     avatar?: string;
+    description?: string;
 }
 
 interface initialStateProps {
@@ -34,9 +35,19 @@ export const groupSlice = createSlice({
                 (group) => group._id !== action.payload
             );
         },
+
+        updateGroup: (state, action: PayloadAction<Group>) => {
+            const index = state.groups.findIndex(
+                (group) => group._id === action.payload._id
+            );
+            if (index !== -1) {
+                state.groups[index] = action.payload;
+            }
+        },
         resetState: () => initialState,
     },
 });
 
-export const { setGroups, addGroup, removeGroup } = groupSlice.actions;
+export const { setGroups, addGroup, removeGroup, updateGroup } =
+    groupSlice.actions;
 export default groupSlice.reducer;

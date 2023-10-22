@@ -20,6 +20,7 @@ import {
     addGroup,
     removeGroup,
     setGroups,
+    updateGroup,
 } from "../../redux/features/slices/groupSlice";
 import { onGroupDelete } from "../../redux/features/slices/otherSlice";
 
@@ -65,6 +66,10 @@ export const connectWithSocketServer = () => {
         dispatch(onGroupDelete(data.groupId));
         dispatch(removeGroup(data.groupId));
         dispatch(removeConversationByGroupId(data.groupId));
+    });
+    socket.on("group-updated", (data) => {
+        console.log("group-updated", data);
+        dispatch(updateGroup(data.group));
     });
 };
 

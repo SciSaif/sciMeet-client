@@ -3,7 +3,10 @@ import { useAppSelector } from "../../../../../redux/hooks";
 import PendingInvitationsList from "../PendingInvitationsList";
 import AddFriendModal from "../AddFriendModal";
 import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useDeleteGroupMutation } from "../../../../../redux/features/apis/groupApi";
+import {
+    useDeleteGroupMutation,
+    useUpdateGroupMutation,
+} from "../../../../../redux/features/apis/groupApi";
 
 const GroupProfile = () => {
     const profile = useAppSelector((state) => state.other.profile);
@@ -41,8 +44,13 @@ const GroupProfile = () => {
 
     const [newGroupName, setNewGroupName] = useState(group.group_name);
     const [editNameMode, setEditNameMode] = useState(false);
+    const [newGroupDescription, setNewGroupDescription] = useState(
+        group.description
+    );
+    const [editDescriptionMode, setEditDescriptionMode] = useState(false);
 
     const [deleteGroup] = useDeleteGroupMutation();
+    const [updateGroup] = useUpdateGroupMutation();
 
     return (
         <div className="w-full overflow-auto h-full scrollbar flex flex-col pt-10">
@@ -65,7 +73,10 @@ const GroupProfile = () => {
                             <div
                                 onClick={() => {
                                     setEditNameMode(false);
-                                    // update group name
+                                    updateGroup({
+                                        group_id: group._id,
+                                        group_name: newGroupName,
+                                    });
                                 }}
                                 className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
                             >
@@ -88,6 +99,69 @@ const GroupProfile = () => {
                         </>
                     )}
                 </div>
+            </div>
+            <div className="bg-black/10 mt-3 px-5 py-2">
+                <div className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
+                    Description
+                </div>
+                {isGroupAdmin ? (
+                    <div>
+                        {" "}
+                        {editDescriptionMode ? (
+                            <div className="flex flex-row gap-x-2 text-text items-center">
+                                <input
+                                    className="bg-transparent border-b border-white/50 focus:border-white/75 focus:outline-none"
+                                    value={newGroupDescription}
+                                    onChange={(e) =>
+                                        setNewGroupDescription(e.target.value)
+                                    }
+                                />
+                                <div
+                                    onClick={() => {
+                                        setEditDescriptionMode(false);
+                                        updateGroup({
+                                            group_id: group._id,
+                                            description: newGroupDescription,
+                                        });
+                                    }}
+                                    className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                                >
+                                    <CheckIcon width={16} />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-row text-text gap-x-2 items-center">
+                                <p
+                                    onClick={() => {
+                                        setEditDescriptionMode(true);
+                                    }}
+                                    className="text-text text-sm cursor-pointer"
+                                >
+                                    {group?.description
+                                        ? group.description
+                                        : "Click here to add a description"}
+                                </p>
+                                <div
+                                    onClick={() => {
+                                        setEditDescriptionMode(true);
+                                    }}
+                                    className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                                >
+                                    <PencilIcon width={16} />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div>
+                        {" "}
+                        <p className="text-text text-sm ">
+                            {group?.description
+                                ? group.description
+                                : "No group description"}
+                        </p>
+                    </div>
+                )}
             </div>
             <div className="mt-5 px-5 bg-black/10 ">
                 <h4 className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
@@ -116,15 +190,18 @@ const GroupProfile = () => {
                     </div>
                 )}
             </div>
-            <div className="bg-black/10 mt-3 px-5">
-                <div
-                    onClick={() => deleteGroup(group._id)}
-                    className="text-red-500 flex flex-row gap-2 py-2 cursor-pointer hover:text-red-600"
-                >
-                    <TrashIcon width={20} />
-                    Delete Group
+
+            {isGroupAdmin && (
+                <div className="bg-black/10 mt-3 px-5">
+                    <div
+                        onClick={() => deleteGroup(group._id)}
+                        className="text-red-500 flex flex-row gap-2 py-2 cursor-pointer hover:text-red-600"
+                    >
+                        <TrashIcon width={20} />
+                        Delete Group
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
