@@ -68,6 +68,15 @@ export const chatSlice = createSlice({
         setConversations: (state, action: PayloadAction<IConversation[]>) => {
             state.conversations = action.payload;
         },
+        addConversation: (state, action: PayloadAction<IConversation>) => {
+            state.conversations.push(action.payload);
+        },
+
+        removeConversationByGroupId: (state, action: PayloadAction<string>) => {
+            state.conversations = state.conversations.filter(
+                (conversation) => conversation.groupId !== action.payload
+            );
+        },
 
         updateConverstation: (
             state,
@@ -151,6 +160,8 @@ export const {
     resetState,
     updateTypingStatus,
     updateSeenMessages,
+    addConversation,
     setConversations,
+    removeConversationByGroupId,
 } = chatSlice.actions;
 export default chatSlice.reducer;

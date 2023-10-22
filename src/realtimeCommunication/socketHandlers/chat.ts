@@ -8,13 +8,20 @@ import {
     prepareNewPeerConnection,
 } from "../webRTCHandler";
 import {
+    addConversation,
     addNewMessage,
+    removeConversationByGroupId,
     setConversations,
     updateConverstation,
     updateSeenMessages,
     updateTypingStatus,
 } from "../../redux/features/slices/chatSlice";
-import { setGroups } from "../../redux/features/slices/groupSlice";
+import {
+    addGroup,
+    removeGroup,
+    setGroups,
+} from "../../redux/features/slices/groupSlice";
+import { onGroupDelete } from "../../redux/features/slices/otherSlice";
 
 export const connectWithSocketServer = () => {
     const socket = getSocket();
@@ -48,6 +55,16 @@ export const connectWithSocketServer = () => {
     socket.on("groups-list", (data) => {
         console.log("group list", data);
         dispatch(setGroups(data));
+    });
+    socket.on("new-group", (data) => {
+        console.log("new group", data);
+        dispatch(addGroup(data.group));
+        dispatch(addConversation(data.conversation));
+    });
+    socket.on("group-deleted", (data) => {
+        dispatch(onGroupDelete(data.groupId));
+        dispatch(removeGroup(data.groupId));
+        dispatch(removeConversationByGroupId(data.groupId));
     });
 };
 

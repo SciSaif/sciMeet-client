@@ -12,9 +12,15 @@ export const groupApi = apiSlice.injectEndpoints({
                 body: { ...data, avatar: "group.png" },
             }),
         }),
+        deleteGroup: build.mutation<{ toast: string }, string>({
+            query: (groupId) => ({
+                url: `groups/${groupId}`,
+                method: "DELETE",
+            }),
+        }),
     }),
 
     overrideExisting: false,
 });
 
-export const { useCreateGroupMutation } = groupApi;
+export const { useCreateGroupMutation, useDeleteGroupMutation } = groupApi;

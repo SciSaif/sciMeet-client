@@ -3,9 +3,10 @@ import AddFriendModal from "./components/AddFriendModal";
 import FriendsList from "./components/FriendsList";
 import PendingInvitationsList from "./components/PendingInvitationsList";
 import SidebarLeft from "./components/SidebarLeft";
-import ProfileBar from "./components/ProfileBar";
+import ProfileBar from "./components/profile/ProfileBar";
 import SettingsDropdown from "../components/SettingsDropdown";
 import GroupsLists from "./components/GroupsList";
+import Profile from "./components/profile/Profile";
 
 const Sidebar = () => {
     return (
@@ -29,6 +30,7 @@ const Sidebar = () => {
                     <FriendsList />
                     <GroupsLists />
                     <ProfileBar />
+                    <Profile />
                 </div>
             </div>
         </div>

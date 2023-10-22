@@ -43,6 +43,8 @@ interface ServerToClientEvents {
     }) => void;
     conversations: (data: IConversation[]) => void;
     "groups-list": (data: Group[]) => void;
+    "new-group": (data: { group: Group; conversation: IConversation }) => void;
+    "group-deleted": (data: { groupId: string }) => void;
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;

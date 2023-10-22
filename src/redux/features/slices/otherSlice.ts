@@ -2,9 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Friend } from "./friendSlice";
 import { Group } from "./groupSlice";
+import { isGroup } from "../../../utils/other";
 
 // get theme from local storage
 const theme = localStorage.getItem("theme");
+
+interface Profile {
+    type: "friend" | "group" | "closed" | "personal";
+    id?: string;
+}
 
 interface initialStateProps {
     theme: "light" | "dark";
@@ -12,7 +18,7 @@ interface initialStateProps {
     selectedChat?: Friend | Group;
     sidebarOpen: boolean;
     modalOpen: boolean;
-    profileOpen: boolean;
+    profile: Profile;
 }
 
 const initialState: initialStateProps = {
@@ -21,7 +27,10 @@ const initialState: initialStateProps = {
     selectedChat: undefined,
     sidebarOpen: true,
     modalOpen: false,
-    profileOpen: false,
+    profile: {
+        type: "closed",
+        id: "",
+    },
 };
 
 export const otherSlice = createSlice({
@@ -40,12 +49,40 @@ export const otherSlice = createSlice({
             state.selectedChat = action.payload;
         },
 
+        onGroupDelete: (state, action: PayloadAction<string>) => {
+            const groupId = action.payload;
+            if (
+                isGroup(state.selectedChat) &&
+                state.selectedChat._id === groupId
+            ) {
+                state.selectedChat = undefined;
+            }
+
+            if (
+                state.profile.type === "group" &&
+                state.profile.id === groupId
+            ) {
+                state.profile = {
+                    type: "closed",
+                    id: "",
+                };
+            }
+        },
+
         toggleSidebar: (state) => {
             state.sidebarOpen = !state.sidebarOpen;
         },
-        toggleProfile: (state) => {
-            state.profileOpen = !state.profileOpen;
+        openSidebar: (state) => {
+            state.sidebarOpen = true;
         },
+        closeSidebar: (state) => {
+            state.sidebarOpen = false;
+        },
+
+        setProfile: (state, action: PayloadAction<Profile>) => {
+            state.profile = action.payload;
+        },
+
         isModalOpen: (state, action: PayloadAction<boolean>) => {
             state.modalOpen = action.payload;
         },
@@ -59,7 +96,10 @@ export const {
     setSelectedChat,
     resetState,
     toggleSidebar,
-    toggleProfile,
     isModalOpen,
+    openSidebar,
+    closeSidebar,
+    setProfile,
+    onGroupDelete,
 } = otherSlice.actions;
 export default otherSlice.reducer;
