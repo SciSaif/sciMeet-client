@@ -64,8 +64,8 @@ const GroupProfile = () => {
                 <div className="text-white/80 flex flex-row gap-x-2 items-center mt-2">
                     {editNameMode ? (
                         <div className="flex flex-row gap-x-2 items-center">
-                            <input
-                                className="bg-transparent border-b border-white/50 focus:border-white/75 focus:outline-none"
+                            <textarea
+                                className="bg-transparent  border-b border-white/50 focus:border-white/75 focus:outline-none"
                                 value={newGroupName}
                                 onChange={(e) =>
                                     setNewGroupName(e.target.value)
@@ -111,7 +111,7 @@ const GroupProfile = () => {
                         {" "}
                         {editDescriptionMode ? (
                             <div className="flex flex-row gap-x-2 text-text items-center">
-                                <input
+                                <textarea
                                     className="bg-transparent border-b border-white/50 focus:border-white/75 focus:outline-none"
                                     value={newGroupDescription}
                                     onChange={(e) =>

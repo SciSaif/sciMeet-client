@@ -45,12 +45,12 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
             {emojiPickerOpen && (
                 <div
                     ref={emojiPickerRef}
-                    className="absolute -top-3 -left-10 -translate-y-[100%] "
+                    className="absolute -top-3 -left-10 -translate-y-[100%] z-10 "
                 >
                     <Picker
                         data={data}
                         onEmojiSelect={handleEmojiSelect}
-                        className="absolute top-0 -translate-y-[100%]"
+                        className="absolute top-0  -translate-y-[100%]"
                     />
                 </div>
             )}
