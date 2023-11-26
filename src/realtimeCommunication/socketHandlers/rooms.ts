@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import { store } from "../../redux/store";
 import {
     ActiveRoom,
+    emptyRoom,
     setActiveRooms,
     setRoomDetails,
 } from "../../redux/features/slices/roomSlice";
@@ -45,6 +46,11 @@ export const connectWithSocketServer = () => {
     socket.on("room-create", (data) => {
         dispatch(setRoomDetails(data.roomDetails));
     });
+
+    socket.on("call-rejected", (data) => {
+        console.log("call-rejected");
+        dispatch(emptyRoom());
+    });
 };
 
 export const createRoom = (
@@ -74,4 +80,11 @@ export const leaveRoom = (roomid: string) => {
     if (!socket) return;
 
     socket.emit("leave-room", { roomid });
+};
+
+export const rejectCall = (roomid: string) => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    socket.emit("reject-call", { roomid });
 };

@@ -21,6 +21,7 @@ import { Group } from "../../redux/features/slices/groupSlice";
 
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
+    isGroup?: boolean;
 };
 
 export interface MessageContent {
@@ -50,6 +51,7 @@ interface ServerToClientEvents {
     // ------------------------------------------------------------
     "room-create": (data: any) => void;
     "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
+    "call-rejected": (data: { roomid: string }) => void;
     "conn-prepare": (data: ConnUserSocketIdType) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;
     "conn-signal": (data: any) => void;
@@ -74,6 +76,7 @@ interface ClientToServerEvents {
     }) => void;
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;
+    "reject-call": (data: { roomid: string }) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;
     "conn-signal": (data: any) => void;
 }

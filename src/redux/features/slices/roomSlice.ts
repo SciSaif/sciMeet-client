@@ -11,6 +11,9 @@ interface RoomDetails {
         socketId: string;
     }[];
     roomid: string;
+    conversation_id: string;
+    conversation_participants: string[];
+    isGroup: boolean;
 }
 
 export interface ActiveRoom {
@@ -85,6 +88,12 @@ export const roomSlice = createSlice({
         toggleScreenShareChanged: (state) => {
             state.screenShareChanged = !state.screenShareChanged;
         },
+
+        emptyRoom: (state) => {
+            state.roomDetails = null;
+            state.isUserInRoom = false;
+            state.isUserRoomCreator = false;
+        },
         resetState: () => initialState,
     },
 });
@@ -93,7 +102,7 @@ export const {
     setRoomState,
 
     setRoomDetails,
-
+    emptyRoom,
     setActiveRooms,
     toggleLocalStreamChanged,
     toggleRemoteStreamsChanged,
