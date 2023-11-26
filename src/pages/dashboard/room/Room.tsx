@@ -37,7 +37,7 @@ const Room = () => {
             {/* resize button */}
             <div
                 onClick={handleResize}
-                className="bottom-2  hidden sm:flex absolute  text-white right-0 w-8 h-8    justify-center items-center cursor-pointer"
+                className="bottom-2   flex absolute  text-white right-0 w-8 h-8    justify-center items-center cursor-pointer"
             >
                 {fullScreen && <ArrowsPointingInIcon width={20} />}
             </div>
