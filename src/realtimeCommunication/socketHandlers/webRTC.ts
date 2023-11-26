@@ -8,6 +8,7 @@ import {
     prepareNewPeerConnection,
 } from "../webRTCHandler";
 import { emptyRoom } from "../../redux/features/slices/roomSlice";
+import { leaveRoomHandler } from "../../utils/roomUtils";
 
 export const connectWithSocketServer = () => {
     const socket = getSocket();
@@ -63,6 +64,7 @@ export const connectWithSocketServer = () => {
         console.log("on room-participant-left");
         handleParticipantLeftRoom(data.connUserSocketId);
         if (!data.isGroup) {
+            leaveRoomHandler();
             dispatch(emptyRoom());
         }
     });

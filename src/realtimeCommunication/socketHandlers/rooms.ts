@@ -9,6 +9,7 @@ import {
 } from "../../redux/features/slices/roomSlice";
 import { getSocket } from ".";
 import { Friend } from "../../redux/features/slices/friendSlice";
+import { leaveRoomHandler } from "../../utils/roomUtils";
 
 export const connectWithSocketServer = () => {
     const socket = getSocket();
@@ -49,6 +50,7 @@ export const connectWithSocketServer = () => {
 
     socket.on("call-rejected", (data) => {
         console.log("call-rejected");
+        leaveRoomHandler();
         dispatch(emptyRoom());
     });
 };
