@@ -66,7 +66,10 @@ interface ClientToServerEvents {
     }) => void;
     "seen-messages": (data: { conversation_id: string }) => void;
     // -------------------------------------------------------------
-    "room-create": () => void;
+    "room-create": (data: {
+        conversation_id: string;
+        conversation_participants: string[];
+    }) => void;
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;

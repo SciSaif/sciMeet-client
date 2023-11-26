@@ -32,86 +32,27 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                                         {toReadableDate(message.date)}
                                     </span>
                                 </div>
-                                {message.seenBy.length === 1 && (
+                                {message.seenBy.length === 0 && (
+                                    <div className="text-sm mt-1 flex flex-row justify-between">
+                                        <span>Not Seen </span>
+                                    </div>
+                                )}
+                                {/* {message.seenBy.length === 1 && (
                                     <div className="text-sm mt-1 flex flex-row justify-between">
                                         <span>Seen </span>
                                         <span className="text-text3 text-xs">
-                                            {message.seenBy.length === 1
-                                                ? toReadableDate(
-                                                      message.seenBy[0].date
-                                                  )
-                                                : "not seen"}
+                                            {toReadableDate(
+                                                message.seenBy[0].date
+                                            )}
                                         </span>
                                     </div>
-                                )}
-                                {message.seenBy.length > 1 && (
+                                )} */}
+                                {message.seenBy.length >= 1 && (
                                     <div className="text-sm flex mt-1 flex-col justify-between">
                                         <div className="text-text1">
                                             Seen By
                                         </div>
                                         <div className="flex flex-col gap-1 pt-1">
-                                            {message.seenBy.map((seenBy) => (
-                                                <div
-                                                    key={seenBy.userId}
-                                                    className="flex flex-row items-center justify-between"
-                                                >
-                                                    <div className="flex flex-row items-center gap-x-2">
-                                                        <img
-                                                            src={
-                                                                getFriendById(
-                                                                    seenBy.userId
-                                                                )?.avatar ||
-                                                                "avatars/pikachu.png"
-                                                            }
-                                                            alt="avatar"
-                                                            className="w-6 h-6 rounded-full"
-                                                        />
-                                                        <span className="text-text3 text-xs">
-                                                            {
-                                                                getFriendById(
-                                                                    seenBy.userId
-                                                                )?.username
-                                                            }
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-text3 text-xs">
-                                                        {toReadableDate(
-                                                            seenBy.date
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                            {message.seenBy.map((seenBy) => (
-                                                <div
-                                                    key={seenBy.userId}
-                                                    className="flex flex-row items-center justify-between"
-                                                >
-                                                    <div className="flex flex-row items-center gap-x-2">
-                                                        <img
-                                                            src={
-                                                                getFriendById(
-                                                                    seenBy.userId
-                                                                )?.avatar ||
-                                                                "avatars/pikachu.png"
-                                                            }
-                                                            alt="avatar"
-                                                            className="w-6 h-6 rounded-full"
-                                                        />
-                                                        <span className="text-text3 text-xs">
-                                                            {
-                                                                getFriendById(
-                                                                    seenBy.userId
-                                                                )?.username
-                                                            }
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-text3 text-xs">
-                                                        {toReadableDate(
-                                                            seenBy.date
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            ))}
                                             {message.seenBy.map((seenBy) => (
                                                 <div
                                                     key={seenBy.userId}

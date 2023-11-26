@@ -47,11 +47,14 @@ export const connectWithSocketServer = () => {
     });
 };
 
-export const createRoom = () => {
+export const createRoom = (
+    conversation_id: string,
+    conversation_participants: string[]
+) => {
     const socket = getSocket();
     if (!socket) return;
 
-    socket.emit("room-create");
+    socket.emit("room-create", { conversation_id, conversation_participants });
 };
 
 export const joinRoom = (roomid: string) => {
