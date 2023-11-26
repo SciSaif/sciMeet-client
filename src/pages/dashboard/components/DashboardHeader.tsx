@@ -77,7 +77,11 @@ const DashboardHeader = () => {
             );
 
             if (windowSize.current[0] < md) dispatch(toggleSidebar());
-            createRoom(conversation._id, conversation.participants);
+            createRoom(
+                conversation._id,
+                conversation.participants,
+                conversation.isGroup ? true : false
+            );
         };
 
         getLocalStreamPreview(false, successCallbackFunc);

@@ -34,6 +34,9 @@ const ChatWindow = () => {
             : null;
     });
 
+    const { isRoomFullScreen } = useAppSelector((state) => state.other);
+    const isRoomOpen = useAppSelector((state) => state.room.isUserInRoom);
+
     let messages: IMessage[] = [];
     if (conversation) {
         messages = conversation.messages;
@@ -113,11 +116,14 @@ const ChatWindow = () => {
             onPaste={handlePaste}
             ref={mainRef}
             className={twMerge(
-                "max-h-[100dvh] chat-background pt-14 h-[100dvh] flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    "
+                " h-full max-h-[100dvh]  min-h-[100dvh] chat-background pt-14  flex flex-col  justify-end  relative  overflow-auto  scrollbar w-full    ",
+                isRoomOpen &&
+                    !isRoomFullScreen &&
+                    "max-h-[calc(100vh-30px)] min-h-[calc(100vh-30px)]"
             )}
         >
             {selectedChat === undefined && (
-                <div className="flex w-full items-center justify-center h-full text-text1 font-semibold">
+                <div className="flex w-full items-center justify-center h-screen text-text1 font-semibold">
                     To start chatting, select a friend from the sidebar
                 </div>
             )}

@@ -19,6 +19,7 @@ interface initialStateProps {
     sidebarOpen: boolean;
     modalOpen: boolean;
     profile: Profile;
+    isRoomFullScreen: boolean;
 }
 
 const initialState: initialStateProps = {
@@ -31,6 +32,7 @@ const initialState: initialStateProps = {
         type: "closed",
         id: "",
     },
+    isRoomFullScreen: true,
 };
 
 export const otherSlice = createSlice({
@@ -86,6 +88,9 @@ export const otherSlice = createSlice({
         isModalOpen: (state, action: PayloadAction<boolean>) => {
             state.modalOpen = action.payload;
         },
+        setIsRoomFullScreen: (state, action: PayloadAction<boolean>) => {
+            state.isRoomFullScreen = action.payload;
+        },
         resetState: () => initialState,
     },
 });
@@ -93,6 +98,7 @@ export const otherSlice = createSlice({
 export const {
     setTheme,
     setPendingInvitations,
+    setIsRoomFullScreen,
     setSelectedChat,
     resetState,
     toggleSidebar,

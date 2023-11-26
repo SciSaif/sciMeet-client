@@ -1,3 +1,4 @@
+import { isGroup } from "./../../utils/other";
 import { Socket, io } from "socket.io-client";
 
 import { connectWithSocketServer as connectFriends } from "./friends";
@@ -69,6 +70,7 @@ interface ClientToServerEvents {
     "room-create": (data: {
         conversation_id: string;
         conversation_participants: string[];
+        isGroup: boolean;
     }) => void;
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;

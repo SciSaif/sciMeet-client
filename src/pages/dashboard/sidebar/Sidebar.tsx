@@ -11,10 +11,10 @@ import Profile from "./components/profile/Profile";
 const Sidebar = () => {
     return (
         <div
-            className={` h-[100dvh] w-[calc(100%-60px)] md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
+            className={` w-[calc(100%-60px)] h-full md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
         >
             <SidebarLeft />
-            <div className="bg-primary h-[100dvh] w-full rounded-lg mr-2  relative overflow-hidden">
+            <div className="bg-primary w-full rounded-lg mr-2  relative overflow-hidden">
                 <div className=" h-full flex flex-col ">
                     <div className="w-full flex flex-row items-center justify-between pl-5 gap-3 text-center py-2 text-secondary font-bold text-2xl border-b border-slate-100/25">
                         <div className="flex flex-row gap-2 items-center">

@@ -6,19 +6,23 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { toggleSidebar } from "../../../redux/features/slices/otherSlice";
+import {
+    setIsRoomFullScreen,
+    toggleSidebar,
+} from "../../../redux/features/slices/otherSlice";
 import VideoContainer from "./VideoContainer";
 import RoomButtons from "./RoomButtons";
 
 const Room = () => {
     const dispatch = useAppDispatch();
-    const [fullScreen, setFullScreen] = useState(false);
-    const sidebarOpen = useAppSelector((state) => state.other.sidebarOpen);
+    // const [fullScreen, setFullScreen] = useState(true);
+    const fullScreen = useAppSelector((state) => state.other.isRoomFullScreen);
 
     const handleResize = () => {
-        setFullScreen(!fullScreen);
-        dispatch(toggleSidebar());
+        dispatch(setIsRoomFullScreen(false));
+        // dispatch(toggleSidebar());
     };
+    if (!fullScreen) return null;
 
     return (
         <div
@@ -35,7 +39,6 @@ const Room = () => {
                 onClick={handleResize}
                 className="bottom-2  hidden sm:flex absolute  text-white right-0 w-8 h-8    justify-center items-center cursor-pointer"
             >
-                {fullScreen === false && <ArrowsPointingOutIcon width={20} />}
                 {fullScreen && <ArrowsPointingInIcon width={20} />}
             </div>
             <div
@@ -44,8 +47,8 @@ const Room = () => {
                 }}
                 className="bottom-[5px]  sm:hidden flex absolute  text-white left-2 w-8 h-8    justify-center items-center cursor-pointer"
             >
-                {sidebarOpen === false && <ArrowRightIcon width={25} />}
-                {sidebarOpen && <ArrowLeftIcon width={25} />}
+                {/* {sidebarOpen === false && <ArrowRightIcon width={25} />} */}
+                {/* {sidebarOpen && <ArrowLeftIcon width={25} />} */}
             </div>
         </div>
     );

@@ -15,6 +15,7 @@ import { useSnackbar } from "notistack";
 
 import settings from "../../../../utils/settings";
 import { createRoom } from "../../../../realtimeCommunication/socketHandlers/rooms";
+import { PhoneIcon } from "@heroicons/react/20/solid";
 const md = settings.md;
 
 const SidebarLeft = () => {
@@ -24,7 +25,9 @@ const SidebarLeft = () => {
 
     const room = useAppSelector((state) => state.room);
 
-    const activeRooms = useAppSelector((state) => state.room.activeRooms);
+    // const activeRooms = useAppSelector((state) => state.room.activeRooms);
+
+    // const callRoom = activeRooms.filter((room) => !room.isGroup)[0];
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -46,16 +49,18 @@ const SidebarLeft = () => {
             );
 
             if (windowSize.current[0] < md) dispatch(toggleSidebar());
-            createRoom();
+            // createRoom();
         };
 
         getLocalStreamPreview(false, successCallbackFunc);
     };
 
+    // console.log("callRoom", callRoom);
+
     return (
         <>
             {" "}
-            <div className="bg-transparent h-screen w-24 px-2 py-4 flex flex-col  gap-y-2">
+            <div className="bg-transparent  w-24 px-2 py-4 flex flex-col  gap-y-2">
                 <div className="w-full h-16 text-white bg-secondary  rounded-2xl flex justify-center items-center">
                     {/* <UserGroupIcon width={20} /> */}
                     <UsersIcon width={30} />
@@ -67,10 +72,10 @@ const SidebarLeft = () => {
                     {/* <UserGroupIcon width={20} /> */}
                     <PlusIcon width={30} />
                 </button>
-
+                {/* 
                 {activeRooms.map((room) => (
                     <ActiveRoomButton key={room.roomid} room={room} />
-                ))}
+                ))} */}
             </div>
         </>
     );

@@ -49,12 +49,17 @@ export const connectWithSocketServer = () => {
 
 export const createRoom = (
     conversation_id: string,
-    conversation_participants: string[]
+    conversation_participants: string[],
+    isGroup: boolean
 ) => {
     const socket = getSocket();
     if (!socket) return;
 
-    socket.emit("room-create", { conversation_id, conversation_participants });
+    socket.emit("room-create", {
+        conversation_id,
+        conversation_participants,
+        isGroup,
+    });
 };
 
 export const joinRoom = (roomid: string) => {

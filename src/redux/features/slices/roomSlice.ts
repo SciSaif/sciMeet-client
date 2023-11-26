@@ -24,6 +24,9 @@ export interface ActiveRoom {
         socketId: string;
     }[];
     roomid: string;
+    conversation_id: string;
+    conversation_participants: string[];
+    isGroup: boolean;
 }
 
 interface initialStateProps {
