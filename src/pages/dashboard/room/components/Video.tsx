@@ -60,13 +60,6 @@ const Video = ({ stream, isLocalStream, pinnedId, setPinnedId }: Props) => {
         });
 
         setUserName(userName);
-        console.log(
-            "🚀 ~ file: Video.tsx:65 ~ useEffect ~ userName:",
-            userName,
-            connUsersocketId,
-            participants,
-            friends
-        );
     }, [friends, participants, stream]);
 
     return (

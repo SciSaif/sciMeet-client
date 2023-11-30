@@ -1,4 +1,4 @@
-import { store } from "../../redux/store";
+import { AppThunk } from "../../redux/store";
 
 import { getSocket } from ".";
 import {
@@ -7,10 +7,9 @@ import {
     setOnlineUsers,
 } from "../../redux/features/slices/friendSlice";
 
-export const connectWithSocketServer = () => {
+export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     const socket = getSocket();
     if (!socket) return;
-    const dispatch = store.dispatch;
 
     socket.on("friends-list", ({ friends }) => {
         dispatch(setFriends(friends));

@@ -1,6 +1,6 @@
 import { Socket } from "socket.io-client";
 
-import { store } from "../../redux/store";
+import { AppThunk } from "../../redux/store";
 import { MessageContent, getSocket } from ".";
 import {
     handleParticipantLeftRoom,
@@ -24,13 +24,12 @@ import {
 } from "../../redux/features/slices/groupSlice";
 import { onGroupDelete } from "../../redux/features/slices/otherSlice";
 
-export const connectWithSocketServer = () => {
+export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     const socket = getSocket();
     if (!socket) return;
 
-    const dispatch = store.dispatch;
+    // const dispatch = store.dispatch;
     socket.on("direct-chat-history", (data) => {
-        console.log("direct-chat-history", data);
         dispatch(updateConverstation(data));
     });
 

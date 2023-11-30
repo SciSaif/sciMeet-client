@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ActiveRoom } from "../../../../redux/features/slices/roomSlice";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 
 import settings from "../../../../utils/settings";
 import JoinConfirmModal from "./JoinConfirmModal";
 import { toggleSidebar } from "../../../../redux/features/slices/otherSlice";
+import { RoomDetails } from "../../../../redux/features/slices/roomSlice";
 const defaultImg = settings.defaultImg;
 const md = settings.md;
 const colors = ["#67e8f9", "#5eead4", "#c4b5fd"];
@@ -14,7 +14,7 @@ const randomColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
 };
 interface Props {
-    room: ActiveRoom;
+    room: RoomDetails;
 }
 
 interface Participant {

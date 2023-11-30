@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "../../../../components/Modal";
 import Input from "../../../../components/Input";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
-    ActiveRoom,
+    RoomDetails,
     setRoomDetails,
     setRoomState,
 } from "../../../../redux/features/slices/roomSlice";
@@ -22,7 +22,7 @@ interface Props {
         username: string;
         _id: string;
     }[];
-    room: ActiveRoom;
+    room: RoomDetails;
 }
 
 const JoinConfirmModal = ({ close, participants, room }: Props) => {
@@ -33,6 +33,8 @@ const JoinConfirmModal = ({ close, participants, room }: Props) => {
         (state) => state.room.roomDetails?.roomid
     );
     const handleJoin = () => {
+        console.log("join confirm modal");
+
         if (currentRoomId === room.roomid) {
             close();
             return;
@@ -63,6 +65,12 @@ const JoinConfirmModal = ({ close, participants, room }: Props) => {
             getLocalStreamPreview(false, successCallbackFunc);
         }
     };
+    if (!room.isGroup) {
+        // If room.isGroup is true, just call the handleJoin function
+        handleJoin();
+        return null; // Don't render the modal
+    }
+
     return (
         <Modal
             close={close}

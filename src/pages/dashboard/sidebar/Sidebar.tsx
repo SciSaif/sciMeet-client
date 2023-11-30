@@ -13,7 +13,7 @@ const Sidebar = () => {
         <div
             className={` w-[calc(100%-60px)] h-full md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
         >
-            <SidebarLeft />
+            {/* <SidebarLeft /> */}
             <div className="bg-primary w-full rounded-lg mr-2  relative overflow-hidden">
                 <div className=" h-full flex flex-col ">
                     <div className="w-full flex flex-row items-center justify-between pl-5 gap-3 text-center py-2 text-secondary font-bold text-2xl border-b border-slate-100/25">

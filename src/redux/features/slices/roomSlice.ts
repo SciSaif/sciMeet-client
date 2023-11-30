@@ -1,22 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface RoomDetails {
-    roomCreator: {
-        userId: string;
-        socketId: string;
-    };
-    participants: {
-        userId: string;
-        socketId: string;
-    }[];
-    roomid: string;
-    conversation_id: string;
-    conversation_participants: string[];
-    isGroup: boolean;
-}
-
-export interface ActiveRoom {
+export interface RoomDetails {
     roomCreator: {
         userId: string;
         socketId: string;
@@ -36,7 +21,7 @@ interface initialStateProps {
     isUserInRoom?: boolean;
     isUserRoomCreator?: boolean;
     roomDetails: RoomDetails | null;
-    activeRooms: ActiveRoom[];
+    activeRooms: RoomDetails[];
     localStreamChanged: boolean;
     remoteStreamsChanged: boolean;
     screenShareChanged: boolean;
@@ -73,7 +58,7 @@ export const roomSlice = createSlice({
             state.roomDetails = action.payload;
         },
 
-        setActiveRooms: (state, action: PayloadAction<ActiveRoom[]>) => {
+        setActiveRooms: (state, action: PayloadAction<RoomDetails[]>) => {
             state.activeRooms = action.payload;
         },
 

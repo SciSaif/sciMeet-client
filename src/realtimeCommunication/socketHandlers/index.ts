@@ -5,7 +5,7 @@ import { connectWithSocketServer as connectFriends } from "./friends";
 import { connectWithSocketServer as connectRooms } from "./rooms";
 import { connectWithSocketServer as connectWebRTC } from "./webRTC";
 import { connectWithSocketServer as connectChat } from "./chat";
-import { RootState, store } from "../../redux/store";
+import { AppDispatch, AppThunk, RootState, store } from "../../redux/store";
 import {
     Friend,
     Invitation,
@@ -16,8 +16,8 @@ import {
     INewMessage,
     ITypingUsers,
 } from "../../redux/features/slices/chatSlice";
-import { ActiveRoom } from "../../redux/features/slices/roomSlice";
 import { Group } from "../../redux/features/slices/groupSlice";
+import { RoomDetails } from "../../redux/features/slices/roomSlice";
 
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
@@ -49,8 +49,8 @@ interface ServerToClientEvents {
     "group-deleted": (data: { groupId: string }) => void;
     "group-updated": (data: { group: Group }) => void;
     // ------------------------------------------------------------
-    "room-create": (data: any) => void;
-    "active-rooms": (data: { activeRooms: ActiveRoom[] }) => void;
+    "room-create": (data: { roomDetails: RoomDetails }) => void;
+    "active-rooms": (data: { activeRooms: RoomDetails[] }) => void;
     "call-rejected": (data: { roomid: string }) => void;
     "conn-prepare": (data: ConnUserSocketIdType) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;
@@ -104,9 +104,10 @@ export function closeSocket() {
     }
 }
 
-export const connectAllSocketHandlers = () => {
-    connectFriends();
-    connectRooms();
-    connectWebRTC();
-    connectChat();
-};
+export const connectAllSocketHandlers =
+    (): AppThunk => (dispatch, getState) => {
+        dispatch(connectFriends());
+        dispatch(connectRooms());
+        dispatch(connectWebRTC());
+        dispatch(connectChat());
+    };

@@ -1,8 +1,8 @@
 import { Socket } from "socket.io-client";
 
-import { store } from "../../redux/store";
+import { AppThunk, store } from "../../redux/store";
 import {
-    ActiveRoom,
+    RoomDetails,
     emptyRoom,
     setActiveRooms,
     setRoomDetails,
@@ -10,42 +10,59 @@ import {
 import { getSocket } from ".";
 import { Friend } from "../../redux/features/slices/friendSlice";
 import { leaveRoomHandler } from "../../utils/roomUtils";
+import { getFriendById } from "../../utils/stateUtils";
 
-export const connectWithSocketServer = () => {
+export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     const socket = getSocket();
     if (!socket) return;
 
-    const dispatch = store.dispatch;
-
     socket.on("active-rooms", ({ activeRooms }) => {
         console.log("active-rooms", activeRooms);
-        const friends = store.getState().friend.friends;
-        const rooms: ActiveRoom[] = [];
+        const rooms: RoomDetails[] = [];
 
         activeRooms.forEach((room) => {
-            friends.forEach((f: Friend) => {
-                if (f._id === room.roomCreator.userId) {
-                    room.roomCreator.username = f.username;
-                    rooms.push({
-                        ...room,
-                    });
-                }
-            });
+            const friend = getFriendById(getState, room.roomCreator.userId);
+            let username = friend?.username;
 
-            const user = store.getState().auth.user;
+            const user = getState().auth.user;
             if (user && user._id === room.roomCreator.userId) {
-                room.roomCreator.username = user.username;
-                rooms.push({
-                    ...room,
-                });
+                username = user.username;
             }
+            rooms.push({
+                ...room,
+                roomCreator: {
+                    ...room.roomCreator,
+                    username,
+                },
+            });
         });
 
         dispatch(setActiveRooms(rooms));
     });
 
     socket.on("room-create", (data) => {
-        dispatch(setRoomDetails(data.roomDetails));
+        // add friend username to roomCreator
+        const friend = getFriendById(
+            getState,
+            data.roomDetails.roomCreator.userId
+        );
+        let username = friend?.username;
+
+        // if user is room creator, add user username to roomCreator
+        const user = getState().auth.user;
+        if (user && user._id === data.roomDetails.roomCreator.userId) {
+            username = user.username;
+        }
+
+        const roomDetails = {
+            ...data.roomDetails,
+            roomCreator: {
+                ...data.roomDetails.roomCreator,
+                username,
+            },
+        };
+
+        dispatch(setRoomDetails(roomDetails));
     });
 
     socket.on("call-rejected", (data) => {

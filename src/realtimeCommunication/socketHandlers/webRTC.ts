@@ -1,6 +1,6 @@
 import { Socket } from "socket.io-client";
 
-import { store } from "../../redux/store";
+import { AppThunk } from "../../redux/store";
 import { getSocket } from ".";
 import {
     handleParticipantLeftRoom,
@@ -10,11 +10,11 @@ import {
 import { emptyRoom } from "../../redux/features/slices/roomSlice";
 import { leaveRoomHandler } from "../../utils/roomUtils";
 
-export const connectWithSocketServer = () => {
+export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     const socket = getSocket();
     if (!socket) return;
 
-    const dispatch = store.dispatch;
+    // const dispatch = store.dispatch;
 
     // ---------------------------------------------------------------------------
     // webrtc
