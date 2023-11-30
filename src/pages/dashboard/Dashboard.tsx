@@ -15,6 +15,7 @@ import settings from "../../utils/settings";
 import { connectAllSocketHandlers } from "../../realtimeCommunication/socketHandlers";
 import { useSnackbar } from "notistack";
 import CallPopup from "../../components/CallPopup";
+import OngoingCallBar from "./components/OngoingCallBar";
 
 const Dashboard = () => {
     const windowWidth = useRef(window.innerWidth);
@@ -91,16 +92,7 @@ const Dashboard = () => {
 
     return (
         <div className="flex flex-col h-[100dvh] max-h-[100dvh]">
-            {isUserInRoom && !isRoomFullScreen && (
-                <div
-                    onClick={() => {
-                        dispatch(setIsRoomFullScreen(true));
-                    }}
-                    className="w-full bg-secondary h-[30px] cursor-pointer hover:bg-secondary-400"
-                >
-                    On Call with someone
-                </div>
-            )}
+            {isUserInRoom && !isRoomFullScreen && <OngoingCallBar />}
 
             <div
                 {...handlers}

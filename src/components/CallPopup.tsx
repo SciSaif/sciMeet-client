@@ -74,7 +74,7 @@ const CallPopup = () => {
             <div className="flex flex-row gap-x-2">
                 <button
                     onClick={() => setJoinRoomModal(true)}
-                    className="rounded-full p-2 h-10 w-10 text-white bg-green-400 hover:bg-green-500"
+                    className="rounded-full no_highlights outline-none active:outline-none p-2 h-10 w-10 text-white bg-green-400 hover:bg-green-500"
                 >
                     <PhoneIcon
                         width={20}
@@ -85,7 +85,7 @@ const CallPopup = () => {
                     onClick={() => {
                         rejectCall(callRoom.roomid);
                     }}
-                    className="rounded-full text-white p-2 h-10 w-10 bg-red-400 hover:bg-red-500 rotate-[135deg]"
+                    className="rounded-full no_highlights outline-none active:outline-none text-white p-2 h-10 w-10 bg-red-400 hover:bg-red-500 rotate-[135deg]"
                 >
                     <PhoneIcon
                         width={20}
