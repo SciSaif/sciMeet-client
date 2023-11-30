@@ -5,10 +5,13 @@ import {
     VideoCameraIcon,
     XMarkIcon,
 } from "@heroicons/react/20/solid";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { toggleLocalStreamChanged } from "../../../redux/features/slices/roomSlice";
-import { getLocalStream } from "../../../realtimeCommunication/webRTCHandler";
+import {
+    getLocalStream,
+    getVideoPermission,
+} from "../../../realtimeCommunication/webRTCHandler";
 import { leaveRoomHandler } from "../../../utils/roomUtils";
 import { toggleScreenShare } from "../../../realtimeCommunication/screenShareHandler";
 import { ArrowsPointingInIcon } from "@heroicons/react/24/outline";
@@ -21,14 +24,28 @@ const RoomButtons = () => {
     //  dont remove room here, its needed for rerendering
     const room = useAppSelector((state) => state.room);
     const localStream = getLocalStream();
-    const [cameraEnabled, setCameraEnabled] = React.useState(true);
+    const [cameraEnabled, setCameraEnabled] = React.useState(false);
     const [micEnabled, setMicEnabled] = React.useState(true);
     const [screenShareEnabled, setScreenShareEnabled] = React.useState(false);
 
-    const handleToggleCamera = () => {
+    useEffect(() => {
+        // if camera is not enabled in localStream set cameraEnabled to false
         if (localStream) {
-            localStream.getVideoTracks()[0].enabled =
-                !localStream.getVideoTracks()[0].enabled;
+            const videoTracks = localStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+                setCameraEnabled(videoTracks[0].enabled);
+            }
+        }
+    }, [localStream]);
+
+    const handleToggleCamera = async () => {
+        if (localStream) {
+            const videoTracks = localStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+                videoTracks[0].enabled = !videoTracks[0].enabled;
+            } else {
+                await getVideoPermission();
+            }
             setCameraEnabled(!cameraEnabled);
             dispatch(toggleLocalStreamChanged());
         }

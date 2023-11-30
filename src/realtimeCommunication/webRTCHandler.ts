@@ -59,6 +59,21 @@ export const getLocalStreamPreview = (
         });
 };
 
+// function to give get Video permission as well if only audio permission is given before
+// refresh the localStream with video permission as well
+export const getVideoPermission = async () => {
+    const constraints = defaultConstraints;
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        localStream = stream;
+        store.dispatch(toggleLocalStreamChanged());
+    } catch (err) {
+        console.log(err);
+        console.log("Cannot get an access to local stream");
+    }
+};
+
 let peers = <
     {
         [connUserSocketId: string]: Peer.Instance;

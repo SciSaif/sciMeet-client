@@ -34,7 +34,6 @@ export const leaveRoomHandler = (windowWidth?: number) => {
 
     if (localStream) {
         localStream.getTracks().forEach((track) => track.stop());
-        // dispatch(setLocalStream(null));
         setLocalStream(null);
     }
 

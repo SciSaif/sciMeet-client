@@ -18,20 +18,13 @@ import { setRoomState } from "../../../redux/features/slices/roomSlice";
 import { createRoom } from "../../../realtimeCommunication/socketHandlers/rooms";
 import { getLocalStreamPreview } from "../../../realtimeCommunication/webRTCHandler";
 import settings from "../../../utils/settings";
+import CallButtons from "./CallButtons";
 const md = settings.md;
 
 const DashboardHeader = () => {
     const dispatch = useAppDispatch();
 
     const selectedChat = useAppSelector((state) => state.other.selectedChat);
-    const conversation = useAppSelector((state) => {
-        return selectedChat
-            ? state.chat.conversations.find(
-                  (conversation) =>
-                      conversation._id === selectedChat.conversation_id
-              )
-            : null;
-    });
 
     const onlineUsers = useAppSelector((state) => state.friend.onlineUsers);
 
@@ -53,38 +46,6 @@ const DashboardHeader = () => {
             })
         );
         dispatch(openSidebar());
-    };
-    const room = useAppSelector((state) => state.room);
-    const { enqueueSnackbar } = useSnackbar();
-    const windowSize = useRef([window.innerWidth, window.innerHeight]);
-
-    const handleAddRoom = () => {
-        const successCallbackFunc = () => {
-            if (!conversation) return;
-            // don't Let user Create a room if he is already in a room
-            if (room.isUserInRoom) {
-                enqueueSnackbar("Already in a room", {
-                    variant: "info",
-                });
-                return;
-            }
-
-            dispatch(
-                setRoomState({
-                    isUserInRoom: true,
-                    isUserRoomCreator: true,
-                })
-            );
-
-            if (windowSize.current[0] < md) dispatch(toggleSidebar());
-            createRoom(
-                conversation._id,
-                conversation.participants,
-                conversation.isGroup ? true : false
-            );
-        };
-
-        getLocalStreamPreview(false, successCallbackFunc);
     };
 
     return (
@@ -136,22 +97,7 @@ const DashboardHeader = () => {
                 )}
             </div>
 
-            {selectedChat && (
-                <div className="h-full gap-x-2 pr-5 px-2 flex flex-row items-center text-text1">
-                    <div className="hover:text-text-200 p-2 py-3 cursor-pointer">
-                        <PhoneIcon width={20} />
-                    </div>
-                    <div
-                        onClick={handleAddRoom}
-                        className="hover:text-text-200 p-2 py-3 cursor-pointer"
-                    >
-                        <VideoCameraIcon width={20} />
-                    </div>
-                </div>
-            )}
-            {/* <div className="">
-                <SettingsDropdown />
-            </div> */}
+            <CallButtons />
         </div>
     );
 };
