@@ -51,7 +51,7 @@ export const toggleScreenShare = async () => {
     } else return false;
 };
 
-function replaceStreams(newStream: MediaStream) {
+export function replaceStreams(newStream: MediaStream) {
     let peers = getPeers();
     for (let socket_id in peers) {
         // console.log("___socket_id___", socket_id);

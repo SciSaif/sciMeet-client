@@ -5,7 +5,10 @@ import {
     toggleRemoteStreamsChanged,
 } from "../redux/features/slices/roomSlice";
 import { getCurrentTimeInMilliseconds } from "../utils/other";
-import { shareScreenWithNewRemoteStream } from "./screenShareHandler";
+import {
+    replaceStreams,
+    shareScreenWithNewRemoteStream,
+} from "./screenShareHandler";
 import { signalPeerData } from "./socketHandlers/webRTC";
 
 const onlyAudioConstraints = {
@@ -59,18 +62,60 @@ export const getLocalStreamPreview = (
         });
 };
 
+// // function to give get Video permission as well if only audio permission is given before
+// // refresh the localStream with video permission as well
+// export const getVideoPermission = async () => {
+//     const constraints = defaultConstraints;
+
+//     try {
+//         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+//         localStream = stream;
+//         store.dispatch(toggleLocalStreamChanged());
+//     } catch (err) {
+//         console.log(err);
+//         console.log("Cannot get an access to local stream");
+//     }
+// };
+
 // function to give get Video permission as well if only audio permission is given before
 // refresh the localStream with video permission as well
 export const getVideoPermission = async () => {
     const constraints = defaultConstraints;
 
     try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        localStream = stream;
+        const newStream = await navigator.mediaDevices.getUserMedia(
+            constraints
+        );
+
+        // TODO: replaceStreams
+        // Update existing peer connections with the new stream
+        // let peers = getPeers();
+        // for (let socket_id in peers) {
+        //     // replace the track of the stream with the new stream
+        //     for (let index in peers[socket_id].streams[0].getTracks()) {
+        //         for (let index2 in newStream.getTracks()) {
+        //             if (
+        //                 peers[socket_id].streams[0].getTracks()[index].kind ===
+        //                 newStream.getTracks()[index2].kind
+        //             ) {
+        //                 peers[socket_id].replaceTrack(
+        //                     peers[socket_id].streams[0].getTracks()[index],
+        //                     newStream.getTracks()[index2],
+        //                     peers[socket_id].streams[0]
+        //                 );
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+
+        localStream = newStream;
+
+        // Update localStream and trigger the necessary changes
         store.dispatch(toggleLocalStreamChanged());
     } catch (err) {
         console.log(err);
-        console.log("Cannot get an access to local stream");
+        console.log("Cannot get access to local stream");
     }
 };
 
