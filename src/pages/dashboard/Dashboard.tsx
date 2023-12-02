@@ -42,7 +42,6 @@ const Dashboard = () => {
 
     const slide = (dir: "left" | "right") => {
         // dispatch({ type: dir, numItems });
-        console.log("sliding ", dir);
         if (dir === "left" && sidebarOpen) {
             dispatch(toggleSidebar());
         } else if (dir === "right" && !sidebarOpen) {
@@ -50,7 +49,6 @@ const Dashboard = () => {
         }
         setTimeout(() => {
             // dispatch({ type: "stopSliding" });
-            console.log("sliding stopped");
         }, 50);
     };
 
@@ -68,6 +66,8 @@ const Dashboard = () => {
 
         // Event listener for the popstate event
         const handleBackButton = () => {
+            console.log("back button pressed", isRoomFullScreen);
+
             // if sidebar is closed in mobile then open it
             if (
                 windowWidth.current < settings.md &&
@@ -75,14 +75,16 @@ const Dashboard = () => {
                 !isModalOpen
             ) {
                 // console.log("toggle");
+
                 dispatch(toggleSidebar());
             } else {
                 // go back to previous page
-                window.history.back();
+                // window.history.back();
             }
 
             //  if room is full screen then exit full screen
             if (isRoomFullScreen) {
+                console.log("exit full screen");
                 dispatch(setIsRoomFullScreen(false));
             }
         };

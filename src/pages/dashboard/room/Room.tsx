@@ -16,7 +16,6 @@ import { twMerge } from "tailwind-merge";
 
 const Room = () => {
     const dispatch = useAppDispatch();
-    // const [fullScreen, setFullScreen] = useState(true);
     const fullScreen = useAppSelector((state) => state.other.isRoomFullScreen);
 
     return (

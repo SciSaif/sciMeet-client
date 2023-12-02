@@ -12,13 +12,12 @@ const OngoingCallBar = () => {
         (room) => !room.isGroup && room.roomCreator.userId !== user?._id
     )[0];
 
-    const friends = useAppSelector((state) => state.friend.friends);
-    const room = activeRooms[0];
-
     return (
         <div
             onClick={() => {
                 dispatch(setIsRoomFullScreen(true));
+                // navigate by appending /room to the url
+                window.history.pushState({}, "", "/dashboard/room");
             }}
             className="w-full  flex-row justify-between px-2 flex items-center text-sm bg-secondary h-[30px] cursor-pointer hover:bg-secondary-400"
         >
