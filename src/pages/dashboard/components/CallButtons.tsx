@@ -49,6 +49,8 @@ const CallButtons = () => {
         getLocalStreamPreview(joinWithAudioOnly, successCallbackFunc);
     };
 
+    if (!selectedChat) return null;
+
     return (
         <div className="h-full gap-x-2 pr-5 px-2 flex flex-row items-center text-text1">
             <div

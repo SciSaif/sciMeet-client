@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../redux/hooks";
 import { PhoneIcon } from "@heroicons/react/24/solid";
 import JoinConfirmModal from "../pages/dashboard/sidebar/components/JoinConfirmModal";
@@ -56,7 +56,6 @@ const CallPopup = () => {
             setAvatar(friend?.avatar || defaultImg);
         }
     }, [friends, room, user]);
-
     if (!callRoom || isUserInRoom) return null;
 
     return (

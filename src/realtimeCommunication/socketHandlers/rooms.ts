@@ -8,7 +8,6 @@ import {
     setRoomDetails,
 } from "../../redux/features/slices/roomSlice";
 import { getSocket } from ".";
-import { Friend } from "../../redux/features/slices/friendSlice";
 import { leaveRoomHandler } from "../../utils/roomUtils";
 import { getFriendById } from "../../utils/stateUtils";
 
