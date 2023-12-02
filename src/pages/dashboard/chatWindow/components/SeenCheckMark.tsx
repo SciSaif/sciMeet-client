@@ -20,12 +20,12 @@ interface Props {
 
 const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
     return (
-        <div className="_checkMarkId min-w-[30px] w-[30px]  flex items-end ">
+        <div className="_checkMarkId min-w-[30px] w-[30px]   flex items-end ">
             {message.author._id === userId && (
                 <Popover
                     popup={
                         <>
-                            <div className="bg-primary-700  w-[250px] p-2 rounded-lg max-h-[150px] overflow-auto scrollbar">
+                            <div className="bg-primary-700 shadow   w-[250px] p-2 rounded-lg max-h-[150px] overflow-auto scrollbar">
                                 <div className="text-sm border-b border-text/20 pb-1 flex flex-row justify-between">
                                     <span>Delivered </span>
                                     <span className="text-text3 text-xs">
@@ -37,16 +37,7 @@ const SeenCheckMark = ({ message, userId, seenByAll }: Props) => {
                                         <span>Not Seen </span>
                                     </div>
                                 )}
-                                {/* {message.seenBy.length === 1 && (
-                                    <div className="text-sm mt-1 flex flex-row justify-between">
-                                        <span>Seen </span>
-                                        <span className="text-text3 text-xs">
-                                            {toReadableDate(
-                                                message.seenBy[0].date
-                                            )}
-                                        </span>
-                                    </div>
-                                )} */}
+
                                 {message.seenBy.length >= 1 && (
                                     <div className="text-sm flex mt-1 flex-col justify-between">
                                         <div className="text-text1">

@@ -12,17 +12,19 @@ import {
 } from "../../../redux/features/slices/otherSlice";
 import VideoContainer from "./VideoContainer";
 import RoomButtons from "./RoomButtons";
+import { twMerge } from "tailwind-merge";
 
 const Room = () => {
     const dispatch = useAppDispatch();
     // const [fullScreen, setFullScreen] = useState(true);
     const fullScreen = useAppSelector((state) => state.other.isRoomFullScreen);
 
-    if (!fullScreen) return null;
-
     return (
         <div
-            className={`rounded-l-xl flex flex-col rounded-b-none absolute bottom-0 z-50 right-0 h-full w-full bg-primary-900`}
+            className={twMerge(
+                `rounded-l-xl  flex flex-col rounded-b-none absolute bottom-0 z-50 right-0 h-full w-full bg-primary-900`,
+                !fullScreen && "opacity-0 -z-50"
+            )}
         >
             <VideoContainer />
             <RoomButtons />
