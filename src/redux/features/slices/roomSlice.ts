@@ -15,6 +15,7 @@ export interface RoomDetails {
     conversation_id: string;
     conversation_participants: string[];
     isGroup: boolean;
+    ignoredBy?: string[];
 }
 
 interface initialStateProps {

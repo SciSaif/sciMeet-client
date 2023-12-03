@@ -2,8 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../redux/hooks";
 import { PhoneIcon } from "@heroicons/react/24/solid";
 import JoinConfirmModal from "../pages/dashboard/sidebar/components/JoinConfirmModal";
-import { rejectCall } from "../realtimeCommunication/socketHandlers/rooms";
+import {
+    ignoreCall,
+    rejectCall,
+} from "../realtimeCommunication/socketHandlers/rooms";
 import settings from "../utils/settings";
+import { Group } from "../redux/features/slices/groupSlice";
 
 interface Participant {
     avatar: string;
@@ -15,25 +19,30 @@ const defaultImg = settings.defaultImg;
 const CallPopup = () => {
     const [joinRoomModal, setJoinRoomModal] = useState(false);
     const [participants, setParticipants] = useState<Participant[]>([]);
+    const [group, setGroup] = useState<Group>(); //
     const { isUserInRoom, roomDetails } = useAppSelector((state) => state.room);
     const [avatar, setAvatar] = useState<string>("");
 
     const user = useAppSelector((state) => state.auth.user);
     const activeRooms = useAppSelector((state) => state.room.activeRooms);
+    const groups = useAppSelector((state) => state.group.groups);
 
     const callRoom = activeRooms.filter(
-        (room) => !room.isGroup && room.roomCreator.userId !== user?._id
+        (room) =>
+            room.roomCreator.userId !== user?._id &&
+            !room.ignoredBy?.includes(user?._id || "0")
     )[0];
 
     const friends = useAppSelector((state) => state.friend.friends);
-    const room = activeRooms[0];
+    const room = callRoom;
 
     useEffect(() => {
         if (
             friends &&
             room?.participants &&
             room.participants.length > 0 &&
-            user
+            user &&
+            groups
         ) {
             const participants = room.participants.map((participant) => {
                 const friend = friends.find(
@@ -49,14 +58,26 @@ const CallPopup = () => {
 
             setParticipants(participants);
 
-            // find the avatar of the friend
-            const friend = friends.find(
-                (friend) => friend._id === callRoom?.roomCreator.userId
-            );
-            setAvatar(friend?.avatar || defaultImg);
+            // if its not a group call
+            if (!room.isGroup) {
+                // find the avatar of the friend
+                const friend = friends.find(
+                    (friend) => friend._id === callRoom?.roomCreator.userId
+                );
+                setAvatar(friend?.avatar || defaultImg);
+            } else {
+                const conversation_id = room.conversation_id;
+                const group = groups.find(
+                    (group) => group.conversation_id === conversation_id
+                );
+                setAvatar(group?.avatar || defaultImg);
+                setGroup(group);
+            }
         }
-    }, [friends, room, user]);
+    }, [friends, room, user, groups]);
     if (!callRoom || isUserInRoom) return null;
+
+    const isGroup = room.isGroup;
 
     return (
         <div className="absolute z-50 top-2 shadow-xl flex flex-row max-w-screen  min-w-[350px] justify-between items-center -translate-x-1/2   left-1/2 h-[70px] rounded-full bg-primary-900 border-gray-800 border p-1 px-3">
@@ -67,7 +88,9 @@ const CallPopup = () => {
                     className="w-10 h-10 rounded-full"
                 />
                 <p className="text-white">
-                    {callRoom.roomCreator.username} is Calling
+                    {isGroup
+                        ? group?.group_name + " group call"
+                        : callRoom.roomCreator.username + " is Calling"}{" "}
                 </p>
             </div>
             <div className="flex flex-row gap-x-2">
@@ -82,7 +105,8 @@ const CallPopup = () => {
                 </button>
                 <button
                     onClick={() => {
-                        rejectCall(callRoom.roomid);
+                        if (isGroup) ignoreCall(room.roomid);
+                        else rejectCall(callRoom.roomid);
                     }}
                     className="rounded-full no_highlights outline-none active:outline-none text-white p-2 h-10 w-10 bg-red-400 hover:bg-red-500 rotate-[135deg]"
                 >

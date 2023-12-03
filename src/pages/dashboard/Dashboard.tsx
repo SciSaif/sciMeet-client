@@ -77,9 +77,6 @@ const Dashboard = () => {
                 // console.log("toggle");
 
                 dispatch(toggleSidebar());
-            } else {
-                // go back to previous page
-                // window.history.back();
             }
 
             //  if room is full screen then exit full screen

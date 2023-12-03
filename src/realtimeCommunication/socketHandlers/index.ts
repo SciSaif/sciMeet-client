@@ -77,6 +77,7 @@ interface ClientToServerEvents {
     "join-room": (data: { roomid: string }) => void;
     "leave-room": (data: { roomid: string }) => void;
     "reject-call": (data: { roomid: string }) => void;
+    "ignore-call": (data: { roomid: string }) => void;
     "conn-init": (data: ConnUserSocketIdType) => void;
     "conn-signal": (data: any) => void;
 }

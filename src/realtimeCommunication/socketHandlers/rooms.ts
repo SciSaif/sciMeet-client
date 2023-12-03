@@ -106,3 +106,10 @@ export const rejectCall = (roomid: string) => {
 
     socket.emit("reject-call", { roomid });
 };
+
+export const ignoreCall = (roomid: string) => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    socket.emit("ignore-call", { roomid });
+};
