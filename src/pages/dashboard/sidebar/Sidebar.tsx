@@ -7,8 +7,12 @@ import ProfileBar from "./components/profile/ProfileBar";
 import SettingsDropdown from "../components/SettingsDropdown";
 import GroupsLists from "./components/GroupsList";
 import Profile from "./components/profile/Profile";
+import { AtomIcon, MessageCircleIcon, UsersRoundIcon } from "lucide-react";
+import Tab from "./components/Tab";
 
+type Tabs = "friends" | "groups" | "AI";
 const Sidebar = () => {
+    const [selectedTab, setSelectedTab] = useState<Tabs>("friends");
     return (
         <div
             className={` w-[calc(100%-60px)] h-full md:w-[400px] transition-all  absolute md:top-0 md:left-0 flex flex-row gap-1 `}
@@ -27,8 +31,26 @@ const Sidebar = () => {
                         </div>
                         <SettingsDropdown />
                     </div>
-                    <FriendsList />
-                    <GroupsLists />
+                    {/* a div with three equal columns using grid */}
+                    <div className="grid grid-cols-3 gap-2 h-10 mt-2 border-b border-slate-100/25">
+                        <Tab
+                            icon={<MessageCircleIcon size={24} />}
+                            selected={selectedTab === "friends"}
+                            onClick={() => setSelectedTab("friends")}
+                        />
+                        <Tab
+                            icon={<UsersRoundIcon size={24} />}
+                            selected={selectedTab === "groups"}
+                            onClick={() => setSelectedTab("groups")}
+                        />
+                        <Tab
+                            icon={<AtomIcon size={24} />}
+                            selected={selectedTab === "AI"}
+                            onClick={() => setSelectedTab("AI")}
+                        />
+                    </div>
+                    {selectedTab === "friends" && <FriendsList />}
+                    {selectedTab === "groups" && <GroupsLists />}
                     <ProfileBar />
                     <Profile />
                 </div>

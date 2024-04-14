@@ -1,9 +1,6 @@
-import React from "react";
-import ButtonArrow from "../../components/ButtonArrow";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { useAppSelector } from "../../redux/hooks";
-import ButtonPop from "../../components/ButtonPop";
+import TestAccount from "../../components/TestAccount";
 
 const Home = () => {
     return (
@@ -12,10 +9,12 @@ const Home = () => {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug">
                     Instantly Chat and Video Call with Friends
                 </h1>
-                <p className="mt-8 text-textGray text-lg leading-snug font-semibold  tracking-wider">
+                <p className="mt-8 text-textGray mb-5 text-lg leading-snug font-semibold  tracking-wider">
                     Experience the joy of live conversations with your friends
                     and family anytime, anywhere.
                 </p>
+
+                <TestAccount />
 
                 {/* get started button */}
                 <div className="mt-8">
