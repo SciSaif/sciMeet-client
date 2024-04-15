@@ -1,6 +1,7 @@
 import { saveAs } from "file-saver";
 import { Friend } from "../redux/features/slices/friendSlice";
 import { Group } from "../redux/features/slices/groupSlice";
+import { Bot } from "../redux/features/slices/botSlice";
 
 // function to return an array element at a random index
 export const randomElement = (arr: any[]) =>
@@ -18,4 +19,8 @@ export const downloadFile = (url?: string, fileName?: string) => {
 // typeGuard function to check if selectedChat is a friend or a group
 export const isGroup = (selectedChat: any): selectedChat is Group => {
     return "group_name" in selectedChat;
+};
+
+export const isBot = (selectedChat: any): selectedChat is Bot => {
+    return "bot_name" in selectedChat;
 };

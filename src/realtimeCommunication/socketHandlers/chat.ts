@@ -10,6 +10,7 @@ import {
 import {
     addConversation,
     addNewMessage,
+    removeConversationByBotId,
     removeConversationByGroupId,
     setConversations,
     updateConverstation,
@@ -22,7 +23,16 @@ import {
     setGroups,
     updateGroup,
 } from "../../redux/features/slices/groupSlice";
-import { onGroupDelete } from "../../redux/features/slices/otherSlice";
+import {
+    onBotDelete,
+    onGroupDelete,
+} from "../../redux/features/slices/otherSlice";
+import {
+    addBot,
+    removeBot,
+    setBots,
+    updateBot,
+} from "../../redux/features/slices/botSlice";
 
 export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     const socket = getSocket();
@@ -69,6 +79,26 @@ export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     socket.on("group-updated", (data) => {
         console.log("group-updated", data);
         dispatch(updateGroup(data.group));
+    });
+
+    // bots
+    socket.on("bots-list", (data) => {
+        console.log("bot list", data);
+        dispatch(setBots(data));
+    });
+    socket.on("new-bot", (data) => {
+        console.log("new bot", data);
+        dispatch(addBot(data.bot));
+        dispatch(addConversation(data.conversation));
+    });
+    socket.on("bot-deleted", (data) => {
+        dispatch(onBotDelete(data.botId));
+        dispatch(removeBot(data.botId));
+        dispatch(removeConversationByBotId(data.botId));
+    });
+    socket.on("bot-updated", (data) => {
+        console.log("bot-updated", data);
+        dispatch(updateBot(data.bot));
     });
 };
 

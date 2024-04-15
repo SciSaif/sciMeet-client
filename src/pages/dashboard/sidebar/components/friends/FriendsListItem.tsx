@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import {
     setSelectedChat,
     toggleSidebar,
-} from "../../../../redux/features/slices/otherSlice";
-import { Friend } from "../../../../redux/features/slices/friendSlice";
-import { countUnreadMessages } from "../../../../utils/unreadMessages";
+} from "../../../../../redux/features/slices/otherSlice";
+import { Friend } from "../../../../../redux/features/slices/friendSlice";
+import { countUnreadMessages } from "../../../../../utils/unreadMessages";
 
 const FriendsListItem = ({ friend }: { friend: Friend }) => {
     const dispatch = useAppDispatch();

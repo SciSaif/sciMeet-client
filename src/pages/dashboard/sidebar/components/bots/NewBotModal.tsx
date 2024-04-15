@@ -1,35 +1,38 @@
 import React, { useRef, useState } from "react";
-import Modal from "../../../../components/Modal";
-import Input from "../../../../components/Input";
-import { useAppSelector } from "../../../../redux/hooks";
+import Modal from "../../../../../components/Modal";
+import Input from "../../../../../components/Input";
+import { useAppSelector } from "../../../../../redux/hooks";
 
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
-import { useCreateGroupMutation } from "../../../../redux/features/apis/groupApi";
+import {
+    useCreateBotMutation,
+    useGetBotTypesQuery,
+} from "../../../../../redux/features/apis/botApi";
 
 interface Props {
     close: () => void;
 }
 
-const NewGroupModal = ({ close }: Props) => {
-    const friends = useAppSelector((state) => state.friend.friends);
+const NewBotModal = ({ close }: Props) => {
+    const { data: botTypes } = useGetBotTypesQuery();
     const [participants, setParticipants] = useState<string[]>([]);
     const [error, setError] = useState("");
-    const [groupName, setGroupName] = useState("");
+    const [botName, setBotName] = useState("");
 
-    const [createGroup] = useCreateGroupMutation();
+    const [createBot] = useCreateBotMutation();
 
     const handleCreate = () => {
         if (participants.length === 0) {
             setError("You must add participants");
             return;
         }
-        if (groupName === "") {
-            setError("Group name cannot be empty");
+        if (botName === "") {
+            setError("Bot name cannot be empty");
             return;
         }
 
-        createGroup({
-            group_name: groupName,
+        createBot({
+            bot_name: botName,
             participants,
         });
         close();
@@ -42,49 +45,47 @@ const NewGroupModal = ({ close }: Props) => {
             className="p-5 sm:p-10 w-full sm:w-fit sm:min-w-[400px]"
         >
             <div>
-                <h2 className="font-semibold text-lg mb-2 ">New Group</h2>
+                <h2 className="font-semibold text-lg mb-2 ">New Bot</h2>
 
                 <h3 className="text-sm mb-2">Add Participants</h3>
             </div>
 
             <div className="mb-2">
-                {friends?.length === 0 && (
-                    <div>There are no friends to show</div>
-                )}
+                {botTypes?.length === 0 && <div>There are no bots to show</div>}
 
-                {friends?.length > 0 && (
+                {botTypes && botTypes?.length > 0 && (
                     <div>
-                        {friends.map((friend) => (
+                        {botTypes.map((botType) => (
                             <div
                                 onClick={() => {
                                     setError("");
-                                    if (participants.includes(friend._id)) {
+                                    if (participants.includes(botType._id)) {
                                         // remove
                                         setParticipants((prev) =>
                                             prev.filter(
-                                                (id) => id !== friend._id
+                                                (id) => id !== botType._id
                                             )
                                         );
                                         return;
                                     }
                                     setParticipants((prev) => [
                                         ...prev,
-                                        friend._id,
+                                        botType._id,
                                     ]);
                                 }}
-                                key={friend._id}
+                                key={botType._id}
                                 className="flex flex-row  py-1 hover:bg-black/10 cursor-pointer justify-between items-center"
                             >
                                 <div className="flex flex-row gap-x-2  items-center">
                                     <img
-                                        src={friend.avatar}
+                                        src={botType.avatar}
                                         alt="avatar"
                                         className="w-8 h-8 rounded-full"
                                     />
-                                    <span>{friend.username}</span>
+                                    <span>{botType.username}</span>
                                 </div>
                                 <div>
-                                    {participants.includes(friend._id) && (
+                                    {participants.includes(botType._id) && (
                                         <span className="text-green-500">
                                             <CheckCircleIcon
                                                 width={20}
@@ -102,10 +103,10 @@ const NewGroupModal = ({ close }: Props) => {
             <div className="mb-2">
                 <Input
                     onChange={(e) => {
-                        setGroupName(e.target.value);
+                        setBotName(e.target.value);
                     }}
-                    value={groupName}
-                    label="Group Name"
+                    value={botName}
+                    label="Bot Name"
                     type="text"
                     required
                     className="border-slate-500 py-1 "
@@ -122,11 +123,11 @@ const NewGroupModal = ({ close }: Props) => {
                     className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md"
                     onClick={handleCreate}
                 >
-                    <span className="font-bold ">Create Group</span>
+                    <span className="font-bold ">Create Bot</span>
                 </button>
             </div>
         </Modal>
     );
 };
 
-export default NewGroupModal;
+export default NewBotModal;

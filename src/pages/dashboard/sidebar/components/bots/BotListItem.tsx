@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import {
     setSelectedChat,
     toggleSidebar,
-} from "../../../../redux/features/slices/otherSlice";
-import { Friend } from "../../../../redux/features/slices/friendSlice";
-import { countUnreadMessages } from "../../../../utils/unreadMessages";
-import { Group } from "../../../../redux/features/slices/groupSlice";
+} from "../../../../../redux/features/slices/otherSlice";
+import { Friend } from "../../../../../redux/features/slices/friendSlice";
+import { countUnreadMessages } from "../../../../../utils/unreadMessages";
+import { Bot } from "../../../../../redux/features/slices/botSlice";
 
-const GroupListItem = ({ group }: { group: Group }) => {
+const BotListItem = ({ bot }: { bot: Bot }) => {
     const dispatch = useAppDispatch();
     const selectedChat = useAppSelector((state) => state.other.selectedChat);
 
@@ -26,7 +26,7 @@ const GroupListItem = ({ group }: { group: Group }) => {
     let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
-        dispatch(setSelectedChat(group));
+        dispatch(setSelectedChat(bot));
         // @Todo only toggle in mobile
         if (window.innerWidth < 768) dispatch(toggleSidebar());
     };
@@ -35,14 +35,17 @@ const GroupListItem = ({ group }: { group: Group }) => {
         <div
             onClick={handleClick}
             className={`w-full cursor-pointer items-center hover:bg-black/25 active:bg-black/50 select-none ${
-                selectedChat?._id === group._id && "bg-black/25"
+                selectedChat?._id === bot._id && "bg-black/25"
             } rounded-l-full  flex justify-between h-10`}
         >
             <div className="flex flex-row items-center gap-x-2">
                 <div className="flex rounded-full relative">
                     <img
                         className="h-10 w-10 rounded-full"
-                        src={"group.png"}
+                        src={
+                            bot.avatar ||
+                            "https://static1.xdaimages.com/wordpress/wp-content/uploads/2024/02/google-gemini-ai-icon.png"
+                        }
                         alt="dp"
                     />
                     {/* {friend.isOnline ? (
@@ -57,7 +60,7 @@ const GroupListItem = ({ group }: { group: Group }) => {
                         </div>
                     )} */}
                 </div>
-                <div className="text-text2">{group.group_name} </div>
+                <div className="text-text2">{bot.bot_name} </div>
             </div>
             {unreadMessages > 0 && (
                 <div className="pr-5">
@@ -70,4 +73,4 @@ const GroupListItem = ({ group }: { group: Group }) => {
     );
 };
 
-export default GroupListItem;
+export default BotListItem;

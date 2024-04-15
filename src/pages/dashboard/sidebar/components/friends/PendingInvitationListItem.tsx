@@ -3,8 +3,8 @@ import React from "react";
 import {
     useAcceptInvitationMutation,
     useRejectInvitationMutation,
-} from "../../../../redux/features/apis/friendApi";
-import { Invitation } from "../../../../redux/features/slices/friendSlice";
+} from "../../../../../redux/features/apis/friendApi";
+import { Invitation } from "../../../../../redux/features/slices/friendSlice";
 
 const PendingInvitationListItem = ({
     invitation,

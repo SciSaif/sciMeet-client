@@ -1,34 +1,32 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "../../../../../redux/hooks";
-import PendingInvitationsList from "../friends/PendingInvitationsList";
-import AddFriendModal from "../friends/AddFriendModal";
 import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import {
-    useDeleteGroupMutation,
-    useUpdateGroupMutation,
-} from "../../../../../redux/features/apis/groupApi";
+    useDeleteBotMutation,
+    useUpdateBotMutation,
+} from "../../../../../redux/features/apis/botApi";
 
-const GroupProfile = () => {
+const BotProfile = () => {
     const profile = useAppSelector((state) => state.other.profile);
-    const group = useAppSelector((state) => {
-        return state.group.groups.find((group) => group._id === profile.id);
+    const bot = useAppSelector((state) => {
+        return state.bot.bots.find((bot) => bot._id === profile.id);
     });
-    if (!group) return <></>;
+    if (!bot) return <></>;
     const friends = useAppSelector((state) => state.friend.friends);
     const participants = useAppSelector((state) => {
         return state.chat.conversations.find(
-            (conversation) => conversation._id === group.conversation_id
+            (conversation) => conversation._id === bot.conversation_id
         )?.participants;
     });
 
-    let friendsInGroup = friends?.filter((friend) => {
+    let friendsInBot = friends?.filter((friend) => {
         return participants?.includes(friend._id);
     });
 
-    // add current user to friendsInGroup
+    // add current user to friendsInBot
     const user = useAppSelector((state) => state.auth.user);
     if (user) {
-        friendsInGroup = [
+        friendsInBot = [
             {
                 _id: user._id,
                 username: user.username || "user",
@@ -36,28 +34,28 @@ const GroupProfile = () => {
                 conversation_id: "",
                 avatar: user.avatar,
             },
-            ...friendsInGroup,
+            ...friendsInBot,
         ];
     }
 
-    const isGroupAdmin = group.creator_id === user?._id;
+    const isBotAdmin = bot.creator_id === user?._id;
 
-    const [newGroupName, setNewGroupName] = useState(group.group_name || "");
+    const [newBotName, setNewBotName] = useState(bot.bot_name || "");
     const [editNameMode, setEditNameMode] = useState(false);
-    const [newGroupDescription, setNewGroupDescription] = useState(
-        group.description || ""
+    const [newBotDescription, setNewBotDescription] = useState(
+        bot.description || ""
     );
     const [editDescriptionMode, setEditDescriptionMode] = useState(false);
 
-    const [deleteGroup] = useDeleteGroupMutation();
-    const [updateGroup] = useUpdateGroupMutation();
+    const [deleteBot] = useDeleteBotMutation();
+    const [updateBot] = useUpdateBotMutation();
 
     return (
         <div className="w-full overflow-auto h-full scrollbar flex flex-col pt-10">
             <div className="w-full flex justify-center flex-col items-center">
                 <img
                     className="h-44 w-44 "
-                    src={group?.avatar ? group.avatar : "group.png"}
+                    src={bot?.avatar ? bot.avatar : "bot.png"}
                     alt="dp"
                 />
 
@@ -66,17 +64,15 @@ const GroupProfile = () => {
                         <div className="flex flex-row gap-x-2 items-center">
                             <textarea
                                 className="bg-transparent  border-b border-white/50 focus:border-white/75 focus:outline-none"
-                                value={newGroupName}
-                                onChange={(e) =>
-                                    setNewGroupName(e.target.value)
-                                }
+                                value={newBotName}
+                                onChange={(e) => setNewBotName(e.target.value)}
                             />
                             <div
                                 onClick={() => {
                                     setEditNameMode(false);
-                                    updateGroup({
-                                        group_id: group._id,
-                                        group_name: newGroupName,
+                                    updateBot({
+                                        bot_id: bot._id,
+                                        bot_name: newBotName,
                                     });
                                 }}
                                 className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
@@ -86,8 +82,8 @@ const GroupProfile = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="text-2xl">{group.group_name}</div>
-                            {isGroupAdmin && (
+                            <div className="text-2xl">{bot.bot_name}</div>
+                            {isBotAdmin && (
                                 <div
                                     onClick={() => {
                                         setEditNameMode(true);
@@ -100,30 +96,30 @@ const GroupProfile = () => {
                         </>
                     )}
                 </div>
-                <p className="text-sm text-text">Group</p>
+                <p className="text-sm text-text">Bot</p>
             </div>
             <div className="bg-black/10 mt-3 px-5 py-2">
                 <div className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
                     Description
                 </div>
-                {isGroupAdmin ? (
+                {isBotAdmin ? (
                     <div>
                         {" "}
                         {editDescriptionMode ? (
                             <div className="flex flex-row gap-x-2 text-text items-center">
                                 <textarea
                                     className="bg-transparent border-b border-white/50 focus:border-white/75 focus:outline-none"
-                                    value={newGroupDescription}
+                                    value={newBotDescription}
                                     onChange={(e) =>
-                                        setNewGroupDescription(e.target.value)
+                                        setNewBotDescription(e.target.value)
                                     }
                                 />
                                 <div
                                     onClick={() => {
                                         setEditDescriptionMode(false);
-                                        updateGroup({
-                                            group_id: group._id,
-                                            description: newGroupDescription,
+                                        updateBot({
+                                            bot_id: bot._id,
+                                            description: newBotDescription,
                                         });
                                     }}
                                     className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
@@ -139,8 +135,8 @@ const GroupProfile = () => {
                                     }}
                                     className="text-text text-sm cursor-pointer"
                                 >
-                                    {group?.description
-                                        ? group.description
+                                    {bot?.description
+                                        ? bot.description
                                         : "Click here to add a description"}
                                 </p>
                                 <div
@@ -158,9 +154,9 @@ const GroupProfile = () => {
                     <div>
                         {" "}
                         <p className="text-text text-sm ">
-                            {group?.description
-                                ? group.description
-                                : "No group description"}
+                            {bot?.description
+                                ? bot.description
+                                : "No bot description"}
                         </p>
                     </div>
                 )}
@@ -169,9 +165,9 @@ const GroupProfile = () => {
                 <h4 className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
                     Participants
                 </h4>
-                {friendsInGroup?.length > 0 && (
+                {friendsInBot?.length > 0 && (
                     <div>
-                        {friendsInGroup.map((friend) => (
+                        {friendsInBot.map((friend) => (
                             <div
                                 key={friend._id}
                                 className="flex flex-row text-text py-1 hover:bg-black/10 cursor-pointer justify-between items-center"
@@ -184,7 +180,7 @@ const GroupProfile = () => {
                                     />
                                     <span>{friend.username}</span>
                                 </div>
-                                {group.creator_id === friend._id && (
+                                {bot.creator_id === friend._id && (
                                     <div>Admin</div>
                                 )}
                             </div>
@@ -193,14 +189,14 @@ const GroupProfile = () => {
                 )}
             </div>
 
-            {isGroupAdmin && (
+            {isBotAdmin && (
                 <div className="bg-black/10 mt-3 px-5">
                     <div
-                        onClick={() => deleteGroup(group._id)}
+                        onClick={() => deleteBot(bot._id)}
                         className="text-red-500 flex flex-row gap-2 py-2 cursor-pointer hover:text-red-600"
                     >
                         <TrashIcon width={20} />
-                        Delete Group
+                        Delete Bot
                     </div>
                 </div>
             )}
@@ -208,4 +204,4 @@ const GroupProfile = () => {
     );
 };
 
-export default GroupProfile;
+export default BotProfile;

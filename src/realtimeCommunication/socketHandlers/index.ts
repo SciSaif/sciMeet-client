@@ -18,6 +18,7 @@ import {
 } from "../../redux/features/slices/chatSlice";
 import { Group } from "../../redux/features/slices/groupSlice";
 import { RoomDetails } from "../../redux/features/slices/roomSlice";
+import { Bot } from "../../redux/features/slices/botSlice";
 
 export type ConnUserSocketIdType = {
     connUserSocketId: string;
@@ -48,6 +49,12 @@ interface ServerToClientEvents {
     "new-group": (data: { group: Group; conversation: IConversation }) => void;
     "group-deleted": (data: { groupId: string }) => void;
     "group-updated": (data: { group: Group }) => void;
+    // ------------------------------------------------------------
+    "bots-list": (data: Bot[]) => void;
+    "new-bot": (data: { bot: Bot; conversation: IConversation }) => void;
+    "bot-deleted": (data: { botId: string }) => void;
+    "bot-updated": (data: { bot: Bot }) => void;
+
     // ------------------------------------------------------------
     "room-create": (data: { roomDetails: RoomDetails }) => void;
     "active-rooms": (data: { activeRooms: RoomDetails[] }) => void;

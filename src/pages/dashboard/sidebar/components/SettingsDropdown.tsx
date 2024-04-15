@@ -7,10 +7,13 @@ import {
     UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import NewGroupModal from "../sidebar/components/NewGroupModal";
+import NewGroupModal from "./groups/NewGroupModal";
+import { BotMessageSquare } from "lucide-react";
+import NewBotModal from "./bots/NewBotModal";
 
 const SettingsDropdown = () => {
     const [newGroupModal, setNewGroupModal] = useState(false);
+    const [newBotModal, setNewBotModal] = useState(false);
 
     return (
         <Menu as="div" className="relative inline-block    text-left h-full">
@@ -29,6 +32,23 @@ const SettingsDropdown = () => {
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items className="absolute right-0 z-10  mt-2 w-56 origin-top-right divide-y divide-gray-100/50 rounded-md bg-primary-600  text-white shadow shadow-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="px-1 py-1 ">
+                        <Menu.Item>
+                            {({ active }) => (
+                                <div
+                                    onClick={() => setNewBotModal(true)}
+                                    className={`${
+                                        active
+                                            ? "bg-slate-500 text-white"
+                                            : "text-white "
+                                    } group gap-x-2 cursor-pointer flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                >
+                                    <BotMessageSquare size={20} />
+                                    New Bot
+                                </div>
+                            )}
+                        </Menu.Item>
+                    </div>
                     <div className="px-1 py-1 ">
                         <Menu.Item>
                             {({ active }) => (
@@ -86,6 +106,8 @@ const SettingsDropdown = () => {
             {newGroupModal && (
                 <NewGroupModal close={() => setNewGroupModal(false)} />
             )}
+
+            {newBotModal && <NewBotModal close={() => setNewBotModal(false)} />}
         </Menu>
     );
 };

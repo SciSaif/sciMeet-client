@@ -1,9 +1,9 @@
 import FriendsListItem from "./FriendsListItem";
-import { useAppSelector } from "../../../../redux/hooks";
+import { useAppSelector } from "../../../../../redux/hooks";
 import {
     Friend,
     OnlineUser,
-} from "../../../../redux/features/slices/friendSlice";
+} from "../../../../../redux/features/slices/friendSlice";
 
 const FriendsList = () => {
     const { friends: allFriends, onlineUsers } = useAppSelector(

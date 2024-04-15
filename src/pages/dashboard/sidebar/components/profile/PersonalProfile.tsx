@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAppSelector } from "../../../../../redux/hooks";
-import PendingInvitationsList from "../PendingInvitationsList";
-import AddFriendModal from "../AddFriendModal";
+import PendingInvitationsList from "../friends/PendingInvitationsList";
+import AddFriendModal from "../friends/AddFriendModal";
 
 const PersonalProfile = () => {
     const user = useAppSelector((state) => state.auth.user);

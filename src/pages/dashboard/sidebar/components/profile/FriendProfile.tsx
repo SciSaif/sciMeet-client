@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAppSelector } from "../../../../../redux/hooks";
-import PendingInvitationsList from "../PendingInvitationsList";
-import AddFriendModal from "../AddFriendModal";
+import PendingInvitationsList from "../friends/PendingInvitationsList";
+import AddFriendModal from "../friends/AddFriendModal";
 import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import {
     useDeleteGroupMutation,

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import { twMerge } from "tailwind-merge";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import PendingInvitationsList from "../PendingInvitationsList";
-import AddFriendModal from "../AddFriendModal";
+import PendingInvitationsList from "../friends/PendingInvitationsList";
+import AddFriendModal from "../friends/AddFriendModal";
 import { setProfile } from "../../../../../redux/features/slices/otherSlice";
 
 const ProfileBar = () => {

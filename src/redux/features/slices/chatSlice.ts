@@ -24,6 +24,7 @@ export interface IMessage {
         date: string;
     }[];
     firstMessage?: boolean;
+    isBot: boolean;
 }
 
 export interface IConversation {
@@ -32,6 +33,8 @@ export interface IConversation {
     messages: IMessage[];
     isGroup?: boolean;
     groupId?: string;
+    isBot?: boolean;
+    botId?: string;
 }
 
 export interface ITypingUsers {
@@ -75,6 +78,11 @@ export const chatSlice = createSlice({
         removeConversationByGroupId: (state, action: PayloadAction<string>) => {
             state.conversations = state.conversations.filter(
                 (conversation) => conversation.groupId !== action.payload
+            );
+        },
+        removeConversationByBotId: (state, action: PayloadAction<string>) => {
+            state.conversations = state.conversations.filter(
+                (conversation) => conversation.botId !== action.payload
             );
         },
 
@@ -163,5 +171,6 @@ export const {
     addConversation,
     setConversations,
     removeConversationByGroupId,
+    removeConversationByBotId,
 } = chatSlice.actions;
 export default chatSlice.reducer;

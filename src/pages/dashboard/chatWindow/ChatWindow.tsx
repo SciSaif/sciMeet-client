@@ -17,7 +17,7 @@ import { twMerge } from "tailwind-merge";
 import FilesUpload from "./components/inputs/FilesUpload";
 import useDragAndDrop from "../../../hooks/useDragDrop";
 import { getChatHistory } from "../../../realtimeCommunication/socketHandlers/chat";
-import { isGroup } from "../../../utils/other";
+import { isBot, isGroup } from "../../../utils/other";
 
 const ChatWindow = () => {
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -180,10 +180,13 @@ const ChatWindow = () => {
                                     name={
                                         isGroup(selectedChat)
                                             ? selectedChat.group_name
+                                            : isBot(selectedChat)
+                                            ? selectedChat.bot_name
                                             : selectedChat.username
                                     }
                                     avatar={selectedChat.avatar}
                                     isGroup={isGroup(selectedChat)}
+                                    isBot={isBot(selectedChat)}
                                 />
                             )}
                     </div>

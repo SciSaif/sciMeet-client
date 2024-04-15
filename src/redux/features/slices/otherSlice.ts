@@ -3,19 +3,20 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { Friend } from "./friendSlice";
 import { Group } from "./groupSlice";
 import { isGroup } from "../../../utils/other";
+import { Bot } from "./botSlice";
 
 // get theme from local storage
 const theme = localStorage.getItem("theme");
 
 interface Profile {
-    type: "friend" | "group" | "closed" | "personal";
+    type: "friend" | "group" | "bot" | "closed" | "personal";
     id?: string;
 }
 
 interface initialStateProps {
     theme: "light" | "dark";
     pendingInvitations: any;
-    selectedChat?: Friend | Group;
+    selectedChat?: Friend | Group | Bot;
     sidebarOpen: boolean;
     modalOpen: boolean;
     profile: Profile;
@@ -47,7 +48,10 @@ export const otherSlice = createSlice({
             state.pendingInvitations = action.payload;
         },
 
-        setSelectedChat: (state, action: PayloadAction<Friend | Group>) => {
+        setSelectedChat: (
+            state,
+            action: PayloadAction<Friend | Group | Bot | undefined>
+        ) => {
             state.selectedChat = action.payload;
         },
 
@@ -64,6 +68,20 @@ export const otherSlice = createSlice({
                 state.profile.type === "group" &&
                 state.profile.id === groupId
             ) {
+                state.profile = {
+                    type: "closed",
+                    id: "",
+                };
+            }
+        },
+
+        onBotDelete: (state, action: PayloadAction<string>) => {
+            const botId = action.payload;
+            if (state.selectedChat?._id && state.selectedChat._id === botId) {
+                state.selectedChat = undefined;
+            }
+
+            if (state.profile.type === "bot" && state.profile.id === botId) {
                 state.profile = {
                     type: "closed",
                     id: "",
@@ -107,5 +125,6 @@ export const {
     closeSidebar,
     setProfile,
     onGroupDelete,
+    onBotDelete,
 } = otherSlice.actions;
 export default otherSlice.reducer;

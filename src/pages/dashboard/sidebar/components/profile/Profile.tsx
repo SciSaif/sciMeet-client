@@ -4,6 +4,7 @@ import PersonalProfile from "./PersonalProfile";
 import GroupProfile from "./GroupProfile";
 import { setProfile } from "../../../../../redux/features/slices/otherSlice";
 import FriendProfile from "./FriendProfile";
+import BotProfile from "./BotProfile";
 
 const Profile = () => {
     const profile = useAppSelector((state) => state.other.profile);
@@ -23,6 +24,7 @@ const Profile = () => {
             {profileType === "personal" && <PersonalProfile />}
             {profileType === "group" && <GroupProfile />}
             {profileType === "friend" && <FriendProfile />}
+            {profileType === "bot" && <BotProfile />}
         </div>
     );
 };

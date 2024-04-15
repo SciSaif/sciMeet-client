@@ -1,22 +1,11 @@
-import {
-    Bars3Icon,
-    PhoneIcon,
-    VideoCameraIcon,
-} from "@heroicons/react/24/outline";
-import React, { useRef } from "react";
-import SettingsDropdown from "./SettingsDropdown";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
     openSidebar,
     setProfile,
     toggleSidebar,
 } from "../../../redux/features/slices/otherSlice";
-import { Friend } from "../../../redux/features/slices/friendSlice";
-import { isGroup } from "../../../utils/other";
-import { useSnackbar } from "notistack";
-import { setRoomState } from "../../../redux/features/slices/roomSlice";
-import { createRoom } from "../../../realtimeCommunication/socketHandlers/rooms";
-import { getLocalStreamPreview } from "../../../realtimeCommunication/webRTCHandler";
+import { isBot, isGroup } from "../../../utils/other";
 import settings from "../../../utils/settings";
 import CallButtons from "./CallButtons";
 const md = settings.md;
@@ -41,7 +30,11 @@ const DashboardHeader = () => {
         if (!selectedChat) return;
         dispatch(
             setProfile({
-                type: isGroup(selectedChat) ? "group" : "friend",
+                type: isGroup(selectedChat)
+                    ? "group"
+                    : isBot(selectedChat)
+                    ? "bot"
+                    : "friend",
                 id: selectedChat._id,
             })
         );
@@ -87,6 +80,8 @@ const DashboardHeader = () => {
                             <div className="text-text1 font-bold">
                                 {isGroup(selectedChat)
                                     ? selectedChat.group_name
+                                    : isBot(selectedChat)
+                                    ? selectedChat.bot_name
                                     : selectedChat.username}
                             </div>
                             <div className="text-xs text-text -mt-1">

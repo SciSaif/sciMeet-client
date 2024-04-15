@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Modal from "../../../../components/Modal";
-import Input from "../../../../components/Input";
-import { usePostInviteMutation } from "../../../../redux/features/apis/friendApi";
+import Modal from "../../../../../components/Modal";
+import Input from "../../../../../components/Input";
+import { usePostInviteMutation } from "../../../../../redux/features/apis/friendApi";
 interface Props {
     close: () => void;
 }

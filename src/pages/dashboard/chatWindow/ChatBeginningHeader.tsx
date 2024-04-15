@@ -3,10 +3,11 @@ import React from "react";
 interface Props {
     name: string;
     isGroup?: boolean;
+    isBot?: boolean;
     avatar?: string;
 }
 
-const ChatBeginningHeader = ({ name, isGroup, avatar }: Props) => {
+const ChatBeginningHeader = ({ name, isGroup, avatar, isBot }: Props) => {
     return (
         <div className="py-5 px-1 text-text1">
             <div className="flex rounded-full w-fit">
