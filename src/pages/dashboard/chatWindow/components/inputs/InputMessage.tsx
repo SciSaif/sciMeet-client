@@ -144,6 +144,8 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                             selectedChat &&
                             ("username" in selectedChat
                                 ? selectedChat.username
+                                : "bot_name" in selectedChat
+                                ? selectedChat.bot_name
                                 : selectedChat.group_name)
                         }`}
                         onBlur={handleTypingStop}
