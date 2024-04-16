@@ -128,7 +128,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
                 <form
                     onSubmit={handleSubmit}
-                    className="flex flex-row  items-center w-full"
+                    className="flex flex-row  items-center z-10 w-full"
                 >
                     <TextareaAutosize
                         ref={textareaRef}
@@ -139,7 +139,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                             handleTypingStart();
                         }}
                         onKeyDown={handleKeyDown}
-                        className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[200px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
+                        className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[300px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
                         placeholder={`Message ${
                             selectedChat &&
                             ("username" in selectedChat
