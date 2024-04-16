@@ -15,9 +15,10 @@ import { sendDirectMessage } from "../../../../../realtimeCommunication/socketHa
 
 interface Props {
     messagesContainerRef: React.RefObject<HTMLDivElement>;
+    isBot?: boolean;
 }
 
-const InputMessage = ({ messagesContainerRef }: Props) => {
+const InputMessage = ({ messagesContainerRef, isBot }: Props) => {
     const [message, setMessage] = useState("");
     const selectedChat = useAppSelector((state) => state.other.selectedChat);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -71,7 +72,10 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
-            handleSubmit(e);
+            if (windowSize.current[0] >= settings.md) {
+                handleSubmit(e);
+            }
+            // handleSubmit(e);
         } else if (e.key === "Tab") {
             setMessage(afterTabPress(e));
         }
@@ -117,7 +121,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
         <div className="pb-5    w-full  px-1 md:px-5">
             <div className="w-full h-auto  flex flex-row  items-center bg-primary-700 relative  rounded-xl">
                 {/* Use the FileInput component */}
-                <FileInput handleFileChange={handleFileChange} />
+                {!isBot && <FileInput handleFileChange={handleFileChange} />}
 
                 {/* Use the EmojiPicker component */}
                 <EmojiPicker
@@ -151,7 +155,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                         onBlur={handleTypingStop}
                         rows={1}
                     />
-                    <AudioRecorder />
+                    {!isBot && <AudioRecorder />}
 
                     <button
                         type="submit"
@@ -162,7 +166,7 @@ const InputMessage = ({ messagesContainerRef }: Props) => {
                 </form>
             </div>
 
-            {files && files.length > 0 && selectedChat && (
+            {files && files.length > 0 && selectedChat && !isBot && (
                 <FilesUpload
                     messagesContainerRef={messagesContainerRef}
                     conversation_id={selectedChat.conversation_id}

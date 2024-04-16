@@ -191,7 +191,10 @@ const ChatWindow = () => {
                             )}
                     </div>
 
-                    <InputMessage messagesContainerRef={messagesContainerRef} />
+                    <InputMessage
+                        messagesContainerRef={messagesContainerRef}
+                        isBot={conversation?.isBot}
+                    />
                 </>
             )}
             {files && files.length > 0 && selectedChat && (
