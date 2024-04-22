@@ -25,6 +25,12 @@ type FormType = z.infer<typeof Form>;
 
 const BotSetup = () => {
     const selectedChat = useAppSelector((state) => state.other.selectedChat);
+    const conversation_id = selectedChat?.conversation_id;
+    const bot = useAppSelector((state) =>
+        state.bot.bots.find((bot) => bot.conversation_id === conversation_id)
+    );
+    const bot_name = bot?.bot_name;
+
     const [customPrompt, setCustomPrompt] = useState(false);
     const {
         register,
@@ -36,7 +42,7 @@ const BotSetup = () => {
         defaultValues: {
             relation: "friend",
             years: 10,
-            bot_name: "ayesha",
+            bot_name: bot_name,
             my_name: "Saif",
             bot_age: 19,
             my_age: 23,
