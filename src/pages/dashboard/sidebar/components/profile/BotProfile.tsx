@@ -38,14 +38,14 @@ const BotProfile = () => {
         ];
     }
 
-    const isBotAdmin = bot.creator_id === user?._id;
-
     const [newBotName, setNewBotName] = useState(bot.bot_name || "");
     const [editNameMode, setEditNameMode] = useState(false);
     const [newBotDescription, setNewBotDescription] = useState(
         bot.description || ""
     );
+    const [newApiKey, setNewApiKey] = useState("");
     const [editDescriptionMode, setEditDescriptionMode] = useState(false);
+    const [editApiKeyMode, setEditApiKeyMode] = useState(false);
 
     const [deleteBot] = useDeleteBotMutation();
     const [updateBot] = useUpdateBotMutation();
@@ -83,16 +83,14 @@ const BotProfile = () => {
                     ) : (
                         <>
                             <div className="text-2xl">{bot.bot_name}</div>
-                            {isBotAdmin && (
-                                <div
-                                    onClick={() => {
-                                        setEditNameMode(true);
-                                    }}
-                                    className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
-                                >
-                                    <PencilIcon width={16} />
-                                </div>
-                            )}
+                            <div
+                                onClick={() => {
+                                    setEditNameMode(true);
+                                }}
+                                className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                            >
+                                <PencilIcon width={16} />
+                            </div>
                         </>
                     )}
                 </div>
@@ -102,64 +100,100 @@ const BotProfile = () => {
                 <div className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
                     Description
                 </div>
-                {isBotAdmin ? (
-                    <div>
-                        {" "}
-                        {editDescriptionMode ? (
-                            <div className="flex flex-row gap-x-2 text-text items-center">
-                                <textarea
-                                    className="bg-transparent border-b border-white/50 focus:border-white/75 focus:outline-none"
-                                    value={newBotDescription}
-                                    onChange={(e) =>
-                                        setNewBotDescription(e.target.value)
-                                    }
-                                />
-                                <div
-                                    onClick={() => {
-                                        setEditDescriptionMode(false);
-                                        updateBot({
-                                            bot_id: bot._id,
-                                            description: newBotDescription,
-                                        });
-                                    }}
-                                    className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
-                                >
-                                    <CheckIcon width={16} />
-                                </div>
+                <div>
+                    {" "}
+                    {editDescriptionMode ? (
+                        <div className="flex flex-row gap-x-2 text-text items-center">
+                            <textarea
+                                className="bg-transparent border-b w-full border-white/50 focus:border-white/75 focus:outline-none"
+                                value={newBotDescription}
+                                onChange={(e) =>
+                                    setNewBotDescription(e.target.value)
+                                }
+                            />
+                            <div
+                                onClick={() => {
+                                    setEditDescriptionMode(false);
+                                    updateBot({
+                                        bot_id: bot._id,
+                                        description: newBotDescription,
+                                    });
+                                }}
+                                className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                            >
+                                <CheckIcon width={16} />
                             </div>
-                        ) : (
-                            <div className="flex flex-row text-text gap-x-2 items-center">
-                                <p
-                                    onClick={() => {
-                                        setEditDescriptionMode(true);
-                                    }}
-                                    className="text-text text-sm cursor-pointer"
-                                >
-                                    {bot?.description
-                                        ? bot.description
-                                        : "Click here to add a description"}
-                                </p>
-                                <div
-                                    onClick={() => {
-                                        setEditDescriptionMode(true);
-                                    }}
-                                    className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
-                                >
-                                    <PencilIcon width={16} />
-                                </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-row text-text gap-x-2 items-center">
+                            <p
+                                onClick={() => {
+                                    setEditDescriptionMode(true);
+                                }}
+                                className="text-text text-sm cursor-pointer"
+                            >
+                                {bot?.description
+                                    ? bot.description
+                                    : "Click here to add a description"}
+                            </p>
+                            <div
+                                onClick={() => {
+                                    setEditDescriptionMode(true);
+                                }}
+                                className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                            >
+                                <PencilIcon width={16} />
                             </div>
-                        )}
-                    </div>
-                ) : (
-                    <div>
-                        {" "}
-                        <p className="text-text text-sm ">
-                            {bot?.description
-                                ? bot.description
-                                : "No bot description"}
-                        </p>
-                    </div>
-                )}
+                        </div>
+                    )}
+                </div>
+            </div>
+            <div className="bg-black/10 mt-3 px-5 py-2">
+                <div>
+                    {" "}
+                    {editApiKeyMode ? (
+                        <div className="flex flex-row gap-x-2 text-text items-center">
+                            <textarea
+                                className="bg-transparent border-b w-full border-white/50 focus:border-white/75 focus:outline-none"
+                                value={newApiKey}
+                                placeholder="Enter new API Key"
+                                onChange={(e) => setNewApiKey(e.target.value)}
+                            />
+                            <div
+                                onClick={() => {
+                                    setEditApiKeyMode(false);
+                                    updateBot({
+                                        bot_id: bot._id,
+                                        description: newBotDescription,
+                                        api_key: newApiKey,
+                                    });
+                                }}
+                                className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                            >
+                                <CheckIcon width={16} />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-row text-text gap-x-2 items-center">
+                            <p
+                                onClick={() => {
+                                    setEditApiKeyMode(true);
+                                }}
+                                className="text-text text-sm cursor-pointer"
+                            >
+                                Update API Key
+                            </p>
+                            <div
+                                onClick={() => {
+                                    setEditApiKeyMode(true);
+                                }}
+                                className="opacity-60 hover:opacity-100 cursor-pointer mt-1"
+                            >
+                                <PencilIcon width={16} />
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="mt-5 px-5 bg-black/10 ">
                 <h4 className="text-text2  text-sm mb-2  w-full mt-3 font-semibold">
@@ -189,17 +223,15 @@ const BotProfile = () => {
                 )}
             </div>
 
-            {isBotAdmin && (
-                <div className="bg-black/10 mt-3 px-5">
-                    <div
-                        onClick={() => deleteBot(bot._id)}
-                        className="text-red-500 flex flex-row gap-2 py-2 cursor-pointer hover:text-red-600"
-                    >
-                        <TrashIcon width={20} />
-                        Delete Bot
-                    </div>
+            <div className="bg-black/10 mt-3 px-5">
+                <div
+                    onClick={() => deleteBot(bot._id)}
+                    className="text-red-500 flex flex-row gap-2 py-2 cursor-pointer hover:text-red-600"
+                >
+                    <TrashIcon width={20} />
+                    Delete Bot
                 </div>
-            )}
+            </div>
         </div>
     );
 };

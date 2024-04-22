@@ -18,6 +18,7 @@ import FilesUpload from "./components/inputs/FilesUpload";
 import useDragAndDrop from "../../../hooks/useDragDrop";
 import { getChatHistory } from "../../../realtimeCommunication/socketHandlers/chat";
 import { isBot, isGroup } from "../../../utils/other";
+import BotSetup from "./components/BotSetup";
 
 const ChatWindow = () => {
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -176,25 +177,24 @@ const ChatWindow = () => {
                         {messages &&
                             (messages.length == 0 ||
                                 messages[0]?.firstMessage) && (
-                                <ChatBeginningHeader
-                                    name={
-                                        isGroup(selectedChat)
-                                            ? selectedChat.group_name
-                                            : isBot(selectedChat)
-                                            ? selectedChat.bot_name
-                                            : selectedChat.username
-                                    }
-                                    avatar={selectedChat.avatar}
-                                    isGroup={isGroup(selectedChat)}
-                                    isBot={isBot(selectedChat)}
-                                />
+                                <>
+                                    {!(
+                                        isBot(selectedChat) &&
+                                        messages.length === 0
+                                    ) && <ChatBeginningHeader />}
+
+                                    {isBot(selectedChat) &&
+                                        messages.length === 0 && <BotSetup />}
+                                </>
                             )}
                     </div>
 
-                    <InputMessage
-                        messagesContainerRef={messagesContainerRef}
-                        isBot={conversation?.isBot}
-                    />
+                    {!(isBot(selectedChat) && messages.length === 0) && (
+                        <InputMessage
+                            messagesContainerRef={messagesContainerRef}
+                            isBot={conversation?.isBot}
+                        />
+                    )}
                 </>
             )}
             {files && files.length > 0 && selectedChat && (

@@ -11,7 +11,7 @@ export const botApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         createBot: build.mutation<
             { toast: string },
-            { bot_name: string; participants: string[] }
+            { bot_name: string; participants: string[]; api_key?: string }
         >({
             query: (data) => ({
                 url: `bots`,
@@ -30,7 +30,12 @@ export const botApi = apiSlice.injectEndpoints({
         }),
         updateBot: build.mutation<
             { toast: string },
-            { bot_id: string; bot_name?: string; description?: string }
+            {
+                bot_id: string;
+                bot_name?: string;
+                description?: string;
+                api_key?: string;
+            }
         >({
             query: (data) => ({
                 url: `bots`,

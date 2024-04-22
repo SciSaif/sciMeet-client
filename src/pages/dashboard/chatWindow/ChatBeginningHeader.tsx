@@ -1,4 +1,6 @@
 import React from "react";
+import { useAppSelector } from "../../../redux/hooks";
+import { isBot, isGroup } from "../../../utils/other";
 
 interface Props {
     name: string;
@@ -7,7 +9,17 @@ interface Props {
     avatar?: string;
 }
 
-const ChatBeginningHeader = ({ name, isGroup, avatar, isBot }: Props) => {
+const ChatBeginningHeader = () => {
+    const selectedChat = useAppSelector((state) => state.other.selectedChat);
+
+    const name = isGroup(selectedChat)
+        ? selectedChat?.group_name
+        : isBot(selectedChat)
+        ? selectedChat?.bot_name
+        : selectedChat?.username;
+
+    const avatar = selectedChat?.avatar;
+
     return (
         <div className="py-5 px-1 text-text1">
             <div className="flex rounded-full w-fit">
@@ -18,7 +30,7 @@ const ChatBeginningHeader = ({ name, isGroup, avatar, isBot }: Props) => {
                 />
             </div>
             <div className=" text-text1 font-bold text-3xl">{name}</div>
-            {isGroup ? (
+            {isGroup(selectedChat) ? (
                 <p>This is the beginning of the group</p>
             ) : (
                 <p>This is the beginning of your converasation with {name}</p>

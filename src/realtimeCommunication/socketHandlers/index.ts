@@ -24,6 +24,9 @@ export type ConnUserSocketIdType = {
     connUserSocketId: string;
     isGroup?: boolean;
 };
+export enum BOT_ERROR_CODES {
+    SAFETY = "Candidate was blocked due to SAFETY",
+}
 
 export interface MessageContent {
     conversation_id: string;
@@ -54,6 +57,10 @@ interface ServerToClientEvents {
     "new-bot": (data: { bot: Bot; conversation: IConversation }) => void;
     "bot-deleted": (data: { botId: string }) => void;
     "bot-updated": (data: { bot: Bot }) => void;
+    "bot-error": (data: {
+        code: BOT_ERROR_CODES;
+        conversation_id: string;
+    }) => void;
 
     // ------------------------------------------------------------
     "room-create": (data: { roomDetails: RoomDetails }) => void;

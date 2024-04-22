@@ -15,9 +15,13 @@ interface Props {
 
 const NewBotModal = ({ close }: Props) => {
     const { data: botTypes } = useGetBotTypesQuery();
-    const [participants, setParticipants] = useState<string[]>([]);
+    const [participants, setParticipants] = useState<string[]>(
+        botTypes && botTypes?.length > 0 ? [botTypes[0]?._id] : []
+    );
     const [error, setError] = useState("");
     const [botName, setBotName] = useState("");
+    const [apiKey, setApiKey] = useState("");
+    const [customApiKey, setCustomApiKey] = useState(false);
 
     const [createBot] = useCreateBotMutation();
 
@@ -34,6 +38,7 @@ const NewBotModal = ({ close }: Props) => {
         createBot({
             bot_name: botName,
             participants,
+            api_key: customApiKey ? apiKey : undefined,
         });
         close();
     };
@@ -42,7 +47,7 @@ const NewBotModal = ({ close }: Props) => {
         <Modal
             close={close}
             closeIcon
-            className="p-5 sm:p-10 w-full sm:w-fit sm:min-w-[400px]"
+            className="p-2 sm:p-5 w-full sm:w-fit sm:min-w-[400px]"
         >
             <div>
                 <h2 className="font-semibold text-lg mb-2 ">New Bot</h2>
@@ -100,7 +105,7 @@ const NewBotModal = ({ close }: Props) => {
                 )}
             </div>
 
-            <div className="mb-2">
+            <div className="mb-2 flex flex-col gap-2">
                 <Input
                     onChange={(e) => {
                         setBotName(e.target.value);
@@ -111,6 +116,38 @@ const NewBotModal = ({ close }: Props) => {
                     required
                     className="border-slate-500 py-1 "
                 />
+
+                <label
+                    htmlFor="Option1"
+                    className="flex cursor-pointer items-start gap-2"
+                >
+                    <div className="flex items-center">
+                        &#8203;
+                        <input
+                            type="checkbox"
+                            className="size-4 rounded border-gray-300"
+                            id="Option1"
+                            checked={customApiKey}
+                            onChange={(e) => {
+                                setCustomApiKey(e.target.checked);
+                            }}
+                        />
+                    </div>
+
+                    <p className=" text-primary text-sm"> Custom API key </p>
+                </label>
+
+                {customApiKey && (
+                    <Input
+                        onChange={(e) => {
+                            setApiKey(e.target.value);
+                        }}
+                        value={apiKey}
+                        label="API Key"
+                        type="text"
+                        className="border-slate-500 py-1 "
+                    />
+                )}
             </div>
 
             {error.length > 0 ? (

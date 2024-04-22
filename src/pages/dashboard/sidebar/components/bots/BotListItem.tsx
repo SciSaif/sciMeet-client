@@ -23,7 +23,7 @@ const BotListItem = ({ bot }: { bot: Bot }) => {
             : [];
     });
 
-    let unreadMessages = countUnreadMessages(messages);
+    // let unreadMessages = countUnreadMessages(messages);
 
     const handleClick = () => {
         dispatch(setSelectedChat(bot));
@@ -62,13 +62,13 @@ const BotListItem = ({ bot }: { bot: Bot }) => {
                 </div>
                 <div className="text-text2">{bot.bot_name} </div>
             </div>
-            {unreadMessages > 0 && (
+            {/* {unreadMessages > 0 && (
                 <div className="pr-5">
                     <div className="rounded-full min-w-[24px] text-center text-xs text-white bg-primary-700 p-1">
                         {unreadMessages}
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };

@@ -92,7 +92,7 @@ const DashboardHeader = () => {
                 )}
             </div>
 
-            <CallButtons />
+            {selectedChat && !isBot(selectedChat) && <CallButtons />}
         </div>
     );
 };

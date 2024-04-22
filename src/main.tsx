@@ -14,7 +14,7 @@ ReactDOM.createRoot(rootElement).render(
             <SnackbarProvider
                 maxSnack={3}
                 anchorOrigin={{
-                    vertical: "bottom",
+                    vertical: "top",
                     horizontal: "center",
                 }}
             >

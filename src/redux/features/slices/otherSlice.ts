@@ -21,6 +21,7 @@ interface initialStateProps {
     modalOpen: boolean;
     profile: Profile;
     isRoomFullScreen: boolean;
+    toastMessage?: string;
 }
 
 const initialState: initialStateProps = {
@@ -109,6 +110,11 @@ export const otherSlice = createSlice({
         setIsRoomFullScreen: (state, action: PayloadAction<boolean>) => {
             state.isRoomFullScreen = action.payload;
         },
+
+        setToastMessage: (state, action: PayloadAction<string>) => {
+            state.toastMessage = action.payload;
+        },
+
         resetState: () => initialState,
     },
 });
@@ -126,5 +132,6 @@ export const {
     setProfile,
     onGroupDelete,
     onBotDelete,
+    setToastMessage,
 } = otherSlice.actions;
 export default otherSlice.reducer;

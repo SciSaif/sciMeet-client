@@ -6,14 +6,23 @@ interface Props
     extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
     label: string;
     error?: FieldError;
+    variant?: "1" | "2";
 }
 
 const Input = (
-    { type, label, error, className, ...rest }: Props,
+    { type, label, error, className, variant, ...rest }: Props,
     ref: Ref<HTMLInputElement>
 ) => {
     const id = useId();
+    let variantClassName = "";
+    let variantLabelClassName = "";
+    if (variant === "2") {
+        variantClassName =
+            "bg-primary-700 border-0 text-white focus-within:border-primary-700 focus-within:ring-primary-700 ";
+        variantLabelClassName = "text-text";
+    }
 
+    className = twMerge(variantClassName, className);
     return (
         <>
             <label
@@ -39,7 +48,12 @@ const Input = (
                     )}
                 />
 
-                <span className="absolute left-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs dark:text-gray-200">
+                <span
+                    className={twMerge(
+                        "absolute left-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs dark:text-gray-200",
+                        variantLabelClassName
+                    )}
+                >
                     {label}
                 </span>
             </label>

@@ -125,6 +125,18 @@ export const chatSlice = createSlice({
             conversation.messages.push(message);
         },
 
+        removeLatestMessage: (
+            state,
+            action: PayloadAction<{ conversation_id: string }>
+        ) => {
+            const conversation = state.conversations.find(
+                (conversation) =>
+                    conversation._id === action.payload.conversation_id
+            );
+            if (!conversation) return;
+            conversation.messages.pop();
+        },
+
         updateSeenMessages: (
             state,
             action: PayloadAction<{ conversation_id: string; userId: string }>
@@ -165,6 +177,7 @@ export const chatSlice = createSlice({
 export const {
     updateConverstation,
     addNewMessage,
+    removeLatestMessage,
     resetState,
     updateTypingStatus,
     updateSeenMessages,

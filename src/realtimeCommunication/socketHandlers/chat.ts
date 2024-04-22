@@ -1,7 +1,7 @@
 import { Socket } from "socket.io-client";
 
 import { AppThunk } from "../../redux/store";
-import { MessageContent, getSocket } from ".";
+import { BOT_ERROR_CODES, MessageContent, getSocket } from ".";
 import {
     handleParticipantLeftRoom,
     handleSignalingData,
@@ -12,6 +12,7 @@ import {
     addNewMessage,
     removeConversationByBotId,
     removeConversationByGroupId,
+    removeLatestMessage,
     setConversations,
     updateConverstation,
     updateSeenMessages,
@@ -26,6 +27,7 @@ import {
 import {
     onBotDelete,
     onGroupDelete,
+    setToastMessage,
 } from "../../redux/features/slices/otherSlice";
 import {
     addBot,
@@ -99,6 +101,18 @@ export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
     socket.on("bot-updated", (data) => {
         console.log("bot-updated", data);
         dispatch(updateBot(data.bot));
+    });
+
+    socket.on("bot-error", (data) => {
+        dispatch(
+            removeLatestMessage({ conversation_id: data.conversation_id })
+        );
+        const code = data.code;
+        if (code === BOT_ERROR_CODES.SAFETY) {
+            dispatch(setToastMessage("Message removed due to safety concerns"));
+        } else {
+            dispatch(setToastMessage("Something went wrong!"));
+        }
     });
 };
 
