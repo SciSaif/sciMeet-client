@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "../../../../../components/Modal";
 import Input from "../../../../../components/Input";
 import { useAppSelector } from "../../../../../redux/hooks";
@@ -15,15 +15,19 @@ interface Props {
 
 const NewBotModal = ({ close }: Props) => {
     const { data: botTypes } = useGetBotTypesQuery();
-    const [participants, setParticipants] = useState<string[]>(
-        botTypes && botTypes?.length > 0 ? [botTypes[0]?._id] : []
-    );
+    const [participants, setParticipants] = useState<string[]>([]);
     const [error, setError] = useState("");
     const [botName, setBotName] = useState("");
     const [apiKey, setApiKey] = useState("");
     const [customApiKey, setCustomApiKey] = useState(false);
 
     const [createBot] = useCreateBotMutation();
+
+    useEffect(() => {
+        if (botTypes && botTypes?.length > 0) {
+            setParticipants([botTypes[0]?._id]);
+        }
+    }, [botTypes]);
 
     const handleCreate = () => {
         if (participants.length === 0) {

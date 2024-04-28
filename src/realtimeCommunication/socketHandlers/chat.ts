@@ -1,12 +1,6 @@
-import { Socket } from "socket.io-client";
-
 import { AppThunk } from "../../redux/store";
 import { BOT_ERROR_CODES, MessageContent, getSocket } from ".";
-import {
-    handleParticipantLeftRoom,
-    handleSignalingData,
-    prepareNewPeerConnection,
-} from "../webRTCHandler";
+
 import {
     addConversation,
     addNewMessage,
@@ -27,6 +21,8 @@ import {
 import {
     onBotDelete,
     onGroupDelete,
+    setSelectedChat,
+    setSelectedTab,
     setToastMessage,
 } from "../../redux/features/slices/otherSlice";
 import {
@@ -92,6 +88,8 @@ export const connectWithSocketServer = (): AppThunk => (dispatch, getState) => {
         console.log("new bot", data);
         dispatch(addBot(data.bot));
         dispatch(addConversation(data.conversation));
+        dispatch(setSelectedChat(data.bot));
+        dispatch(setSelectedTab("bot"));
     });
     socket.on("bot-deleted", (data) => {
         dispatch(onBotDelete(data.botId));

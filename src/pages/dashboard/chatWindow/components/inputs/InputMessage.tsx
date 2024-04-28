@@ -23,7 +23,6 @@ const InputMessage = ({ messagesContainerRef, isBot }: Props) => {
     const selectedChat = useAppSelector((state) => state.other.selectedChat);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
-
     useEffect(() => {
         if (selectedChat) {
             setMessage("");
@@ -96,15 +95,11 @@ const InputMessage = ({ messagesContainerRef, isBot }: Props) => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
     const handleEmojiSelect = (emoji: any) => {
-        console.log("en");
-
         if (textareaRef.current) {
-            console.log("en2");
             const start = textareaRef.current.selectionStart;
             const end = textareaRef.current.selectionEnd;
             const textBefore = message.substring(0, start);
             const textAfter = message.substring(end, message.length);
-            console.log(textBefore + emoji.native + textAfter);
 
             setMessage(textBefore + emoji.native + textAfter);
 

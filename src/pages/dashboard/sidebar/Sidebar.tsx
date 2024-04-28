@@ -15,16 +15,19 @@ import {
 } from "lucide-react";
 import Tab from "./components/Tab";
 import BotsLists from "./components/bots/BotsList";
-import { useAppDispatch } from "../../../redux/hooks";
-import { setSelectedChat } from "../../../redux/features/slices/otherSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import {
+    Tabs,
+    setSelectedChat,
+    setSelectedTab,
+} from "../../../redux/features/slices/otherSlice";
 
-type Tabs = "friends" | "groups" | "bot";
 const Sidebar = () => {
     const dispatch = useAppDispatch();
-    const [selectedTab, setSelectedTab] = useState<Tabs>("friends");
+    const selectedTab = useAppSelector((state) => state.other.selectedTab);
     const selectTab = (tab: Tabs) => {
-        setSelectedTab(tab);
         dispatch(setSelectedChat(undefined));
+        dispatch(setSelectedTab(tab));
     };
     return (
         <div

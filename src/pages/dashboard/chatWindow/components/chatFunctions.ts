@@ -22,7 +22,7 @@
 // function to handle tab press
 export const afterTabPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     e.preventDefault(); // Prevent the default behavior of the Tab key
-    console.log;
+    console.log("e", e);
     const { selectionStart, selectionEnd } = e.currentTarget;
     const currentMessage = e.currentTarget.value;
     const newMessage =
@@ -32,5 +32,6 @@ export const afterTabPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Adjust the cursor position after inserting the tab
     const newSelectionStart = selectionStart + 1;
     e.currentTarget.setSelectionRange(newSelectionStart, newSelectionStart);
+
     return newMessage;
 };

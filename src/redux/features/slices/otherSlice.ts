@@ -12,6 +12,7 @@ interface Profile {
     type: "friend" | "group" | "bot" | "closed" | "personal";
     id?: string;
 }
+export type Tabs = "friends" | "groups" | "bot";
 
 interface initialStateProps {
     theme: "light" | "dark";
@@ -22,6 +23,7 @@ interface initialStateProps {
     profile: Profile;
     isRoomFullScreen: boolean;
     toastMessage?: string;
+    selectedTab: Tabs;
 }
 
 const initialState: initialStateProps = {
@@ -35,6 +37,7 @@ const initialState: initialStateProps = {
         id: "",
     },
     isRoomFullScreen: true,
+    selectedTab: "friends",
 };
 
 export const otherSlice = createSlice({
@@ -54,6 +57,10 @@ export const otherSlice = createSlice({
             action: PayloadAction<Friend | Group | Bot | undefined>
         ) => {
             state.selectedChat = action.payload;
+        },
+
+        setSelectedTab: (state, action: PayloadAction<Tabs>) => {
+            state.selectedTab = action.payload;
         },
 
         onGroupDelete: (state, action: PayloadAction<string>) => {
@@ -124,6 +131,7 @@ export const {
     setPendingInvitations,
     setIsRoomFullScreen,
     setSelectedChat,
+    setSelectedTab,
     resetState,
     toggleSidebar,
     isModalOpen,

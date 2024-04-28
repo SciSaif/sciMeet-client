@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,7 @@ import { createPrompt } from "../../../../utils/promptGenerator";
 import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandlers/chat";
 import { useAppSelector } from "../../../../redux/hooks";
 import TextareaAutosize from "react-textarea-autosize";
+import { afterTabPress } from "./chatFunctions";
 
 const Form = z.object({
     relation: z.string().min(1, "Relation is required"),
@@ -57,7 +58,7 @@ const BotSetup = () => {
 
     const [prompt, setPrompt] = useState<string>("");
     useEffect(() => {
-        if (!formData) return;
+        if (!formData || customPrompt) return;
         setPrompt(createPrompt(formData));
     }, [formData]);
 
@@ -69,7 +70,13 @@ const BotSetup = () => {
             conversation_id: selectedChat?.conversation_id,
         });
     };
-
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+        } else if (e.key === "Tab") {
+            console.log("tab");
+            setPrompt(afterTabPress(e));
+        }
+    };
     return (
         <div className="rounded-lg  p-4">
             <h2 className="text-xl font-semibold border-b border-slate-100/50 pb-2 text-text text-center mb-5">
@@ -193,8 +200,9 @@ const BotSetup = () => {
                     <TextareaAutosize
                         placeholder="Prompt"
                         // variant="2"
-                        value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        value={prompt}
                         className="w-full  resize-none pl-1 rounded-l-xl border-0 pr-10 bg-transparent overflow-y-auto overflow-x-hidden  scrollbar max-h-[300px]  focus:ring-0 placeholder:text-text2/50 outline-none  active:outline-none text-text2"
                     />
                 )}
