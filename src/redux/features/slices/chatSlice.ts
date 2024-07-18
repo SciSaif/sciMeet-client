@@ -72,6 +72,7 @@ export const chatSlice = createSlice({
             state.conversations = action.payload;
         },
         addConversation: (state, action: PayloadAction<IConversation>) => {
+            console.log("adding conversation", action.payload);
             state.conversations.push(action.payload);
         },
 

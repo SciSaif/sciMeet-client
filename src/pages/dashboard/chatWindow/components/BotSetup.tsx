@@ -8,10 +8,11 @@ import { sendDirectMessage } from "../../../../realtimeCommunication/socketHandl
 import { useAppSelector } from "../../../../redux/hooks";
 import TextareaAutosize from "react-textarea-autosize";
 import { afterTabPress } from "./chatFunctions";
+import { RefreshCcw } from "lucide-react";
 
 const Form = z.object({
     relation: z.string().min(1, "Relation is required"),
-    years: z.number().positive("Years should be a positive number"),
+    time: z.string().min(1, "Time is required"),
     bot_name: z.string().min(1, "Bot name is required"),
     my_name: z.string().min(1, "Your name is required"),
     bot_age: z.number().positive("Bot age should be a positive number"),
@@ -36,13 +37,15 @@ const BotSetup = () => {
     const {
         register,
         handleSubmit,
+        setValue,
+        getValues,
         watch,
         formState: { errors },
     } = useForm<FormType>({
         resolver: zodResolver(Form),
         defaultValues: {
             relation: "friend",
-            years: 10,
+            time: "10 years",
             bot_name: bot_name,
             my_name: "Saif",
             bot_age: 19,
@@ -53,7 +56,6 @@ const BotSetup = () => {
             first_message: "hi, whats up?",
         },
     });
-    console.log("data, ", watch());
     const formData = watch();
 
     const [prompt, setPrompt] = useState<string>("");
@@ -77,6 +79,12 @@ const BotSetup = () => {
             setPrompt(afterTabPress(e));
         }
     };
+    const swapGender = (gender: "bot_gender" | "my_gender") => {
+        const currentGender = getValues(gender);
+        let newGender = currentGender === "female" ? "male" : "female";
+        setValue(gender, newGender);
+    };
+
     return (
         <div className="rounded-lg  p-4">
             <h2 className="text-xl font-semibold border-b border-slate-100/50 pb-2 text-text text-center mb-5">
@@ -126,20 +134,38 @@ const BotSetup = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <Input
-                                type="text"
-                                label="Bot Gender"
-                                error={errors.bot_gender}
-                                variant="2"
-                                {...register("bot_gender")}
-                            />
-                            <Input
-                                type="text"
-                                label="My Gender"
-                                error={errors.my_gender}
-                                variant="2"
-                                {...register("my_gender")}
-                            />
+                            <div className="relative">
+                                <Input
+                                    type="text"
+                                    label="Bot Gender"
+                                    error={errors.bot_gender}
+                                    variant="2"
+                                    {...register("bot_gender")}
+                                />
+                                <RefreshCcw
+                                    onClick={() => {
+                                        swapGender("bot_gender");
+                                    }}
+                                    className="text-text hover:text-white  cursor-pointer active:rotate-45 right-2 hover: absolute top-1/2 -translate-y-1/2"
+                                    size={16}
+                                />
+                            </div>
+                            <div className="relative">
+                                <Input
+                                    type="text"
+                                    label="My Gender"
+                                    error={errors.my_gender}
+                                    variant="2"
+                                    {...register("my_gender")}
+                                />
+                                <RefreshCcw
+                                    onClick={() => {
+                                        swapGender("my_gender");
+                                    }}
+                                    className="text-text hover:text-white  cursor-pointer active:rotate-45 right-2 hover: absolute top-1/2 -translate-y-1/2"
+                                    size={16}
+                                />
+                            </div>
                         </div>
                         <div className="lg:grid lg:grid-cols-2 flex flex-col gap-4">
                             <Input
@@ -151,11 +177,11 @@ const BotSetup = () => {
                             />
 
                             <Input
-                                type="number"
+                                type="text"
                                 label="How long do you know each other?"
-                                error={errors.years}
+                                error={errors.time}
                                 variant="2"
-                                {...register("years", { valueAsNumber: true })}
+                                {...register("time")}
                             />
                         </div>
 

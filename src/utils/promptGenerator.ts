@@ -1,6 +1,6 @@
 interface PromptVariables {
     relation: string;
-    years: number;
+    time: string;
     bot_name: string;
     my_name: string;
     bot_age: number;
@@ -14,7 +14,7 @@ interface PromptVariables {
 export function createPrompt(variables: PromptVariables): string {
     const {
         relation,
-        years,
+        time,
         bot_name,
         my_name,
         bot_age,
@@ -25,7 +25,7 @@ export function createPrompt(variables: PromptVariables): string {
         first_message,
     } = variables;
 
-    const prompt = `you are my ${relation} and we know each other for ${years} years.
+    const prompt = `you are my ${relation} and we know each other for ${time}.
 your name is ${bot_name}, and my name is ${my_name}.
 Talk to me like my ${relation} will probably talk in a chat app.
 Make up facts when needed and make it sound like its a normal chat with ${relation}.
@@ -36,7 +36,7 @@ you are ${adjectives}
 Here are some details about me:
 I am ${my_age} years old.
 I am a ${my_gender}.
-    We will now start the conversation. we will go one by one. First I will message, then you will message and so on.
+We will now start the conversation. we will go one by one. First I will message, then you will message and so on.
 Do not send the whole conversation.
 I will begin first:
 ${first_message}`;
